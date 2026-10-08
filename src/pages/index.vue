@@ -43,10 +43,11 @@
       elevated
       style="
         background-color: #156c6d;
-        height: 60px;
+        height: 70px;
         width: 100%;
-        padding-left: 10%;
-        padding-right: 10%;
+        padding-top: 2%;
+        padding-left: 5%;
+        padding-right: 5%;
       "
     >
       <q-toolbar
@@ -58,41 +59,49 @@
         "
       >
         <q-btn
+          stack
           flat
-          dense
           round
+          dense
           style="color: white"
           icon="home"
+          label="Home"
           aria-label="home"
-          @click="toggleLeftDrawer"
+          to="/"
         />
 
         <q-btn
           flat
+          stack
           dense
           round
           style="color: white"
           icon="wallet"
+          label="Wallet"
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
 
         <q-btn
           flat
+          stack
           dense
           round
           style="color: white"
           icon="report"
+          label="Report"
           aria-label="Report"
           @click="toggleLeftDrawer"
         />
 
         <q-btn
           flat
+          stack
           dense
           round
           style="color: white"
           icon="person"
+          label="Profile"
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
