@@ -7,6 +7,7 @@
         width: 100%;
         margin-top: -20px;
         background-color: white;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
       "
     >
       <div
@@ -36,12 +37,12 @@
           "
         >
           <q-card-section style="margin-left: 5%; margin-top: 1%">
-            <div class="balance-text" style="font-size: 17pt">Balance</div>
+            <div class="balance-text" style="font-size: 13pt">Balance</div>
             <div
               class="balance-text-value"
-              style="font-size: 19pt; margin-top: 1%"
-              >Php. 100,000.00</div
-            >
+              style="font-size: 19pt; margin-top: 1pt"
+              >Php. 100,000.00
+            </div>
           </q-card-section>
         </q-card>
       </div>

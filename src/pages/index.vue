@@ -40,12 +40,11 @@
     </q-header>
 
     <q-footer
-      elevated
       style="
         background-color: #156c6d;
         height: 70px;
         width: 100%;
-        padding-top: 2%;
+        padding-top: 3%;
         padding-left: 5%;
         padding-right: 5%;
       "
