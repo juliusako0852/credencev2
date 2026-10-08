@@ -35,6 +35,15 @@
               style="height: 60px"
             />
           </q-toolbar-title>
+          <q-btn
+            flat
+            dense
+            round
+            style="color: #37656f"
+            icon="notifications"
+            aria-label="Menu"
+            @click="toggleLeftDrawer"
+          />
         </q-toolbar>
       </div>
     </q-header>
@@ -45,8 +54,8 @@
         height: 70px;
         width: 100%;
         padding-top: 3%;
-        padding-left: 5%;
-        padding-right: 5%;
+        padding-left: 2%;
+        padding-right: 2%;
       "
     >
       <q-toolbar
@@ -87,9 +96,9 @@
           dense
           round
           style="color: white"
-          icon="report"
-          label="Report"
-          aria-label="Report"
+          icon="receipt_long"
+          label="Transactions"
+          aria-label="Transactions"
           @click="toggleLeftDrawer"
         />
 

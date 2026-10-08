@@ -1,87 +1,93 @@
 <template>
   <q-page>
-    <div
-      class="q-pt-none"
-      style="
-        height: 200px;
-        width: 100%;
-        margin-top: -20px;
-        background-color: white;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-      "
-    >
+    <div class="home-page" style="height: 100%; width: 100%">
       <div
-        class="top-bar2"
+        class="q-pt-none"
         style="
-          height: 75%;
+          height: 175px;
+          width: 100%;
+          margin-top: -20px;
           background-color: white;
-          color: white;
-          display: flex;
-          text-align: center;
-          justify-content: center;
-          align-items: center;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
         "
       >
-        <q-card
+        <div
+          class="top-bar2"
           style="
-            height: 85%;
-            width: 95%;
-            border-radius: 15px;
-            background-image: linear-gradient(
-              to right,
-              black,
-              #156c6d,
-              #1a898b
-            );
-            text-align: left;
+            height: 100%;
+            background-color: white;
+            color: white;
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
           "
         >
-          <q-card-section style="margin-left: 5%; margin-top: 1%">
-            <div class="balance-text" style="font-size: 13pt">Balance</div>
-            <div
-              class="balance-text-value"
-              style="font-size: 19pt; margin-top: 1pt"
-              >Php. 100,000.00
-            </div>
-          </q-card-section>
-        </q-card>
+          <q-card
+            style="
+              height: 85%;
+              width: 95%;
+              border-radius: 15px;
+              background-image: linear-gradient(
+                to right,
+                black,
+                #156c6d,
+                #1a898b
+              );
+              text-align: left;
+            "
+          >
+            <q-card-section style="margin-left: 5%; margin-top: 1%">
+              <div class="balance-text" style="font-size: 13pt">Balance</div>
+              <div
+                class="balance-text-value"
+                style="font-size: 19pt; margin-top: 1pt"
+                >Php. 100,000.00
+              </div>
+              <div
+                class="top-bar3"
+                style="
+                  margin-top: 15px;
+                  height: 10%;
+                  display: flex;
+                  color: white;
+                  text-align: center;
+                  justify-content: flex-end;
+                  align-items: center;
+                "
+              >
+                <q-btn
+                  style="
+                    background-color: #0e494a;
+                    color: white;
+                    font-weight: bold;
+                    height: 80%;
+                    width: 30%;
+                    border-radius: 10px;
+                    font-size: small;
+                  "
+                  elevated
+                  to="/second"
+                  label="+ Deposit"
+                />
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
       </div>
-      <div
-        class="top-bar3"
-        style="
-          height: 25%;
-          background-color: white;
-          display: flex;
-          color: white;
-          text-align: center;
-          justify-content: space-between;
-          align-items: center;
-          padding-left: 5%;
-          padding-right: 5%;
-        "
-      >
-        <q-btn
+
+      <div class="menu-buttons" style="width: 100%; height: 90%">
+        <div
+          class="button-panel"
           style="
-            background-color: #37656f;
-            height: 80%;
-            width: 45%;
-            border-radius: 10px;
-            font-size: small;
+            background-color: red;
+            height: 400px;
+            margin-top: 50px;
+            margin-left: 5%;
+            margin-right: 5%;
           "
-          to="/second"
-          label="Withdraw"
-        />
-        <q-btn
-          style="
-            background-color: #37656f;
-            height: 80%;
-            width: 45%;
-            border-radius: 10px;
-            font-size: small;
-          "
-          to="/second"
-          label="Deposit"
-        />
+        >
+        </div>
       </div>
     </div>
   </q-page>
