@@ -35,7 +35,7 @@
         class="top-bar2"
         style="
           height: 60%;
-          background-color: red;
+          background-color: white;
           display: flex;
           text-align: center;
           justify-content: center;
@@ -45,11 +45,13 @@
           style="
             margin-top: 5%;
             height: 70%;
-            width: 90%;
+            width: 95%;
+            border-radius: 15px;
             background-image: linear-gradient(
               to right,
               black,
-              rgb(55, 101, 111)
+              #156c6d,
+              #1a898b
             );
           "
         >
