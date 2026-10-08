@@ -1,5 +1,10 @@
 <template>
-  <q-layout view="lHh Lpr lFf" style="background-color: white">
+  <q-layout
+    view="lHh Lpr lFf"
+    style="
+      background-image: linear-gradient(to bottom, #1a898b, #156c6d, white);
+    "
+  >
     <q-header elevated style="background-color: white; height: 250px">
       <div
         class="top-bar1"
@@ -53,9 +58,13 @@
               #156c6d,
               #1a898b
             );
+            text-align: left;
           "
         >
-          hello
+          <q-card-section style="margin-left: 5%">
+            <div class="text-h5">Balance</div>
+            <div class="text-h6" style="margin-top: 2%">Php. 100,000.00</div>
+          </q-card-section>
         </q-card>
       </div>
     </q-header>
