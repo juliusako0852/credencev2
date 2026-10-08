@@ -80,13 +80,25 @@
         <div
           class="button-panel"
           style="
-            background-color: red;
             height: 400px;
             margin-top: 50px;
             margin-left: 5%;
             margin-right: 5%;
           "
         >
+          <q-btn
+            stack
+            flat
+            round
+            dense
+            size="10px"
+            style="color: white"
+            label="Send"
+            aria-label="home"
+            to="/"
+          >
+            <q-icon name="settings" size="20px" /> Send</q-btn
+          >
         </div>
       </div>
     </div>
