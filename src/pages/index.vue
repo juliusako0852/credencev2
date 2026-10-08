@@ -2,7 +2,7 @@
   <q-layout
     view="lHh Lpr lFf"
     style="
-      background-image: linear-gradient(to bottom, #1a898b, #156c6d, white);
+      background-image: linear-gradient(to bottom, black, #1a898b, #81bebf);
     "
   >
     <div class="header1"> </div>
@@ -62,6 +62,7 @@
         style="
           align-items: center;
           text-align: center;
+
           justify-content: space-around;
           display: flex;
         "
