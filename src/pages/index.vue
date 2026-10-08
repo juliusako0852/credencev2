@@ -84,8 +84,8 @@
           dense
           round
           style="color: white"
-          icon="wallet"
-          label="Wallet"
+          icon="qr_code_2"
+          label="QR Code"
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
@@ -97,8 +97,8 @@
           round
           style="color: white"
           icon="receipt_long"
-          label="Transactions"
-          aria-label="Transactions"
+          label="History"
+          aria-label="History"
           @click="toggleLeftDrawer"
         />
 

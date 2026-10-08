@@ -80,24 +80,42 @@
         <div
           class="button-panel"
           style="
-            height: 400px;
-            margin-top: 50px;
+            height: 200px;
+            color: white;
+            margin-top: 30px;
             margin-left: 5%;
             margin-right: 5%;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            text-align: center;
+            justify-content: space-evenly;
           "
         >
+          <q-btn stack flat dense aria-label="send" size="8pt" to="/">
+            <q-icon name="paid" size="50px" />Send</q-btn
+          >
+          <q-btn stack flat dense aria-label="payments" size="8pt" to="/">
+            <q-icon name="payments" size="50px" />Payments</q-btn
+          >
+          <q-btn stack flat dense aria-label="home" size="8pt" to="/">
+            <q-icon name="trending_up" size="50px" />Analytics</q-btn
+          >
+          <q-btn stack flat dense aria-label="home" size="8pt" to="/">
+            <q-icon name="savings" size="50px" />Buffer Vault</q-btn
+          >
           <q-btn
             stack
             flat
-            round
             dense
-            size="10px"
-            style="color: white"
-            label="Send"
-            aria-label="home"
+            aria-label="generate_report"
+            size="8pt"
             to="/"
           >
-            <q-icon name="settings" size="20px" /> Send</q-btn
+            <q-icon name="request_quote" size="50px" />Generate Report</q-btn
+          >
+          <q-btn stack flat dense aria-label="home" size="8pt" to="/">
+            <q-icon name="payment" size="50px" />Send</q-btn
           >
         </div>
       </div>
