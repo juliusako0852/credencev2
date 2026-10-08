@@ -4,11 +4,11 @@
       <div
         class="top-bar1"
         style="
-          background-color: red;
           text-align: center;
-          height: 30%;
-          align-items: center;
+          height: 40%;
+          align-items: top;
           justify-content: center;
+          display: flex;
         "
       >
         <q-toolbar>
@@ -26,13 +26,35 @@
             <img
               alt="Credence Logo"
               src="~@/assets/credence_logo2.svg"
-              style="height: 60px"
+              style="height: 65px"
             />
           </q-toolbar-title>
         </q-toolbar>
       </div>
-      <div class="top-bar2" style="height: 70%; background-color: white">
-        <q-card></q-card>
+      <div
+        class="top-bar2"
+        style="
+          height: 60%;
+          background-color: red;
+          display: flex;
+          text-align: center;
+          justify-content: center;
+        "
+      >
+        <q-card
+          style="
+            margin-top: 5%;
+            height: 70%;
+            width: 90%;
+            background-image: linear-gradient(
+              to right,
+              black,
+              rgb(55, 101, 111)
+            );
+          "
+        >
+          hello
+        </q-card>
       </div>
     </q-header>
 
