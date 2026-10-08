@@ -39,6 +39,66 @@
       </div>
     </q-header>
 
+    <q-footer
+      elevated
+      style="
+        background-color: #156c6d;
+        height: 60px;
+        width: 100%;
+        padding-left: 10%;
+        padding-right: 10%;
+      "
+    >
+      <q-toolbar
+        style="
+          align-items: center;
+          text-align: center;
+          justify-content: space-around;
+          display: flex;
+        "
+      >
+        <q-btn
+          flat
+          dense
+          round
+          style="color: white"
+          icon="home"
+          aria-label="home"
+          @click="toggleLeftDrawer"
+        />
+
+        <q-btn
+          flat
+          dense
+          round
+          style="color: white"
+          icon="wallet"
+          aria-label="Menu"
+          @click="toggleLeftDrawer"
+        />
+
+        <q-btn
+          flat
+          dense
+          round
+          style="color: white"
+          icon="report"
+          aria-label="Report"
+          @click="toggleLeftDrawer"
+        />
+
+        <q-btn
+          flat
+          dense
+          round
+          style="color: white"
+          icon="person"
+          aria-label="Menu"
+          @click="toggleLeftDrawer"
+        />
+      </q-toolbar>
+    </q-footer>
+
     <
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>

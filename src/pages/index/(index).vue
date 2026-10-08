@@ -51,6 +51,7 @@
           height: 25%;
           background-color: white;
           display: flex;
+          color: white;
           text-align: center;
           justify-content: space-between;
           align-items: center;
