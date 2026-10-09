@@ -37,11 +37,27 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       Record<never, never>,
       | '//(index)'
+      | '//historypage'
+      | '//profilepage'
       | '//second'
     >,
     '//(index)': RouteRecordInfo<
       '//(index)',
       '/',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '//historypage': RouteRecordInfo<
+      '//historypage',
+      '/historypage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '//profilepage': RouteRecordInfo<
+      '//profilepage',
+      '/profilepage',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -77,6 +93,8 @@ declare module 'vue-router/auto-routes' {
       routes:
         | '/'
         | '//(index)'
+        | '//historypage'
+        | '//profilepage'
         | '//second'
       views:
         | 'default'
@@ -86,6 +104,22 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index/(index).vue': {
       routes:
         | '//(index)'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/index/historypage.vue': {
+      routes:
+        | '//historypage'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/index/profilepage.vue': {
+      routes:
+        | '//profilepage'
       views:
         | never
       pathParamNames:

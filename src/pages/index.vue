@@ -98,7 +98,7 @@
           icon="receipt_long"
           label="History"
           aria-label="History"
-          @click="toggleLeftDrawer"
+          to="historypage"
         />
 
         <q-btn
@@ -110,7 +110,7 @@
           icon="person"
           label="Profile"
           aria-label="Menu"
-          @click="toggleLeftDrawer"
+          to="/profilepage"
         />
       </q-toolbar>
     </q-footer>
