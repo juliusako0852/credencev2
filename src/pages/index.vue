@@ -86,7 +86,7 @@
           icon="qr_code_2"
           label="QR Code"
           aria-label="Menu"
-          @click="toggleLeftDrawer"
+          to="/qrcodepage"
         />
 
         <q-btn

@@ -103,9 +103,6 @@
           <q-btn stack flat dense aria-label="payments" size="8pt" to="/">
             <q-icon name="payments" size="50px" />Payments</q-btn
           >
-          <q-btn stack flat dense aria-label="analytics" size="8pt" to="/">
-            <q-icon name="trending_up" size="50px" />Analytics</q-btn
-          >
           <q-btn stack flat dense aria-label="buffer_vault" size="8pt" to="/">
             <q-icon name="savings" size="50px" />Buffer Vault</q-btn
           >
@@ -119,10 +116,28 @@
           >
             <q-icon name="request_quote" size="50px" />Generate Report</q-btn
           >
+          <q-btn stack flat dense aria-label="diary" size="8pt" to="/">
+            <q-icon name="book" size="50px" />Digital Diary</q-btn
+          >
           <q-btn stack flat dense aria-label="connect" size="8pt" to="/">
             <q-icon name="smartphone" size="50px" />Connect</q-btn
           >
         </div>
+      </div>
+      <div
+        class="analytics-panel"
+        style="
+          background-color: white;
+          width: auto;
+          height: 400px;
+          margin-left: 5%;
+          margin-right: 5%;
+          margin-top: 10pt;
+          margin-bottom: 10pt;
+          border-radius: 10px;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        "
+      >
       </div>
     </div>
   </q-page>

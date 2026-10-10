@@ -39,6 +39,7 @@ declare module 'vue-router/auto-routes' {
       | '//(index)'
       | '//historypage'
       | '//profilepage'
+      | '//qrcodepage'
       | '//second'
     >,
     '//(index)': RouteRecordInfo<
@@ -58,6 +59,13 @@ declare module 'vue-router/auto-routes' {
     '//profilepage': RouteRecordInfo<
       '//profilepage',
       '/profilepage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '//qrcodepage': RouteRecordInfo<
+      '//qrcodepage',
+      '/qrcodepage',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -95,6 +103,7 @@ declare module 'vue-router/auto-routes' {
         | '//(index)'
         | '//historypage'
         | '//profilepage'
+        | '//qrcodepage'
         | '//second'
       views:
         | 'default'
@@ -120,6 +129,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index/profilepage.vue': {
       routes:
         | '//profilepage'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/index/qrcodepage.vue': {
+      routes:
+        | '//qrcodepage'
       views:
         | never
       pathParamNames:

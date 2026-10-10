@@ -13,6 +13,7 @@
           color: white;
           display: flex;
           text-align: center;
+          align-items: center;
         "
       >
         User's Profile
