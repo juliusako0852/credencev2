@@ -39,6 +39,9 @@ declare module 'vue-router/auto-routes' {
       | '//(index)'
       | '//analyticspage'
       | '//historypage'
+      | '//insurancespage'
+      | '//investmentspage'
+      | '//loanspage'
       | '//profilepage'
       | '//qrcodepage'
       | '//second'
@@ -61,6 +64,27 @@ declare module 'vue-router/auto-routes' {
     '//historypage': RouteRecordInfo<
       '//historypage',
       '/historypage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '//insurancespage': RouteRecordInfo<
+      '//insurancespage',
+      '/insurancespage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '//investmentspage': RouteRecordInfo<
+      '//investmentspage',
+      '/investmentspage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '//loanspage': RouteRecordInfo<
+      '//loanspage',
+      '/loanspage',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -119,6 +143,9 @@ declare module 'vue-router/auto-routes' {
         | '//(index)'
         | '//analyticspage'
         | '//historypage'
+        | '//insurancespage'
+        | '//investmentspage'
+        | '//loanspage'
         | '//profilepage'
         | '//qrcodepage'
         | '//second'
@@ -147,6 +174,30 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index/historypage.vue': {
       routes:
         | '//historypage'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/index/insurancespage.vue': {
+      routes:
+        | '//insurancespage'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/index/investmentspage.vue': {
+      routes:
+        | '//investmentspage'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/index/loanspage.vue': {
+      routes:
+        | '//loanspage'
       views:
         | never
       pathParamNames:

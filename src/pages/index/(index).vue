@@ -123,13 +123,27 @@
           <q-btn stack flat dense aria-label="connect" size="8pt" to="/">
             <q-icon name="smartphone" size="40px" />Load</q-btn
           >
-          <q-btn stack flat dense aria-label="loans" size="8pt" to="/">
+          <q-btn stack flat dense aria-label="loans" size="8pt" to="/loanspage">
             <q-icon name="wallet" size="40px" />Loans</q-btn
           >
-          <q-btn stack flat dense aria-label="investment" size="8pt" to="/">
+          <q-btn
+            stack
+            flat
+            dense
+            aria-label="investment"
+            size="8pt"
+            to="/investmentspage"
+          >
             <q-icon name="percent" size="40px" />Investment</q-btn
           >
-          <q-btn stack flat dense aria-label="insurance" size="8pt" to="/">
+          <q-btn
+            stack
+            flat
+            dense
+            aria-label="insurance"
+            size="8pt"
+            to="/insurancespage"
+          >
             <q-icon name="shield" size="40px" />Insurance</q-btn
           >
         </div>
