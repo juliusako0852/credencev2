@@ -106,7 +106,7 @@
           <q-btn stack flat dense aria-label="bills" size="8pt" to="/">
             <q-icon name="payments" size="40px" />Bills</q-btn
           >
-          <q-btn stack flat dense aria-label="vault" size="8pt" to="/">
+          <q-btn stack flat dense aria-label="vault" size="8pt" to="/vaultpage">
             <q-icon name="savings" size="40px" />Vault</q-btn
           >
 
@@ -181,8 +181,16 @@
         "
       >
         <div>Insights</div>
-        <div
-          ><q-btn stack flat dense aria-label="insurance" size="8pt" to="/">
+        <div style="width: 30%"
+          ><q-btn
+            stack
+            flat
+            dense
+            aria-label="insurance"
+            size="8pt"
+            to="/analyticspage"
+            style="background-color: #0e494a; width: 100%; border-radius: 10px"
+          >
             View Details</q-btn
           ></div
         >

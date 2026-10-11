@@ -37,14 +37,23 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       Record<never, never>,
       | '//(index)'
+      | '//analyticspage'
       | '//historypage'
       | '//profilepage'
       | '//qrcodepage'
       | '//second'
+      | '//vaultpage'
     >,
     '//(index)': RouteRecordInfo<
       '//(index)',
       '/',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '//analyticspage': RouteRecordInfo<
+      '//analyticspage',
+      '/analyticspage',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -77,6 +86,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '//vaultpage': RouteRecordInfo<
+      '//vaultpage',
+      '/vaultpage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/[...path]': RouteRecordInfo<
       '/[...path]',
       '/:path(.*)',
@@ -101,10 +117,12 @@ declare module 'vue-router/auto-routes' {
       routes:
         | '/'
         | '//(index)'
+        | '//analyticspage'
         | '//historypage'
         | '//profilepage'
         | '//qrcodepage'
         | '//second'
+        | '//vaultpage'
       views:
         | 'default'
       pathParamNames:
@@ -113,6 +131,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index/(index).vue': {
       routes:
         | '//(index)'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/index/analyticspage.vue': {
+      routes:
+        | '//analyticspage'
       views:
         | never
       pathParamNames:
@@ -145,6 +171,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index/second.vue': {
       routes:
         | '//second'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/index/vaultpage.vue': {
+      routes:
+        | '//vaultpage'
       views:
         | never
       pathParamNames:
