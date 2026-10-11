@@ -73,9 +73,70 @@
               align-items: center;
             "
             elevated
-            to="/second"
+            @click="prompt = true"
             label="Emergency Withdrawal"
           />
+          <q-dialog v-model="prompt" persistent>
+            <q-card
+              style="min-width: 350px; border-radius: 10px; color: #0e494a"
+            >
+              <q-card-section>
+                <div class="text-h5" style="font-weight: bold"
+                  ><q-icon name="warning" /> Emergency Withdrawal</div
+                >
+              </q-card-section>
+              <q-card-section>
+                <div class="text-h6">Enter amount:</div>
+              </q-card-section>
+
+              <q-card-section class="q-pt-none">
+                <q-input
+                  dense
+                  v-model="emergency_amount"
+                  autofocus
+                  @keyup.enter="prompt = false"
+                />
+              </q-card-section>
+              <q-card-section>
+                <div class="text-h6">Purpose:</div>
+              </q-card-section>
+
+              <q-card-section class="q-pt-none">
+                <q-input
+                  dense
+                  v-model="emergency_purpose"
+                  autofocus
+                  @keyup.enter="prompt = false"
+                />
+              </q-card-section>
+
+              <q-file
+                filled
+                bottom-slots
+                v-model="emergency_file_upload"
+                label="Upload Receipt"
+                counter
+              >
+                <template #prepend>
+                  <q-icon name="cloud_upload" @click.stop.prevent />
+                </template>
+                <template #append>
+                  <q-icon
+                    name="close"
+                    @click.stop.prevent="emergency_file_upload = null"
+                    class="cursor-pointer"
+                  />
+                </template>
+
+                <template #hint> PDF, JPEG, and PNG files </template>
+              </q-file>
+
+              <q-card-actions align="right" class="text-primary">
+                <q-btn flat label="Cancel" v-close-popup />
+                <q-btn flat label="Submit " v-close-popup />
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
         </div>
         <div style="width: 100%">
           <q-btn
@@ -103,5 +164,13 @@
 </template>
 
 <script setup lang="ts">
-//
+import { ref } from "vue";
+
+const alert = ref(false);
+const confirm = ref(false);
+const prompt = ref(false);
+
+const emergency_file_upload = ref(null);
+const emergency_amount = ref("");
+const emergency_purpose = ref("");
 </script>
