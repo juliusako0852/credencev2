@@ -4,7 +4,7 @@
       <div
         class="q-pt-none"
         style="
-          height: 240px;
+          height: 170px;
           width: 100%;
           margin-top: -20px;
           background-color: white;
@@ -34,47 +34,50 @@
                 #156c6d,
                 #1a898b
               );
+              box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
               text-align: left;
             "
           >
             <q-card-section style="margin-left: 5%; margin-top: 1%">
-              <div class="balance-text" style="font-size: 13pt">Balance</div>
-              <div
-                class="balance-text-value"
-                style="font-size: 27pt; margin-top: 5pt"
-                >Php. 100,000.00
-              </div>
-              <div
-                class="balance-account-number"
-                style="font-size: 12pt; margin-top: 5pt"
-                >Account Number: xxx-xxx-xxx
-              </div>
-              <div
-                class="top-bar3"
-                style="
-                  margin-top: 15px;
-                  height: 10%;
-                  display: flex;
-                  color: white;
-                  text-align: center;
-                  justify-content: flex-end;
-                  align-items: center;
-                "
+              <div class="healthscore-text" style="font-size: 12pt; width: 100%"
+                >Health Score</div
               >
-                <q-btn
+              <div style="display: flex; width: 100%">
+                <div
+                  class="healthscore-text-value"
+                  style="font-size: 45pt; margin-top: 2pt; width: 50%"
+                  >98
+                </div>
+                <div
                   style="
-                    background-color: #0e494a;
+                    margin-top: px;
+                    height: auto;
+                    width: 50%;
+                    display: flex;
                     color: white;
-                    font-weight: bold;
-                    height: 80%;
-                    width: 30%;
-                    border-radius: 10px;
-                    font-size: small;
+                    text-align: center;
+                    justify-content: center;
+                    align-items: center;
                   "
-                  elevated
-                  to="/second"
-                  label="+ Deposit"
-                />
+                >
+                  <q-btn
+                    style="
+                      background-color: #0e494a;
+                      color: white;
+                      font-weight: bold;
+                      height: 50%;
+                      width: 100%;
+                      border-radius: 10px;
+                      font-size: small;
+                      text-align: center;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                    elevated
+                    to="/second"
+                    label="Generate Report"
+                  />
+                </div>
               </div>
             </q-card-section>
           </q-card>
@@ -85,54 +88,115 @@
         <div
           class="button-panel"
           style="
-            height: 200px;
+            height: 160px;
             color: white;
             margin-top: 30px;
             margin-left: 5%;
             margin-right: 5%;
 
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             text-align: center;
             justify-content: space-evenly;
           "
         >
           <q-btn stack flat dense aria-label="send" size="8pt" to="/">
-            <q-icon name="paid" size="50px" />Send</q-btn
+            <q-icon name="swap_horiz" size="40px" />Transfer</q-btn
           >
-          <q-btn stack flat dense aria-label="payments" size="8pt" to="/">
-            <q-icon name="payments" size="50px" />Payments</q-btn
+          <q-btn stack flat dense aria-label="bills" size="8pt" to="/">
+            <q-icon name="payments" size="40px" />Bills</q-btn
           >
-          <q-btn stack flat dense aria-label="buffer_vault" size="8pt" to="/">
-            <q-icon name="savings" size="50px" />Buffer Vault</q-btn
+          <q-btn stack flat dense aria-label="vault" size="8pt" to="/">
+            <q-icon name="savings" size="40px" />Vault</q-btn
           >
+
           <q-btn
             stack
             flat
             dense
-            aria-label="generate_report"
+            aria-label="credit-passport"
             size="8pt"
             to="/"
           >
-            <q-icon name="request_quote" size="50px" />Generate Report</q-btn
-          >
-          <q-btn stack flat dense aria-label="diary" size="8pt" to="/">
-            <q-icon name="book" size="50px" />Digital Diary</q-btn
+            <q-icon name="book" size="40px" />Credit Passport</q-btn
           >
           <q-btn stack flat dense aria-label="connect" size="8pt" to="/">
-            <q-icon name="smartphone" size="50px" />Connect</q-btn
+            <q-icon name="smartphone" size="40px" />Load</q-btn
+          >
+          <q-btn stack flat dense aria-label="loans" size="8pt" to="/">
+            <q-icon name="wallet" size="40px" />Loans</q-btn
+          >
+          <q-btn stack flat dense aria-label="investment" size="8pt" to="/">
+            <q-icon name="percent" size="40px" />Investment</q-btn
+          >
+          <q-btn stack flat dense aria-label="insurance" size="8pt" to="/">
+            <q-icon name="shield" size="40px" />Insurance</q-btn
           >
         </div>
       </div>
+      <div
+        class="forecast-text"
+        style="
+          margin-left: 5%;
+          margin-right: 5%;
+          margin-top: 10pt;
+          color: white;
+          font-weight: bold;
+          font-size: x-large;
+          width: auto;
+          display: flex;
+          border-color: white;
+        "
+        >Financial Forecast</div
+      >
+      <div
+        class="forecast"
+        style="
+          background-color: white;
+          width: auto;
+          height: 200px;
+          margin-left: 5%;
+          margin-right: 5%;
+          margin-top: 5pt;
+          margin-bottom: 10pt;
+          border-radius: 10px;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        "
+      >
+      </div>
+
+      <div
+        class="analytics-text"
+        style="
+          margin-left: 5%;
+          margin-right: 5%;
+          margin-top: 10pt;
+          color: white;
+          font-weight: bold;
+          font-size: large;
+          width: auto;
+          display: flex;
+          border-color: white;
+          justify-content: space-between;
+        "
+      >
+        <div>Insights</div>
+        <div
+          ><q-btn stack flat dense aria-label="insurance" size="8pt" to="/">
+            View Details</q-btn
+          ></div
+        >
+      </div>
+
       <div
         class="analytics-panel"
         style="
           background-color: white;
           width: auto;
-          height: 400px;
+          height: 200px;
           margin-left: 5%;
           margin-right: 5%;
-          margin-top: 10pt;
+          margin-top: 5pt;
           margin-bottom: 10pt;
           border-radius: 10px;
           box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
