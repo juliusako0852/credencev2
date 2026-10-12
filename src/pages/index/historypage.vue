@@ -22,28 +22,46 @@
         class="basic-info"
         style="
           background-color: white;
-          height: 150px;
+          height: 550px;
           width: auto;
           border-radius: 10px;
           margin: 10pt;
         "
       >
-      </div>
-      <div
-        class="contact-info"
-        style="
-          background-color: white;
-          height: 400px;
-          width: auto;
-          border-radius: 10px;
-          margin: 10pt;
-        "
-      >
+        <q-list bordered separator>
+          <q-item
+            v-for="entry in history_entries"
+            key="entry.id"
+            style="width: 100%; height: auto"
+          >
+            <div style="width: 100%">
+              <div style="width: 100%">
+                <q-item-section>
+                  Date: {{ entry.date }} Time: {{ entry.time }}
+                </q-item-section>
+              </div>
+              <div style="width: 100%">
+                <q-item-section>
+                  {{ entry.price }}
+                </q-item-section>
+              </div>
+            </div>
+          </q-item>
+        </q-list>
       </div>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-//
+import { ref } from "vue";
+const history_entries = ref([
+  {
+    id: 1,
+    date: "9/11/2026",
+    time: "9:00 AM",
+    price: "- Php. 100.00",
+    desc: "Added to the vault"
+  }
+]);
 </script>
