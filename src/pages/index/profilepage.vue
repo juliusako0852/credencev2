@@ -47,13 +47,13 @@
           <div style="font-weight: bold; font-size: large; margin-top: 10pt"
             >Name:</div
           >
-          <div>Osama Bin Laden</div>
+          <div>{{ user?.name || error || "Loading..." }}</div>
           <div style="font-weight: bold; font-size: large">Email:</div>
-          <div>osamabinladen@gmail.com</div>
+          <div>{{ user?.email || "Loading..." }}</div>
           <div style="font-weight: bold; font-size: large">Contact:</div>
-          <div>09123456789</div>
+          <div>{{ user?.contact || "Loading..." }}</div>
           <div style="font-weight: bold; font-size: large">Address:</div>
-          <div>Saudi Arabia</div>
+          <div>{{ user?.address || "Loading..." }}</div>
         </div>
       </div>
       <div
@@ -94,14 +94,34 @@
 import { ref, onMounted } from "vue";
 import { api } from "../../boot/axios";
 
-const items = ref([]);
+interface UserProfile {
+  id: number;
+  name: string;
+  email: string;
+  contact: string;
+  address: string;
+}
 
-onMounted(async () => {
+const user = ref<UserProfile | null>(null);
+const error = ref("");
+
+const fetchUser = async () => {
   try {
-    const response = await api.get("items/");
-    items.value = response.data;
-  } catch (error) {
-    console.error("Error fetching data from Django:", error);
+    const response = await api.get("", { params: { format: "json" } });
+    const list = Array.isArray(response.data)
+      ? response.data
+      : response.data.results;
+
+    if (list?.length > 0) {
+      user.value = list[0];
+    } else {
+      error.value = "No user found";
+    }
+  } catch (err: any) {
+    console.error(err);
+    error.value = err.message;
   }
-});
+};
+
+onMounted(fetchUser);
 </script>
