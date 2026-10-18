@@ -91,5 +91,17 @@
 </template>
 
 <script setup lang="ts">
-//
+import { ref, onMounted } from "vue";
+import { api } from "../../boot/axios";
+
+const items = ref([]);
+
+onMounted(async () => {
+  try {
+    const response = await api.get("items/");
+    items.value = response.data;
+  } catch (error) {
+    console.error("Error fetching data from Django:", error);
+  }
+});
 </script>
