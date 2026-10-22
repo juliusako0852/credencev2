@@ -83,7 +83,14 @@
 
       <div class="menu-buttons" style="width: 100%; height: 90%">
         <div class="main-menu-button-panel">
-          <q-btn stack flat dense aria-label="send" size="8pt" to="/">
+          <q-btn
+            stack
+            flat
+            dense
+            aria-label="send"
+            size="8pt"
+            to="../signuppage"
+          >
             <q-icon name="swap_horiz" size="40px" />Transfer</q-btn
           >
           <q-btn stack flat dense aria-label="bills" size="8pt" to="/">

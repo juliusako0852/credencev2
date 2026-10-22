@@ -38,7 +38,13 @@
         "
       >
         Don't have an account?
-        <q-btn flat style="color: #0e494a" no-caps label="Sign Up" />
+        <q-btn
+          flat
+          style="color: #0e494a"
+          no-caps
+          label="Sign Up"
+          to="/signuppage"
+        />
       </div>
 
       <div style="width: auto; margin-bottom: 10pt">
