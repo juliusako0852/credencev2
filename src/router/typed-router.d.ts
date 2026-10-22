@@ -124,6 +124,13 @@ declare module 'vue-router/auto-routes' {
       { path: ParamValue<false> },
       | never
     >,
+    '/loginpage': RouteRecordInfo<
+      '/loginpage',
+      '/loginpage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
   }
 
   /**
@@ -242,6 +249,14 @@ declare module 'vue-router/auto-routes' {
         | never
       pathParamNames:
         | 'path'
+    }
+    'src/pages/loginpage.vue': {
+      routes:
+        | '/loginpage'
+      views:
+        | never
+      pathParamNames:
+        | never
     }
   }
 

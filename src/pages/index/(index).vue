@@ -71,7 +71,7 @@
                       align-items: center;
                     "
                     elevated
-                    to="/second"
+                    to="/loginpage"
                     label="Generate Report"
                   />
                 </div>
