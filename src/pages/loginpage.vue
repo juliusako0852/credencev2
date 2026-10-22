@@ -25,16 +25,99 @@
           font-size: 30pt;
           color: #0e494a;
           font-weight: bolder;
-          margin-bottom: 20pt;
         "
         >Log In</div
       >
-      <div style="width: auto; margin-bottom: 10pt">
-        <q-field standout="bg-teal text-white" label="Email"> </q-field>
+      <div
+        style="
+          width: auto;
+          margin-bottom: 15pt;
+          padding-right: 3pt;
+          text-align: center;
+          color: grey;
+        "
+      >
+        Don't have an account?
+        <q-btn flat style="color: #0e494a" no-caps label="Sign Up" />
       </div>
+
       <div style="width: auto; margin-bottom: 10pt">
-        <q-field standout="bg-teal text-white" label="Password"> </q-field>
+        <q-input
+          elevated
+          rounded
+          standout="bg-teal text-white"
+          v-model="email"
+          label="Email"
+          :dense="dense"
+        />
+      </div>
+      <div style="width: auto; margin-bottom: 5pt">
+        <q-input
+          v-model="password"
+          rounded
+          elevated
+          standout="bg-teal text-white"
+          :dense="dense"
+          label="Password"
+          :type="isPwd ? 'password' : 'text'"
+        >
+          <template #append>
+            <q-icon
+              :name="isPwd ? 'visibility_off' : 'visibility'"
+              class="cursor-pointer"
+              @click="isPwd = !isPwd"
+            />
+          </template>
+        </q-input>
+      </div>
+      <div
+        style="
+          width: auto;
+          margin-bottom: 5pt;
+          padding-right: 3pt;
+          text-align: end;
+        "
+      >
+        <q-btn flat style="color: #0e494a" no-caps label="Forgot Password?" />
+      </div>
+
+      <div
+        style="
+          width: auto;
+          margin-bottom: 10pt;
+          height: 50px;
+          text-align: center;
+          align-items: center;
+        "
+      >
+        <q-btn
+          stack
+          rounded
+          dense
+          elevated
+          aria-label="login-button"
+          size="10pt"
+          to="/"
+          no-caps
+          label="Login"
+          style="
+            width: 100%;
+            height: 100%;
+            color: white;
+            background-color: #0e494a;
+          "
+        />
       </div>
     </div>
   </q-layout>
 </template>
+
+<script setup lang="ts">
+import { ref } from "vue";
+
+const email = ref("");
+const password = ref("");
+const isPwd = ref(true);
+const ph = ref("");
+const dense = ref(false);
+</script>

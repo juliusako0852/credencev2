@@ -183,7 +183,7 @@
             stack
             flat
             dense
-            aria-label="insurance"
+            aria-label="insights"
             size="8pt"
             to="/analyticspage"
             style="background-color: #0e494a; width: 100%; border-radius: 10px"
