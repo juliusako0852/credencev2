@@ -3,13 +3,7 @@
     <div class="home-page" style="height: 100%; width: 100%">
       <div
         class="q-pt-none"
-        style="
-          height: 170px;
-          width: 100%;
-          margin-top: -20px;
-          background-color: white;
-          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-        "
+        style="height: 170px; width: 100%; margin-top: -22px"
       >
         <div
           class="top-bar2"
@@ -21,6 +15,9 @@
             text-align: center;
             justify-content: center;
             align-items: center;
+            border-bottom-left-radius: 7%;
+            border-bottom-right-radius: 7%;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
           "
         >
           <q-card
@@ -85,21 +82,7 @@
       </div>
 
       <div class="menu-buttons" style="width: 100%; height: 90%">
-        <div
-          class="button-panel"
-          style="
-            height: 160px;
-            color: white;
-            margin-top: 30px;
-            margin-left: 5%;
-            margin-right: 5%;
-
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            text-align: center;
-            justify-content: space-evenly;
-          "
-        >
+        <div class="main-menu-button-panel">
           <q-btn stack flat dense aria-label="send" size="8pt" to="/">
             <q-icon name="swap_horiz" size="40px" />Transfer</q-btn
           >

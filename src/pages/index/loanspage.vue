@@ -1,23 +1,7 @@
 <template>
   <q-page>
     <div class="loans-page" style="width: 100%; height: 100%; width: 100%">
-      <div
-        class="loan"
-        style="
-          height: 30px;
-          width: auto;
-          border-radius: 10px;
-          margin: 10pt;
-          font-size: 20pt;
-          font-weight: bold;
-          color: white;
-          display: flex;
-          text-align: center;
-          align-items: center;
-        "
-      >
-        Loans
-      </div>
+      <div class="page-title-text"> Loans </div>
       <div
         class="basic-info"
         style="

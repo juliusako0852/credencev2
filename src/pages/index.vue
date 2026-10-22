@@ -49,11 +49,15 @@
     <q-footer
       style="
         background-color: #156c6d;
-        height: 70px;
-        width: 100%;
+        height: 75px;
+        width: auto;
         padding-top: 3%;
-        padding-left: 2%;
-        padding-right: 2%;
+        margin-left: 3%;
+        margin-right: 3%;
+        margin-bottom: 3%;
+        border-radius: 27px;
+        background-image: linear-gradient(to bottom, #156c6d, #1a898b);
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
       "
     >
       <q-toolbar
@@ -61,6 +65,7 @@
           align-items: center;
           text-align: center;
 
+          border-radius: 5%;
           justify-content: space-around;
           display: flex;
         "
