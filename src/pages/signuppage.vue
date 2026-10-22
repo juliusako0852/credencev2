@@ -55,6 +55,18 @@
           elevated
           rounded
           standout="bg-teal text-white"
+          v-model="phone"
+          :mask="phoneMask"
+          unmasked-value
+          label="Phone Number"
+          :dense="dense"
+        />
+      </div>
+      <div style="width: auto; margin-bottom: 10pt">
+        <q-input
+          elevated
+          rounded
+          standout="bg-teal text-white"
           v-model="email"
           label="Email"
           :dense="dense"
@@ -132,11 +144,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const email = ref("");
 const password = ref("");
 const isPwd = ref(true);
 const ph = ref("");
 const dense = ref(false);
+const phone = ref("");
+const phoneMask = computed(() =>
+  phone.value !== null && phone.value.length > 10
+    ? "(+##) ###-###-####"
+    : "(+##) ####-#####"
+);
 </script>
