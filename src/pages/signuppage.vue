@@ -37,15 +37,21 @@
           color: grey;
         "
       >
-        Already have an account
-        <q-btn flat style="color: #0e494a" no-caps label="Login" />
+        Already have an account?
+        <q-btn
+          flat
+          style="color: #0e494a"
+          no-caps
+          label="Login"
+          to="/loginpage"
+        />
       </div>
       <div style="width: auto; margin-bottom: 10pt">
         <q-input
           elevated
           rounded
           standout="bg-teal text-white"
-          v-model="email"
+          v-model="name"
           label="Name"
           :dense="dense"
         />
@@ -58,7 +64,7 @@
           v-model="phone"
           :mask="phoneMask"
           unmasked-value
-          label="Phone Number"
+          label="Phone Number (+63)"
           :dense="dense"
         />
       </div>
@@ -94,7 +100,7 @@
 
       <div style="width: auto; margin-bottom: 10pt">
         <q-input
-          v-model="password"
+          v-model="confirmPassword"
           rounded
           elevated
           standout="bg-teal text-white"
@@ -146,10 +152,11 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 
+const name = ref("");
 const email = ref("");
 const password = ref("");
+const confirmPassword = ref("");
 const isPwd = ref(true);
-const ph = ref("");
 const dense = ref(false);
 const phone = ref("");
 const phoneMask = computed(() =>
