@@ -38,5 +38,9 @@ export default defineRouter((/* { store, ssrContext } */) => {
     handleHotUpdate(Router);
   }
 
+  Router.onError(error => {
+    console.error("Router navigation error:", error);
+  });
+
   return Router;
 });

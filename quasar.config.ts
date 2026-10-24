@@ -37,7 +37,7 @@ export default defineConfig((/* ctx */) => {
       },
 
       env: {
-        API_URL: process.env.API_URL || "http://10.12.60.192:8000/"
+        API_URL: process.env.API_URL || "http://10.5.51.123:8000/"
       },
 
       typescript: {

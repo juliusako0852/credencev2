@@ -24,7 +24,7 @@
           <q-avatar
             size="100px"
             style="margin-top: 30pt; background-color: #1a898b; color: white"
-            >O</q-avatar
+            >{{ user?.name.charAt(0) }}</q-avatar
           >
         </div>
         <div style="height: 100%; width: 60%; color: #1a898b">
@@ -55,7 +55,7 @@
           align-items: center;
         "
       >
-        Connect Bank Accounts
+        Bank Accounts
       </div>
 
       <div
@@ -76,7 +76,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { api } from "boot/axios";
+import { api } from "../../boot/axios";
 
 interface User {
   id: number;
@@ -100,7 +100,7 @@ const initial = computed(
 onMounted(async () => {
   try {
     // baseURL already ends with /api, so don't repeat it here
-    const { data } = await api.get<UsersResponse>("/users/");
+    const { data } = await api.get<UsersResponse>("/api/users/");
     const users = Array.isArray(data) ? data : data.results;
     user.value = users.find(u => u.id === 1) ?? null;
 
