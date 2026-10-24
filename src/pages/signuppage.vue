@@ -38,13 +38,7 @@
         "
       >
         Already have an account?
-        <q-btn
-          flat
-          style="color: #0e494a"
-          no-caps
-          label="Login"
-          to="/loginpage"
-        />
+        <q-btn flat style="color: #0e494a" no-caps label="Login" to="/" />
       </div>
       <div style="width: auto; margin-bottom: 10pt">
         <q-input
@@ -134,7 +128,7 @@
           elevated
           aria-label="signup-button"
           size="10pt"
-          to="/"
+          to="/app"
           no-caps
           label="Sign Up"
           style="

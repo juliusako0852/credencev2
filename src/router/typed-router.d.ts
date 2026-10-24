@@ -36,85 +36,6 @@ declare module 'vue-router/auto-routes' {
       '/',
       Record<never, never>,
       Record<never, never>,
-      | '//(index)'
-      | '//analyticspage'
-      | '//historypage'
-      | '//insurancespage'
-      | '//investmentspage'
-      | '//loanspage'
-      | '//profilepage'
-      | '//qrcodepage'
-      | '//second'
-      | '//vaultpage'
-    >,
-    '//(index)': RouteRecordInfo<
-      '//(index)',
-      '/',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '//analyticspage': RouteRecordInfo<
-      '//analyticspage',
-      '/analyticspage',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '//historypage': RouteRecordInfo<
-      '//historypage',
-      '/historypage',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '//insurancespage': RouteRecordInfo<
-      '//insurancespage',
-      '/insurancespage',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '//investmentspage': RouteRecordInfo<
-      '//investmentspage',
-      '/investmentspage',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '//loanspage': RouteRecordInfo<
-      '//loanspage',
-      '/loanspage',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '//profilepage': RouteRecordInfo<
-      '//profilepage',
-      '/profilepage',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '//qrcodepage': RouteRecordInfo<
-      '//qrcodepage',
-      '/qrcodepage',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '//second': RouteRecordInfo<
-      '//second',
-      '/second',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '//vaultpage': RouteRecordInfo<
-      '//vaultpage',
-      '/vaultpage',
-      Record<never, never>,
-      Record<never, never>,
       | never
     >,
     '/[...path]': RouteRecordInfo<
@@ -124,9 +45,88 @@ declare module 'vue-router/auto-routes' {
       { path: ParamValue<false> },
       | never
     >,
-    '/loginpage': RouteRecordInfo<
-      '/loginpage',
-      '/loginpage',
+    '/app': RouteRecordInfo<
+      '/app',
+      '/app',
+      Record<never, never>,
+      Record<never, never>,
+      | '/app/(index)'
+      | '/app/analyticspage'
+      | '/app/historypage'
+      | '/app/insurancespage'
+      | '/app/investmentspage'
+      | '/app/loanspage'
+      | '/app/profilepage'
+      | '/app/qrcodepage'
+      | '/app/second'
+      | '/app/vaultpage'
+    >,
+    '/app/(index)': RouteRecordInfo<
+      '/app/(index)',
+      '/app',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/app/analyticspage': RouteRecordInfo<
+      '/app/analyticspage',
+      '/app/analyticspage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/app/historypage': RouteRecordInfo<
+      '/app/historypage',
+      '/app/historypage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/app/insurancespage': RouteRecordInfo<
+      '/app/insurancespage',
+      '/app/insurancespage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/app/investmentspage': RouteRecordInfo<
+      '/app/investmentspage',
+      '/app/investmentspage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/app/loanspage': RouteRecordInfo<
+      '/app/loanspage',
+      '/app/loanspage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/app/profilepage': RouteRecordInfo<
+      '/app/profilepage',
+      '/app/profilepage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/app/qrcodepage': RouteRecordInfo<
+      '/app/qrcodepage',
+      '/app/qrcodepage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/app/second': RouteRecordInfo<
+      '/app/second',
+      '/app/second',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/app/vaultpage': RouteRecordInfo<
+      '/app/vaultpage',
+      '/app/vaultpage',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -154,96 +154,6 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index.vue': {
       routes:
         | '/'
-        | '//(index)'
-        | '//analyticspage'
-        | '//historypage'
-        | '//insurancespage'
-        | '//investmentspage'
-        | '//loanspage'
-        | '//profilepage'
-        | '//qrcodepage'
-        | '//second'
-        | '//vaultpage'
-      views:
-        | 'default'
-      pathParamNames:
-        | never
-    }
-    'src/pages/index/(index).vue': {
-      routes:
-        | '//(index)'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'src/pages/index/analyticspage.vue': {
-      routes:
-        | '//analyticspage'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'src/pages/index/historypage.vue': {
-      routes:
-        | '//historypage'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'src/pages/index/insurancespage.vue': {
-      routes:
-        | '//insurancespage'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'src/pages/index/investmentspage.vue': {
-      routes:
-        | '//investmentspage'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'src/pages/index/loanspage.vue': {
-      routes:
-        | '//loanspage'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'src/pages/index/profilepage.vue': {
-      routes:
-        | '//profilepage'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'src/pages/index/qrcodepage.vue': {
-      routes:
-        | '//qrcodepage'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'src/pages/index/second.vue': {
-      routes:
-        | '//second'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'src/pages/index/vaultpage.vue': {
-      routes:
-        | '//vaultpage'
       views:
         | never
       pathParamNames:
@@ -257,9 +167,99 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | 'path'
     }
-    'src/pages/loginpage.vue': {
+    'src/pages/app.vue': {
       routes:
-        | '/loginpage'
+        | '/app'
+        | '/app/(index)'
+        | '/app/analyticspage'
+        | '/app/historypage'
+        | '/app/insurancespage'
+        | '/app/investmentspage'
+        | '/app/loanspage'
+        | '/app/profilepage'
+        | '/app/qrcodepage'
+        | '/app/second'
+        | '/app/vaultpage'
+      views:
+        | 'default'
+      pathParamNames:
+        | never
+    }
+    'src/pages/app/(index).vue': {
+      routes:
+        | '/app/(index)'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/app/analyticspage.vue': {
+      routes:
+        | '/app/analyticspage'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/app/historypage.vue': {
+      routes:
+        | '/app/historypage'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/app/insurancespage.vue': {
+      routes:
+        | '/app/insurancespage'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/app/investmentspage.vue': {
+      routes:
+        | '/app/investmentspage'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/app/loanspage.vue': {
+      routes:
+        | '/app/loanspage'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/app/profilepage.vue': {
+      routes:
+        | '/app/profilepage'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/app/qrcodepage.vue': {
+      routes:
+        | '/app/qrcodepage'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/app/second.vue': {
+      routes:
+        | '/app/second'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/app/vaultpage.vue': {
+      routes:
+        | '/app/vaultpage'
       views:
         | never
       pathParamNames:
