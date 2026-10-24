@@ -35,8 +35,13 @@
             style="width: 100%; height: auto"
           >
             <div style="width: 100%; display: flex">
-              <div style="width: 20%" v-if="entry.entity."></div>
-              <div style="width: 45%">
+              <div style="width: 15%" v-if="entry.entity === 'Buffer Vault'"
+                ><q-icon name="savings" size="40px" style="color: #0e494a"
+              /></div>
+              <div style="width: 15%" v-if="entry.entity !== 'Buffer Vault'"
+                ><q-icon name="swap_horiz" size="40px" style="color: #0e494a"
+              /></div>
+              <div style="width: 50%">
                 <div
                   style="
                     width: 100%;
@@ -91,6 +96,24 @@ import { ref } from "vue";
 const history_entries = ref([
   {
     transaction_id: 1,
+    id: 1,
+    entity: "Buffer Vault",
+    purpose: "Withdrawal",
+    date: "9/11/2026",
+    time: "9:00 AM",
+    amount: -100.0
+  },
+  {
+    transaction_id: 2,
+    id: 1,
+    entity: "Buffer Vault",
+    purpose: "Withdrawal",
+    date: "9/11/2026",
+    time: "9:00 AM",
+    amount: -100.0
+  },
+  {
+    transaction_id: 3,
     id: 1,
     entity: "Buffer Vault",
     purpose: "Withdrawal",
