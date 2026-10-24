@@ -166,4 +166,44 @@ const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+/*
+//authorization
+import { computed, onMounted } from "vue";
+import { api } from "../boot/axios";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  contact: string;
+  address: string;
+}
+
+// DRF returns a plain array, or { results: [...] } when pagination is enabled
+type UsersResponse = User[] | { results: User[] };
+
+const user = ref<User | null>(null);
+const loading = ref(true);
+const errorMessage = ref("");
+
+const initial = computed(
+  () => user.value?.name?.charAt(0).toUpperCase() || "?"
+);
+
+onMounted(async () => {
+  try {
+    // baseURL already ends with /api, so don't repeat it here
+    const { data } = await api.get<UsersResponse>("/users/");
+    const users = Array.isArray(data) ? data : data.results;
+    user.value = users.find(u => u.id === 1) ?? null;
+
+    if (!user.value) errorMessage.value = "User not found.";
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    errorMessage.value = "Could not load profile.";
+  } finally {
+    loading.value = false;
+  }
+});
+*/
 </script>

@@ -161,7 +161,7 @@ const dense = ref(false);
 const phone = ref("");
 const phoneMask = computed(() =>
   phone.value !== null && phone.value.length > 10
-    ? "(+##) ###-###-####"
-    : "(+##) ####-#####"
+    ? "(+63) ###-###-####"
+    : "(+63) ####-#####"
 );
 </script>

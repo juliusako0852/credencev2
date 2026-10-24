@@ -31,7 +31,7 @@
           <div style="font-weight: bold; font-size: large; margin-top: 10pt"
             >Name:</div
           >
-          <div>{{ user?.name || error || "Loading..." }}</div>
+          <div>{{ user?.name || "Loading..." }}</div>
           <div style="font-weight: bold; font-size: large">Email:</div>
           <div>{{ user?.email || "Loading..." }}</div>
           <div style="font-weight: bold; font-size: large">Contact:</div>
@@ -75,10 +75,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { api } from "../../boot/axios";
+import { ref, computed, onMounted } from "vue";
+import { api } from "boot/axios";
 
-interface UserProfile {
+interface User {
   id: number;
   name: string;
   email: string;
@@ -86,26 +86,30 @@ interface UserProfile {
   address: string;
 }
 
-const user = ref<UserProfile | null>(null);
-const error = ref("");
+// DRF returns a plain array, or { results: [...] } when pagination is enabled
+type UsersResponse = User[] | { results: User[] };
 
-const fetchUser = async () => {
+const user = ref<User | null>(null);
+const loading = ref(true);
+const errorMessage = ref("");
+
+const initial = computed(
+  () => user.value?.name?.charAt(0).toUpperCase() || "?"
+);
+
+onMounted(async () => {
   try {
-    const response = await api.get("", { params: { format: "json" } });
-    const list = Array.isArray(response.data)
-      ? response.data
-      : response.data.results;
+    // baseURL already ends with /api, so don't repeat it here
+    const { data } = await api.get<UsersResponse>("/users/");
+    const users = Array.isArray(data) ? data : data.results;
+    user.value = users.find(u => u.id === 1) ?? null;
 
-    if (list?.length > 0) {
-      user.value = list[0];
-    } else {
-      error.value = "No user found";
-    }
-  } catch (err: any) {
-    console.error(err);
-    error.value = err.message;
+    if (!user.value) errorMessage.value = "User not found.";
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    errorMessage.value = "Could not load profile.";
+  } finally {
+    loading.value = false;
   }
-};
-
-onMounted(fetchUser);
+});
 </script>

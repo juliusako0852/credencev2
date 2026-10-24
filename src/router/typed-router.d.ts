@@ -151,6 +151,14 @@ declare module 'vue-router/auto-routes' {
    * @internal
    */
   export interface _RouteFileInfoMap {
+    'src/pages/loginpage.vue': {
+      routes:
+        | '/loginpage'
+      views:
+        | 'default'
+      pathParamNames:
+        | never
+    }
     'src/pages/index.vue': {
       routes:
         | '/'
@@ -165,7 +173,7 @@ declare module 'vue-router/auto-routes' {
         | '//second'
         | '//vaultpage'
       views:
-        | 'default'
+        | never
       pathParamNames:
         | never
     }
@@ -257,14 +265,7 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | 'path'
     }
-    'src/pages/loginpage.vue': {
-      routes:
-        | '/loginpage'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
+
     'src/pages/signuppage.vue': {
       routes:
         | '/signuppage'
