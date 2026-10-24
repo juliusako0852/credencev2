@@ -96,7 +96,14 @@
           <q-btn stack flat dense aria-label="bills" size="8pt" to="/">
             <q-icon name="payments" size="40px" />Bills</q-btn
           >
-          <q-btn stack flat dense aria-label="vault" size="8pt" to="/vaultpage">
+          <q-btn
+            stack
+            flat
+            dense
+            aria-label="vault"
+            size="8pt"
+            to="/app/vaultpage"
+          >
             <q-icon name="savings" size="40px" />Vault</q-btn
           >
 
@@ -113,7 +120,14 @@
           <q-btn stack flat dense aria-label="connect" size="8pt" to="/">
             <q-icon name="smartphone" size="40px" />Load</q-btn
           >
-          <q-btn stack flat dense aria-label="loans" size="8pt" to="/loanspage">
+          <q-btn
+            stack
+            flat
+            dense
+            aria-label="loans"
+            size="8pt"
+            to="/app/loanspage"
+          >
             <q-icon name="wallet" size="40px" />Loans</q-btn
           >
           <q-btn
@@ -122,7 +136,7 @@
             dense
             aria-label="investment"
             size="8pt"
-            to="/investmentspage"
+            to="/app/investmentspage"
           >
             <q-icon name="percent" size="40px" />Investment</q-btn
           >
@@ -132,7 +146,7 @@
             dense
             aria-label="insurance"
             size="8pt"
-            to="/insurancespage"
+            to="/app/insurancespage"
           >
             <q-icon name="shield" size="40px" />Insurance</q-btn
           >
