@@ -3,7 +3,7 @@
     view="lHh Lpr lFf"
     style="background-image: linear-gradient(to bottom, #1a898b, black)"
   >
-    <div style="width: auto; height: 25vh"> </div>
+    <div class="signup-background"> </div>
     <div
       style="
         width: auto;
