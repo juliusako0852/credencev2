@@ -138,7 +138,7 @@
             size="8pt"
             to="/app/investmentspage"
           >
-            <q-icon name="percent" size="40px" />Investment</q-btn
+            <q-icon name="percent" size="40px" />Investments</q-btn
           >
           <q-btn
             stack
@@ -148,7 +148,7 @@
             size="8pt"
             to="/app/insurancespage"
           >
-            <q-icon name="shield" size="40px" />Insurance</q-btn
+            <q-icon name="shield" size="40px" />Insurances</q-btn
           >
         </div>
       </div>
