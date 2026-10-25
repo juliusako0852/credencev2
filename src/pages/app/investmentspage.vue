@@ -22,24 +22,34 @@
           <details>
             <summary>
               <div>Name of Investment:</div>
-              <div>{{ entry.investment_name }}</div>
+              <div style="font-weight: normal; color: black">{{
+                entry.investment_name
+              }}</div>
               <div>Type:</div>
-              <div>{{ entry.type }}</div>
+              <div style="font-weight: normal; color: black">{{
+                entry.type
+              }}</div>
               <div>Minimum Capital:</div>
-              <div>{{ entry.minimum_capital }}</div>
+              <div style="font-weight: normal; color: black">{{
+                entry.minimum_capital
+              }}</div>
               <div>Return:</div>
-              <div>{{ entry.return }}</div></summary
+              <div style="font-weight: normal; color: black">{{
+                entry.return
+              }}</div></summary
             >
             <div>Month to Date (MTD) Performance:</div>
-            <div>{{ entry.mtd }}</div>
+            <div style="font-weight: normal; color: black">{{ entry.mtd }}</div>
             <div>Year to Date (YTD) Performance:</div>
-            <div>{{ entry.ytd }}</div>
+            <div style="font-weight: normal; color: black">{{ entry.ytd }}</div>
             <div>Net Asset Value (NAV):</div>
-            <div>{{ entry.nav }}</div>
+            <div style="font-weight: normal; color: black">{{ entry.nav }}</div>
             <div>Net Asset Value per Share (NAVPS):</div>
-            <div>{{ entry.navps }}</div>
+            <div style="font-weight: normal; color: black">{{
+              entry.navps
+            }}</div>
             <div>Return since inception:</div>
-            <div>{{ entry.rsi }}</div>
+            <div style="font-weight: normal; color: black">{{ entry.rsi }}</div>
           </details>
         </div>
       </div>
@@ -54,6 +64,30 @@ import { invalidateTypeCache } from "vue/compiler-sfc";
 const investments = ref([
   {
     investment_id: 1,
+    investment_name: "Shann Scam Inc.",
+    type: "Trust Fund",
+    minimum_capital: 10000,
+    return: 1234,
+    mtd: 23323,
+    ytd: 23232,
+    nav: 1231,
+    navps: 2323,
+    rsi: 322332
+  },
+  {
+    investment_id: 2,
+    investment_name: "Shann Scam Inc.",
+    type: "Trust Fund",
+    minimum_capital: 10000,
+    return: 1234,
+    mtd: 23323,
+    ytd: 23232,
+    nav: 1231,
+    navps: 2323,
+    rsi: 322332
+  },
+  {
+    investment_id: 3,
     investment_name: "Shann Scam Inc.",
     type: "Trust Fund",
     minimum_capital: 10000,
