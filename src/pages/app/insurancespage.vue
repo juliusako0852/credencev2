@@ -11,6 +11,7 @@
           border-radius: 10px;
           margin: 10pt;
           padding: 10pt;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
           display: flex;
         "
         v-for="entry in insurance_list"
