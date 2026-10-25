@@ -22,7 +22,8 @@
         class="basic-info"
         style="
           background-color: white;
-          height: 550px;
+          min-height: 550px;
+          height: auto;
           width: auto;
           border-radius: 10px;
           margin: 10pt;
@@ -114,6 +115,60 @@ const history_entries = ref([
   },
   {
     transaction_id: 3,
+    id: 1,
+    entity: "Buffer Vault",
+    purpose: "Withdrawal",
+    date: "9/11/2026",
+    time: "9:00 AM",
+    amount: -100.0
+  },
+  {
+    transaction_id: 1,
+    id: 1,
+    entity: "Buffer Vault",
+    purpose: "Withdrawal",
+    date: "9/11/2026",
+    time: "9:00 AM",
+    amount: -100.0
+  },
+  {
+    transaction_id: 2,
+    id: 1,
+    entity: "Buffer Vault",
+    purpose: "Withdrawal",
+    date: "9/11/2026",
+    time: "9:00 AM",
+    amount: -100.0
+  },
+  {
+    transaction_id: 3,
+    id: 1,
+    entity: "Buffer Vault",
+    purpose: "Withdrawal",
+    date: "9/11/2026",
+    time: "9:00 AM",
+    amount: -100.0
+  },
+  {
+    transaction_id: 4,
+    id: 1,
+    entity: "Buffer Vault",
+    purpose: "Withdrawal",
+    date: "9/11/2026",
+    time: "9:00 AM",
+    amount: -100.0
+  },
+  {
+    transaction_id: 5,
+    id: 1,
+    entity: "Buffer Vault",
+    purpose: "Withdrawal",
+    date: "9/11/2026",
+    time: "9:00 AM",
+    amount: -100.0
+  },
+  {
+    transaction_id: 6,
     id: 1,
     entity: "Buffer Vault",
     purpose: "Withdrawal",

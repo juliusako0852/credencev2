@@ -3,10 +3,10 @@
     <div class="profile-page" style="width: 100%; height: 100%; width: 100%">
       <div class="page-title-text"> User's Profile </div>
       <div
-        class="basic-info"
         style="
           background-color: white;
-          height: 220px;
+          min-height: 220px;
+          height: auto;
           width: auto;
           border-radius: 10px;
           margin: 10pt;
@@ -63,6 +63,7 @@
         style="
           background-color: white;
           min-height: 200px;
+          height: auto;
           width: auto;
           border-radius: 10px;
           margin: 10pt;
