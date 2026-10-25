@@ -10,33 +10,39 @@
           width: auto;
           border-radius: 10px;
           margin: 10pt;
-          padding: 5pt;
+          padding: 10pt;
           display: flex;
         "
         v-for="entry in credit_histories"
         key="entry.loan_id"
       >
         <div
-          style="width: 50%; min-height: 130px; color: teal; font-size: medium"
+          style="
+            width: 60%;
+            min-height: 130px;
+            color: teal;
+            font-size: medium;
+            font-weight: bold;
+          "
         >
-          <div style="font-weight: bold">Lender:</div>
-          <div style="font-weight: bold">Disbursement Date:</div>
-          <div style="font-weight: bold">Loan Amount:</div>
-          <div style="font-weight: bold">Daily Amount:</div>
-          <div style="font-weight: bold">Loan Term:</div>
-          <div style="font-weight: bold">Daily Payment Amount:</div>
-          <div style="font-weight: bold">Total Repayment:</div>
-          <div style="font-weight: bold">Total Interest Rate:</div>
+          <div>Lender:</div>
+          <div>Disbursement Date:</div>
+          <div>Loan Amount:</div>
+          <div>Daily Amount:</div>
+          <div>Loan Term:</div>
+          <div>Daily Payment Amount:</div>
+          <div>Total Repayment:</div>
+          <div>Total Interest Rate:</div>
         </div>
-        <div style="width: 50%; min-height: 130px; font-size: medium">
-          <div style="font-weight: bold">{{ entry.lender }}</div>
-          <div style="font-weight: bold">{{ entry.disbursement_date }}</div>
-          <div style="font-weight: bold">{{ entry.loan_amount }}</div>
-          <div style="font-weight: bold">{{ entry.daily_amount }}</div>
-          <div style="font-weight: bold">{{ entry.loan_term }}</div>
-          <div style="font-weight: bold">{{ entry.daily_payment_amount }}</div>
-          <div style="font-weight: bold">{{ entry.total_repayment }}</div>
-          <div style="font-weight: bold">{{ entry.total_interest_rate }}</div>
+        <div style="width: 40%; min-height: 130px; font-size: medium">
+          <div>{{ entry.lender }}</div>
+          <div>{{ entry.disbursement_date }}</div>
+          <div>{{ entry.loan_amount }}</div>
+          <div>{{ entry.daily_amount }}</div>
+          <div>{{ entry.loan_term }}</div>
+          <div>{{ entry.daily_payment_amount }}</div>
+          <div>{{ entry.total_repayment }}</div>
+          <div>{{ entry.total_interest_rate }}</div>
         </div>
       </div>
     </div>
