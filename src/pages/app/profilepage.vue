@@ -3,10 +3,7 @@
     <div class="profile-page" style="width: 100%; height: 100%; width: 100%">
       <div style="width: 100%; display: flex">
         <div class="page-title-text" style="width: 50%"> User's Profile </div>
-        <div
-          class="page-title-text"
-          style="width: 50%; text-align: right; background-color: pink"
-        >
+        <div class="page-title-text" style="width: 50%; text-align: right">
           <q-btn
             style="
               background-color: #0e494a;
@@ -23,10 +20,84 @@
             "
             elevated
             @click="prompt = true"
-            label="Edit Profile"
-          />
+            ><q-icon name="edit" /> Edit Profile</q-btn
+          >
         </div>
       </div>
+      <q-dialog v-model="prompt" persistent>
+        <q-card style="min-width: 350px; border-radius: 10px; color: #0e494a">
+          <q-card-section>
+            <div class="text-h5" style="font-weight: bold"
+              ><q-icon name="edit" /> Edit Profile</div
+            >
+          </q-card-section>
+          <q-card-section>
+            <div class="text-h6">Name:</div>
+            <q-input
+              dense
+              v-model="new_name"
+              value="{"
+              user.name
+              }
+              autofocus
+              @keyup.enter="prompt = false"
+            />
+          </q-card-section>
+
+          <q-card-section class="q-pt-none"> </q-card-section>
+
+          <q-card-section>
+            <div class="text-h6">Email:</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            <q-input
+              dense
+              v-model="new_email"
+              autofocus
+              @keyup.enter="prompt = false"
+            />
+          </q-card-section>
+          <q-card-section>
+            <div class="text-h6">Purpose:</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            <q-input
+              dense
+              v-model="emergency_purpose"
+              autofocus
+              @keyup.enter="prompt = false"
+            />
+          </q-card-section>
+
+          <q-file
+            filled
+            bottom-slots
+            v-model="emergency_file_upload"
+            label="Upload Receipt"
+            counter
+          >
+            <template #prepend>
+              <q-icon name="cloud_upload" @click.stop.prevent />
+            </template>
+            <template #append>
+              <q-icon
+                name="close"
+                @click.stop.prevent="emergency_file_upload = null"
+                class="cursor-pointer"
+              />
+            </template>
+
+            <template #hint> PDF, JPEG, and PNG files </template>
+          </q-file>
+
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat label="Cancel" v-close-popup />
+            <q-btn flat label="Submit " v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
       <div
         style="
           background-color: white;
@@ -34,7 +105,8 @@
           height: auto;
           width: auto;
           border-radius: 10px;
-          margin: 10pt;
+          margin-left: 10pt;
+          margin-right: 10pt;
           display: flex;
         "
       >
