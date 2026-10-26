@@ -1,7 +1,32 @@
 <template>
   <q-page>
     <div class="profile-page" style="width: 100%; height: 100%; width: 100%">
-      <div class="page-title-text"> User's Profile </div>
+      <div style="width: 100%; display: flex">
+        <div class="page-title-text" style="width: 50%"> User's Profile </div>
+        <div
+          class="page-title-text"
+          style="width: 50%; text-align: right; background-color: pink"
+        >
+          <q-btn
+            style="
+              background-color: #0e494a;
+              color: white;
+              font-weight: bold;
+              height: 50%;
+              width: 80%;
+              border-radius: 10px;
+
+              font-size: small;
+              text-align: center;
+              justify-content: center;
+              align-items: center;
+            "
+            elevated
+            @click="prompt = true"
+            label="Edit Profile"
+          />
+        </div>
+      </div>
       <div
         style="
           background-color: white;
@@ -79,6 +104,8 @@
 import { ref, computed, onMounted } from "vue";
 import { api } from "../../boot/axios";
 
+const prompt = ref(false);
+
 interface User {
   id: number;
   name: string;
@@ -87,30 +114,89 @@ interface User {
   address: string;
 }
 
-// DRF returns a plain array, or { results: [...] } when pagination is enabled
-type UsersResponse = User[] | { results: User[] };
-
 const user = ref<User | null>(null);
+const originalUser = ref<User | null>(null);
+
 const loading = ref(true);
+const saving = ref(false);
 const errorMessage = ref("");
+const successMessage = ref("");
 
 const initial = computed(
   () => user.value?.name?.charAt(0).toUpperCase() || "?"
 );
 
-onMounted(async () => {
-  try {
-    // baseURL already ends with /api, so don't repeat it here
-    const { data } = await api.get<UsersResponse>("/api/users/");
-    const users = Array.isArray(data) ? data : data.results;
-    user.value = users.find(u => u.id === 1) ?? null;
+// Fetch a specific user from Django
+async function fetchUser() {
+  loading.value = true;
+  errorMessage.value = "";
+  successMessage.value = "";
 
-    if (!user.value) errorMessage.value = "User not found.";
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    errorMessage.value = "Could not load profile.";
+  try {
+    const { data } = await api.get<User>("/api/users/1/");
+
+    user.value = { ...data };
+    originalUser.value = { ...data };
+  } catch (error: any) {
+    console.error("Error fetching user:", error);
+
+    errorMessage.value =
+      error.response?.data?.detail ||
+      "Could not load profile. Check your Django API connection.";
   } finally {
     loading.value = false;
   }
-});
+}
+
+// Update the existing user record
+async function updateUser() {
+  if (!user.value || saving.value) return;
+
+  saving.value = true;
+  errorMessage.value = "";
+  successMessage.value = "";
+
+  try {
+    const { data } = await api.patch<User>(`/api/users/${user.value.id}/`, {
+      name: user.value.name,
+      email: user.value.email,
+      contact: user.value.contact,
+      address: user.value.address
+    });
+
+    user.value = { ...data };
+    originalUser.value = { ...data };
+
+    successMessage.value = "Profile updated successfully!";
+  } catch (error: any) {
+    console.error("Error updating user:", error);
+
+    const responseData = error.response?.data;
+
+    errorMessage.value =
+      typeof responseData === "object" && responseData !== null
+        ? Object.entries(responseData)
+            .map(
+              ([field, message]) =>
+                `${field}: ${
+                  Array.isArray(message) ? message.join(", ") : String(message)
+                }`
+            )
+            .join(" | ")
+        : responseData?.detail || "Could not update profile. Please try again.";
+  } finally {
+    saving.value = false;
+  }
+}
+
+// Restore the last fetched or successfully saved values
+function resetForm() {
+  if (originalUser.value) {
+    user.value = { ...originalUser.value };
+    errorMessage.value = "";
+    successMessage.value = "";
+  }
+}
+
+onMounted(fetchUser);
 </script>
