@@ -42,5 +42,21 @@ export default defineRouter((/* { store, ssrContext } */) => {
     console.error("Router navigation error:", error);
   });
 
+  Router.beforeEach(to => {
+    const token = localStorage.getItem("token");
+
+    // Protect all pages under /app
+    if (to.path.startsWith("/index") && !token) {
+      return "/";
+    }
+
+    // Prevent logged-in users from returning to the login page
+    if (to.path === "/" && token) {
+      return "/app";
+    }
+
+    return true;
+  });
+
   return Router;
 });

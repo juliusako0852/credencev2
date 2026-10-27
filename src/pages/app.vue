@@ -124,7 +124,7 @@
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label header> Essential Links </q-item-label>
+        <q-item-label header> Options </q-item-label>
 
         <EssentialLink
           v-for="link in linksList"
@@ -148,16 +148,9 @@ import EssentialLink, {
 
 const linksList: EssentialLinkProps[] = [
   {
-    label: "Docs",
-    caption: "quasar.dev",
-    icon: "school",
+    label: "Logout",
+    icon: "exit",
     link: "https://quasar.dev"
-  },
-  {
-    label: "GitHub",
-    caption: "github.com/quasarframework",
-    icon: "code",
-    link: "https://github.com/quasarframework"
   }
 ];
 
@@ -206,4 +199,15 @@ onMounted(async () => {
   }
 });
 */
+
+import { useAuthStore } from "../stores/auth";
+import { useRouter } from "vue-router";
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+const logout = async () => {
+  authStore.logout();
+  await router.replace("/");
+};
 </script>
