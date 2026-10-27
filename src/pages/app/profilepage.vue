@@ -28,7 +28,7 @@
         <q-card style="min-width: 350px; border-radius: 10px; color: #0e494a">
           <q-card-section>
             <div class="text-h5" style="font-weight: bold"
-              ><q-icon name="edit" /> Edit Profile</div
+              ><q-icon name="edit" />Edit Profile</div
             >
           </q-card-section>
           <q-card-section>
@@ -36,21 +36,13 @@
             <q-input
               dense
               v-model="new_name"
-              value="{"
-              user.name
-              }
               autofocus
               @keyup.enter="prompt = false"
             />
           </q-card-section>
 
-          <q-card-section class="q-pt-none"> </q-card-section>
-
           <q-card-section>
             <div class="text-h6">Email:</div>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
             <q-input
               dense
               v-model="new_email"
@@ -59,42 +51,27 @@
             />
           </q-card-section>
           <q-card-section>
-            <div class="text-h6">Purpose:</div>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
+            <div class="text-h6">Contact Digits:</div>
             <q-input
               dense
-              v-model="emergency_purpose"
+              v-model="new_contact"
+              autofocus
+              @keyup.enter="prompt = false"
+            />
+          </q-card-section>
+          <q-card-section>
+            <div class="text-h6">Address:</div>
+            <q-input
+              dense
+              v-model="new_address"
               autofocus
               @keyup.enter="prompt = false"
             />
           </q-card-section>
 
-          <q-file
-            filled
-            bottom-slots
-            v-model="emergency_file_upload"
-            label="Upload Receipt"
-            counter
-          >
-            <template #prepend>
-              <q-icon name="cloud_upload" @click.stop.prevent />
-            </template>
-            <template #append>
-              <q-icon
-                name="close"
-                @click.stop.prevent="emergency_file_upload = null"
-                class="cursor-pointer"
-              />
-            </template>
-
-            <template #hint> PDF, JPEG, and PNG files </template>
-          </q-file>
-
           <q-card-actions align="right" class="text-primary">
             <q-btn flat label="Cancel" v-close-popup />
-            <q-btn flat label="Submit " v-close-popup />
+            <q-btn flat label="Update " v-close-popup />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -197,6 +174,11 @@ const successMessage = ref("");
 const initial = computed(
   () => user.value?.name?.charAt(0).toUpperCase() || "?"
 );
+
+const new_name = computed(() => user.value?.name);
+const new_email = computed(() => user.value?.email);
+const new_contact = computed(() => user.value?.contact);
+const new_address = computed(() => user?.value?.address);
 
 // Fetch a specific user from Django
 async function fetchUser() {
