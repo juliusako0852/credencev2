@@ -45,14 +45,14 @@ export default defineRouter((/* { store, ssrContext } */) => {
   Router.beforeEach(to => {
     const token = localStorage.getItem("token");
 
-    // Protect all pages under /app
-    if (to.path.startsWith("/index") && !token) {
-      return "/";
+    // Block all /app pages if the user is not logged in
+    if (to.path.startsWith("/app") && !token) {
+      return { path: "/" };
     }
 
-    // Prevent logged-in users from returning to the login page
+    // Redirect logged-in users away from the login page
     if (to.path === "/" && token) {
-      return "/app";
+      return { path: "/app" };
     }
 
     return true;

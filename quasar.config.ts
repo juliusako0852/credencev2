@@ -24,6 +24,7 @@ export default defineConfig((/* ctx */) => {
       // 'eva-icons',
       // 'themify',
       // 'line-awesome',
+      "material-icons",
 
       "roboto-font", // optional, you are not bound to it
       "material-icons" // optional, you are not bound to it

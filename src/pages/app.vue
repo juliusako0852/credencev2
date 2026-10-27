@@ -123,15 +123,17 @@
     <
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Options </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.label"
-          v-bind="link"
-        />
-      </q-list>
+      <q-item-label header> Options </q-item-label>
+      <q-btn
+        flat
+        aria-label="insights"
+        size="8pt"
+        style="width: 70%; border-radius: 10px"
+        icon="exit_to_app"
+        @click="logout"
+      >
+        LOGOUT</q-btn
+      >
     </q-drawer>
 
     <q-page-container>
@@ -145,14 +147,6 @@ import { ref } from "vue";
 import EssentialLink, {
   type EssentialLinkProps
 } from "@/components/EssentialLink.vue";
-
-const linksList: EssentialLinkProps[] = [
-  {
-    label: "Logout",
-    icon: "exit",
-    link: "https://quasar.dev"
-  }
-];
 
 const leftDrawerOpen = ref(false);
 
