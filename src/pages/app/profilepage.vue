@@ -163,6 +163,14 @@ interface User {
   address: string;
 }
 
+interface CurrentUser {
+  id: number;
+  username: string;
+  email: string;
+}
+
+const current_user = ref<CurrentUser | null>(null);
+
 const user = ref<User | null>(null);
 const originalUser = ref<User | null>(null);
 
@@ -181,22 +189,27 @@ const new_contact = computed(() => user.value?.contact);
 const new_address = computed(() => user?.value?.address);
 
 // Fetch a specific user from Django
+
 async function fetchUser() {
   loading.value = true;
   errorMessage.value = "";
-  successMessage.value = "";
 
   try {
-    const { data } = await api.get<User>("/api/users/1/");
+    const response = await api.get<CurrentUser>("users/me/");
+
+    current_user.value = response.data;
+
+    console.log("Logged-in user ID:", current_user.value.id);
+
+    const { data } = await api.get<User>(`api/users/${current_user.value.id}/`);
 
     user.value = { ...data };
     originalUser.value = { ...data };
   } catch (error: any) {
-    console.error("Error fetching user:", error);
+    console.error("Error fetching user:", error.response?.data ?? error);
 
     errorMessage.value =
-      error.response?.data?.detail ||
-      "Could not load profile. Check your Django API connection.";
+      error.response?.data?.detail || "Could not load profile.";
   } finally {
     loading.value = false;
   }
