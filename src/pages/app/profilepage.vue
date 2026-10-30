@@ -93,9 +93,17 @@
             <div class="text-h6">City:</div>
             <q-select
               dense
-              v-model="new_address"
-              autofocus
-              @keyup.enter="prompt = false"
+              v-model="selectedCities"
+              :options="filteredCities"
+              option-label="name"
+              option-value="id"
+              label="Select City/Municipality"
+              outlined
+              emit-value
+              map-options
+              use-input
+              input-debounce="0"
+              clearable
             />
           </q-card-section>
 
@@ -331,7 +339,7 @@ const new_region: Region[] = [
       "Mountain Province"
     ]
   },
-  { id: 5, name: "National Capital Region (NCR)", provinces: [] },
+  { id: 5, name: "National Capital Region (NCR)", provinces: ["Metro Manila"] },
   {
     id: 6,
     name: "Region IV-A - CALABARZON",
@@ -453,310 +461,309 @@ const filteredProvinces = computed(() => {
   return region ? region.provinces : [];
 });
 
-watch(selectedRegion, () => {
-  selectedProvince.value = null;
-});
-
-interface CitiesByProvince {
+interface City {
   province: string;
-  cities : string[];
+  cities: string[];
 }
 
-const cities: CitiesByProvince = [
+const cities: City[] = [
   {
-  province: "Abra",
-  cities: [
-    "Bangued",
-    "Boliney",
-    "Bucay",
-    "Bucloc",
-    "Daguioman",
-    "Danglas",
-    "Dolores",
-    "La Paz",
-    "Lacub",
-    "Lagangilang",
-    "Lagayan",
-    "Langiden",
-    "Licuan-Baay",
-    "Luba",
-    "Malibcong",
-    "Manabo",
-    "Peñarrubia",
-    "Pidigan",
-    "Pilar",
-    "Sallapadan",
-    "San Isidro",
-    "San Juan",
-    "San Quintin",
-    "Tayum",
-    "Tineg",
-    "Tubo",
-    "Villaviciosa"
-  ]
-  }
-  {
-  province: "Agusan del Norte",
-  cities: [
-    "Buenavista",
-    "Butuan",
-    "Cabadbaran",
-    "Carmen",
-    "Jabonga",
-    "Kitcharao",
-    "Las Nieves",
-    "Magallanes",
-    "Nasipit",
-    "Remedios T. Romualdez",
-    "Santiago",
-    "Tubay"
-  ],
-  "Agusan del Sur": [
-    "Bayugan",
-    "Bunawan",
-    "Esperanza",
-    "La Paz",
-    "Loreto",
-    "Prosperidad",
-    "Rosario",
-    "San Francisco",
-    "San Luis",
-    "Santa Josefa",
-    "Sibagat",
-    "Talacogon",
-    "Trento",
-    "Veruela"
-  ]
+    province: "Abra",
+    cities: [
+      "Bangued",
+      "Boliney",
+      "Bucay",
+      "Bucloc",
+      "Daguioman",
+      "Danglas",
+      "Dolores",
+      "La Paz",
+      "Lacub",
+      "Lagangilang",
+      "Lagayan",
+      "Langiden",
+      "Licuan-Baay",
+      "Luba",
+      "Malibcong",
+      "Manabo",
+      "Peñarrubia",
+      "Pidigan",
+      "Pilar",
+      "Sallapadan",
+      "San Isidro",
+      "San Juan",
+      "San Quintin",
+      "Tayum",
+      "Tineg",
+      "Tubo",
+      "Villaviciosa"
+    ]
   },
   {
-    province : "Aklan",
-    cities : [
-    "Altavas",
-    "Balete",
-    "Banga",
-    "Batan",
-    "Buruanga",
-    "Ibajay",
-    "Kalibo",
-    "Lezo",
-    "Libacao",
-    "Madalag",
-    "Makato",
-    "Malay",
-    "Malinao",
-    "Nabas",
-    "New Washington",
-    "Numancia",
-    "Tangalan"
-  ]
+    province: "Agusan del Norte",
+    cities: [
+      "Buenavista",
+      "Butuan",
+      "Cabadbaran",
+      "Carmen",
+      "Jabonga",
+      "Kitcharao",
+      "Las Nieves",
+      "Magallanes",
+      "Nasipit",
+      "Remedios T. Romualdez",
+      "Santiago",
+      "Tubay"
+    ]
   },
   {
-  province: "Albay",
-  cities : [
-    "Bacacay",
-    "Camalig",
-    "Daraga",
-    "Guinobatan",
-    "Jovellar",
-    "Legazpi",
-    "Libon",
-    "Ligao",
-    "Malilipot",
-    "Malinao",
-    "Manito",
-    "Oas",
-    "Pio Duran",
-    "Polangui",
-    "Rapu-Rapu",
-    "Santo Domingo",
-    "Tabaco",
-    "Tiwi"
-  ]
+    province: "Agusan del Sur",
+    cities: [
+      "Bayugan",
+      "Bunawan",
+      "Esperanza",
+      "La Paz",
+      "Loreto",
+      "Prosperidad",
+      "Rosario",
+      "San Francisco",
+      "San Luis",
+      "Santa Josefa",
+      "Sibagat",
+      "Talacogon",
+      "Trento",
+      "Veruela"
+    ]
   },
   {
-  province: "Antique",
-  cities: [
-    "Anini-y",
-    "Barbaza",
-    "Belison",
-    "Bugasong",
-    "Caluya",
-    "Culasi",
-    "Hamtic",
-    "Laua-an",
-    "Libertad",
-    "Pandan",
-    "Patnongon",
-    "San Jose de Buenavista",
-    "San Remigio",
-    "Sebaste",
-    "Sibalom",
-    "Tibiao",
-    "Tobias Fornier",
-    "Valderrama"
-  ]
+    province: "Aklan",
+    cities: [
+      "Altavas",
+      "Balete",
+      "Banga",
+      "Batan",
+      "Buruanga",
+      "Ibajay",
+      "Kalibo",
+      "Lezo",
+      "Libacao",
+      "Madalag",
+      "Makato",
+      "Malay",
+      "Malinao",
+      "Nabas",
+      "New Washington",
+      "Numancia",
+      "Tangalan"
+    ]
+  },
+  {
+    province: "Albay",
+    cities: [
+      "Bacacay",
+      "Camalig",
+      "Daraga",
+      "Guinobatan",
+      "Jovellar",
+      "Legazpi",
+      "Libon",
+      "Ligao",
+      "Malilipot",
+      "Malinao",
+      "Manito",
+      "Oas",
+      "Pio Duran",
+      "Polangui",
+      "Rapu-Rapu",
+      "Santo Domingo",
+      "Tabaco",
+      "Tiwi"
+    ]
+  },
+  {
+    province: "Antique",
+    cities: [
+      "Anini-y",
+      "Barbaza",
+      "Belison",
+      "Bugasong",
+      "Caluya",
+      "Culasi",
+      "Hamtic",
+      "Laua-an",
+      "Libertad",
+      "Pandan",
+      "Patnongon",
+      "San Jose de Buenavista",
+      "San Remigio",
+      "Sebaste",
+      "Sibalom",
+      "Tibiao",
+      "Tobias Fornier",
+      "Valderrama"
+    ]
   },
   {
     province: "Apayao",
     cities: [
-    "Calanasan",
-    "Conner",
-    "Flora",
-    "Kabugao",
-    "Luna",
-    "Pudtol",
-    "Santa Marcela"
-  ],
+      "Calanasan",
+      "Conner",
+      "Flora",
+      "Kabugao",
+      "Luna",
+      "Pudtol",
+      "Santa Marcela"
+    ]
   },
   {
     province: "Aurora",
     cities: [
-    "Baler",
-    "Casiguran",
-    "Dilasag",
-    "Dinalungan",
-    "Dingalan",
-    "Dipaculao",
-    "Maria Aurora",
-    "San Luis"
-  ],
+      "Baler",
+      "Casiguran",
+      "Dilasag",
+      "Dinalungan",
+      "Dingalan",
+      "Dipaculao",
+      "Maria Aurora",
+      "San Luis"
+    ]
   },
   {
-  province: "Basilan",
-  cities: [
-    "Akbar",
-    "Al-Barka",
-    "Hadji Mohammad Ajul",
-    "Hadji Muhtamad",
-    "Isabela City",
-    "Lamitan",
-    "Lantawan",
-    "Maluso",
-    "Sumisip",
-    "Tabuan-Lasa",
-    "Tipo-Tipo",
-    "Tuburan",
-    "Ungkaya Pukan"
-  ],
+    province: "Basilan",
+    cities: [
+      "Akbar",
+      "Al-Barka",
+      "Hadji Mohammad Ajul",
+      "Hadji Muhtamad",
+      "Isabela City",
+      "Lamitan",
+      "Lantawan",
+      "Maluso",
+      "Sumisip",
+      "Tabuan-Lasa",
+      "Tipo-Tipo",
+      "Tuburan",
+      "Ungkaya Pukan"
+    ]
   },
   {
-  province: "Bataan",
-  cities: [
-    "Abucay",
-    "Bagac",
-    "Balanga",
-    "Dinalupihan",
-    "Hermosa",
-    "Limay",
-    "Mariveles",
-    "Morong",
-    "Orani",
-    "Orion",
-    "Pilar",
-    "Samal"
-  ],
+    province: "Bataan",
+    cities: [
+      "Abucay",
+      "Bagac",
+      "Balanga",
+      "Dinalupihan",
+      "Hermosa",
+      "Limay",
+      "Mariveles",
+      "Morong",
+      "Orani",
+      "Orion",
+      "Pilar",
+      "Samal"
+    ]
   },
   {
-  province: "Batanes",
-  cities: ["Basco", "Itbayat", "Ivana", "Mahatao", "Sabtang", "Uyugan"]
+    province: "Batanes",
+    cities: ["Basco", "Itbayat", "Ivana", "Mahatao", "Sabtang", "Uyugan"]
   },
   {
-     province: "Batangas",
-     cities: [
-    "Agoncillo",
-    "Alitagtag",
-    "Balayan",
-    "Balete",
-    "Batangas City",
-    "Bauan",
-    "Calaca",
-    "Calatagan",
-    "Cuenca",
-    "Ibaan",
-    "Laurel",
-    "Lemery",
-    "Lian",
-    "Lipa",
-    "Lobo",
-    "Mabini",
-    "Malvar",
-    "Mataas na kahoy",
-    "Nasugbu",
-    "Padre Garcia",
-    "Rosario",
-    "San Jose",
-    "San Juan",
-    "San Luis",
-    "San Nicolas",
-    "San Pascual",
-    "Santa Teresita",
-    "Santo Tomas",
-    "Taal",
-    "Talisay",
-    "Tanauan",
-    "Taysan",
-    "Tingloy",
-    "Tuy"
-  ]
+    province: "Batangas",
+    cities: [
+      "Agoncillo",
+      "Alitagtag",
+      "Balayan",
+      "Balete",
+      "Batangas City",
+      "Bauan",
+      "Calaca",
+      "Calatagan",
+      "Cuenca",
+      "Ibaan",
+      "Laurel",
+      "Lemery",
+      "Lian",
+      "Lipa",
+      "Lobo",
+      "Mabini",
+      "Malvar",
+      "Mataas na kahoy",
+      "Nasugbu",
+      "Padre Garcia",
+      "Rosario",
+      "San Jose",
+      "San Juan",
+      "San Luis",
+      "San Nicolas",
+      "San Pascual",
+      "Santa Teresita",
+      "Santo Tomas",
+      "Taal",
+      "Talisay",
+      "Tanauan",
+      "Taysan",
+      "Tingloy",
+      "Tuy"
+    ]
   },
   {
     province: "Benguet",
     cities: [
-    "Atok",
-    "Baguio",
-    "Bakun",
-    "Bokod",
-    "Buguias",
-    "Itogon",
-    "Kabayan",
-    "Kapangan",
-    "Kibungan",
-    "La Trinidad",
-    "Mankayan",
-    "Sablan",
-    "Tuba",
-    "Tublay"
-  ],
+      "Atok",
+      "Baguio",
+      "Bakun",
+      "Bokod",
+      "Buguias",
+      "Itogon",
+      "Kabayan",
+      "Kapangan",
+      "Kibungan",
+      "La Trinidad",
+      "Mankayan",
+      "Sablan",
+      "Tuba",
+      "Tublay"
+    ]
   },
   {
-    province:"Biliran" :
+    province: "Biliran",
     cities: [
-    "Almeria",
-    "Biliran",
-    "Cabucgayan",
-    "Caibiran",
-    "Culaba",
-    "Kawayan",
-    "Maripipi",
-    "Naval"
-  ]
+      "Almeria",
+      "Biliran",
+      "Cabucgayan",
+      "Caibiran",
+      "Culaba",
+      "Kawayan",
+      "Maripipi",
+      "Naval"
+    ]
   },
   {
-  province: "Bohol",
-  cities: [
-    "Alicia",
-    "Anda",
-    "Batuan",
-    "Bilar",
-    "Candijay",
-    "Carmen",
-    "Dimiao",
-    "Duero",
-    "Garcia Hernandez",
-    "Guindulman",
-    "Jagna",
-    "Sevilla",
-    "Lila",
-    "Loay",
-    "Loboc",
-    "Mabini",
-    "Pilar",
-    "Sierra Bullones",
-    "Valencia"
-  ]
+    province: "Bohol",
+    cities: [
+      "Alicia",
+      "Anda",
+      "Batuan",
+      "Bilar",
+      "Candijay",
+      "Carmen",
+      "Dimiao",
+      "Duero",
+      "Garcia Hernandez",
+      "Guindulman",
+      "Jagna",
+      "Sevilla",
+      "Lila",
+      "Loay",
+      "Loboc",
+      "Mabini",
+      "Pilar",
+      "Sierra Bullones",
+      "Valencia"
+    ]
   },
   {
-  province: "Bukidnon",
+    province: "Bukidnon",
     cities: [
       "Baungon",
       "Cabanglasan",
@@ -906,13 +913,7 @@ const cities: CitiesByProvince = [
   },
   {
     province: "Camiguin",
-    cities: [
-      "Catarman",
-      "Guinsiliban",
-      "Mahinog",
-      "Mambajao",
-      "Sagay"
-    ]
+    cities: ["Catarman", "Guinsiliban", "Mahinog", "Mambajao", "Sagay"]
   },
   {
     province: "Capiz",
@@ -1167,13 +1168,7 @@ const cities: CitiesByProvince = [
   },
   {
     province: "Guimaras",
-    cities: [
-      "Buenavista",
-      "Jordan",
-      "Nueva Valencia",
-      "San Lorenzo",
-      "Sibunag"
-    ]
+    cities: ["Buenavista", "Jordan", "Nueva Valencia", "San Lorenzo", "Sibunag"]
   },
   {
     province: "Ifugao",
@@ -1563,14 +1558,7 @@ const cities: CitiesByProvince = [
   },
   {
     province: "Marinduque",
-    cities: [
-      "Boac",
-      "Buenavista",
-      "Gasan",
-      "Mogpog",
-      "Santa Cruz",
-      "Torrijos"
-    ]
+    cities: ["Boac", "Buenavista", "Gasan", "Mogpog", "Santa Cruz", "Torrijos"]
   },
   {
     province: "Masbate",
@@ -2453,15 +2441,23 @@ const cities: CitiesByProvince = [
 ];
 
 const selectedCities = ref<string | null>(null);
-// Filter provinces based on selected region
-const filteredCities = computed(() => {
-  const city = cities.find(c => c.province === selectedProvince.value);
 
-  return city ? city.provinces : [];
+// Filter cities based on selected province
+const filteredCities = computed(() => {
+  const province = cities.find(c => c.province === selectedProvince.value);
+
+  return province ? province.cities : [];
 });
 
+// Reset selected city when province changes
+watch(selectedProvince, () => {
+  selectedCities.value = null;
+});
+
+// Reset selected province when region changes
 watch(selectedRegion, () => {
   selectedProvince.value = null;
+  selectedCities.value = null;
 });
 
 onMounted(fetchUser);
