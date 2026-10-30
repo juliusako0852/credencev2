@@ -2,7 +2,7 @@
   <q-page>
     <div class="profile-page" style="width: 100%; height: 100%; width: 100%">
       <div style="width: 100%; display: flex">
-        <div class="page-title-text" style="width: 50%"> User's Profile </div>
+        <div class="page-title-text" style="width: 50%"> User Profile </div>
         <div class="page-title-text" style="width: 50%; text-align: right">
           <q-btn
             style="
@@ -61,8 +61,37 @@
             />
           </q-card-section>
           <q-card-section>
-            <div class="text-h6">Address:</div>
-            <q-input
+            <div class="text-h6">Region:</div>
+            <q-select
+              v-model="selectedRegion"
+              :options="new_region"
+              option-label="name"
+              option-value="id"
+              label="Select Region"
+              outlined
+              emit-value
+              map-options
+              use-input
+              input-debounce="0"
+              clearable
+            />
+            <div class="text-h6">Province:</div>
+            <q-select
+              dense
+              v-model="selectedRegion"
+              :options="new_region"
+              option-label="name"
+              option-value="id"
+              label="Select Region"
+              outlined
+              emit-value
+              map-options
+              use-input
+              input-debounce="0"
+              clearable
+            />
+            <div class="text-h6">City:</div>
+            <q-select
               dense
               v-model="new_address"
               autofocus
@@ -260,5 +289,161 @@ function resetForm() {
   }
 }
 */
+interface Region {
+  id: number;
+  name: string;
+  provinces: string[];
+}
+
+const new_region: Region[] = [
+  {
+    id: 1,
+    name: "Region I - Ilocos Region",
+    provinces: ["Ilocos Norte", "Ilocos Sur", "La Union", "Pangasinan"]
+  },
+  {
+    id: 2,
+    name: "Region II - Cagayan Valley",
+    provinces: ["Isabela", "Cagayan", "Nueva Vizcaya", "Batanes", "Quirino"]
+  },
+  {
+    id: 3,
+    name: "Region III - Central Luzon",
+    provinces: [
+      "Aurora",
+      "Bataan",
+      "Bulacan",
+      "Nueva Ecija",
+      "Pampanga",
+      "Tarlac",
+      "Zambales"
+    ]
+  },
+  {
+    id: 4,
+    name: "Cordillera Administrative Region (CAR)",
+    provinces: [
+      "Abra",
+      "Apayao",
+      "Benguet",
+      "Ifugao",
+      "Kalinga",
+      "Mountain Province"
+    ]
+  },
+  { id: 5, name: "National Capital Region (NCR)", provinces: [] },
+  {
+    id: 6,
+    name: "Region IV-A - CALABARZON",
+    provinces: ["Cavite", "Laguna", "Batangas", "Rizal", "Quezon"]
+  },
+  {
+    id: 7,
+    name: "Region IV-B - MIMAROPA",
+    provinces: ["Mindoro", "Marinduque", "Romblon", "Palawan"]
+  },
+  {
+    id: 8,
+    name: "Region V - Bicol Region",
+    provinces: [
+      "Albay",
+      "Camarines Norte",
+      "Camarines Sur",
+      "Catanduanes",
+      "Masbate",
+      "Sorsogon"
+    ]
+  },
+  {
+    id: 9,
+    name: "Region VI - Western Visayas",
+    provinces: ["Aklan", "Antique", "Capiz", "Iloilo", "Guimaras"]
+  },
+  {
+    id: 10,
+    name: "Region VII - Central Visayas",
+    provinces: ["Cebu", "Bohol"]
+  },
+  {
+    id: 11,
+    name: "Region VIII - Eastern Visayas",
+    provinces: [
+      "Northern Samar",
+      "Eastern Samar",
+      "Samar",
+      "Biliran",
+      "Leyte",
+      "Southern Leyte"
+    ]
+  },
+  {
+    id: 12,
+    name: "Negros Island Region (NIR)",
+    provinces: ["Negros Occidental", "Negros Oriental", "Siquijor"]
+  },
+  {
+    id: 13,
+    name: "Region IX - Zamboanga Peninsula",
+    provinces: ["Zamboanga del Norte", "Zamboanga del Sur", "Zamboanga Sibugay"]
+  },
+  {
+    id: 14,
+    name: "Region X - Northern Mindanao",
+    provinces: [
+      "Bukidnon",
+      "Camiguin",
+      "Lanao del Norte",
+      "Misamis Occidental",
+      "Misamis Oriental"
+    ]
+  },
+  {
+    id: 15,
+    name: "Region XI — Davao Region",
+    provinces: [
+      "Davao de Oro (Compostela Valley)",
+      "Davao del Norte",
+      "Davao del Sur",
+      "Davao Occidental",
+      "Davao Oriental"
+    ]
+  },
+  {
+    id: 16,
+    name: "Region XII — SOCCSKSARGEN",
+    provinces: [
+      "Cotabato (North Cotabato)",
+      "South Cotabato",
+      "Sarangani",
+      "Sultan Kudarat"
+    ]
+  },
+  {
+    id: 17,
+    name: "Region XIII — Caraga",
+    provinces: [
+      "Surigao del Norte",
+      "Surigao del Sur",
+      "Dinagat Islands",
+      "Agusan del Sur",
+      "Agusan del Norte"
+    ]
+  },
+  {
+    id: 18,
+    name: "Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)",
+    provinces: [
+      "Basilan",
+      "Lanao del Sur",
+      "Maguindanao del Norte",
+      "Maguindanao del Sur",
+      "Sulu",
+      "Tawi-tawi"
+    ]
+  }
+];
+
+const selectedRegion = ref<number | null>(null);
+
 onMounted(fetchUser);
 </script>
