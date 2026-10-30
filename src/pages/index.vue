@@ -8,7 +8,7 @@
     <div
       style="
         width: auto;
-        min-height: 55vh;
+        min-height: 45vh;
         background-color: white;
         border-top-right-radius: 10%;
         border-top-left-radius: 10%;
@@ -19,7 +19,7 @@
       <div
         style="
           text-align: center;
-          font-size: 30pt;
+          font-size: 2.5em;
           color: #0e494a;
           font-weight: bolder;
         "

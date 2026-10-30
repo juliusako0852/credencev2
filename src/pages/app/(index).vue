@@ -81,8 +81,28 @@
         </div>
       </div>
 
-      <div class="menu-buttons" style="width: 100%; height: 90%">
-        <div class="main-menu-button-panel">
+      <div
+        class="menu-buttons"
+        style="
+          width: 100%;
+          height: 25vh;
+
+          align-items: center;
+        "
+      >
+        <div
+          class="main-menu-button-panel"
+          style="
+            justify-content: center;
+            align-self: center;
+            align-content: center;
+            height: 100%;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            color: #1a898b;
+          "
+        >
           <q-btn
             stack
             flat
@@ -91,10 +111,10 @@
             size="8pt"
             to="../signuppage"
           >
-            <q-icon name="swap_horiz" size="40px" />Transfer</q-btn
+            <q-icon name="swap_horiz" size="5vh" />Transfer</q-btn
           >
           <q-btn stack flat dense aria-label="bills" size="8pt" to="/">
-            <q-icon name="payments" size="40px" />Bills</q-btn
+            <q-icon name="payments" size="5vh" />Bills</q-btn
           >
           <q-btn
             stack
@@ -104,7 +124,7 @@
             size="8pt"
             to="/app/vaultpage"
           >
-            <q-icon name="savings" size="40px" />Vault</q-btn
+            <q-icon name="savings" size="5vh" />Vault</q-btn
           >
 
           <q-btn
@@ -115,10 +135,10 @@
             size="8pt"
             to="/"
           >
-            <q-icon name="book" size="40px" />Credit Passport</q-btn
+            <q-icon name="book" size="5vh" />Credit Passport</q-btn
           >
           <q-btn stack flat dense aria-label="connect" size="8pt" to="/">
-            <q-icon name="smartphone" size="40px" />Load</q-btn
+            <q-icon name="smartphone" size="5vh" />Load</q-btn
           >
           <q-btn
             stack
@@ -128,7 +148,7 @@
             size="8pt"
             to="/app/loanspage"
           >
-            <q-icon name="wallet" size="40px" />Loans</q-btn
+            <q-icon name="wallet" size="5vh" />Loans</q-btn
           >
           <q-btn
             stack
@@ -138,7 +158,7 @@
             size="8pt"
             to="/app/investmentspage"
           >
-            <q-icon name="percent" size="40px" />Investments</q-btn
+            <q-icon name="percent" size="5vh" />Investments</q-btn
           >
           <q-btn
             stack
@@ -148,7 +168,7 @@
             size="8pt"
             to="/app/insurancespage"
           >
-            <q-icon name="shield" size="40px" />Insurances</q-btn
+            <q-icon name="shield" size="5vh" />Insurances</q-btn
           >
         </div>
       </div>

@@ -10,13 +10,14 @@
               color: white;
               font-weight: bold;
               height: 50%;
-              width: 80%;
+              width: 90%;
               border-radius: 10px;
 
               font-size: small;
               text-align: center;
               justify-content: center;
               align-items: center;
+              font-size: small;
             "
             elevated
             @click="prompt = true"
@@ -85,6 +86,7 @@
           margin-left: 10pt;
           margin-right: 10pt;
           display: flex;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
         "
       >
         <div
@@ -98,20 +100,23 @@
           <q-avatar
             size="100px"
             style="margin-top: 30pt; background-color: #1a898b; color: white"
-            >{{ user?.name.charAt(0) }}</q-avatar
+            >{{ current_user?.username.charAt(0) }}</q-avatar
           >
         </div>
         <div style="height: 100%; width: 60%; color: #1a898b">
           <div style="font-weight: bold; font-size: large; margin-top: 10pt"
             >Name:</div
           >
-          <div>{{ user?.name || "Loading..." }}</div>
+          <div
+            >{{ current_user?.first_name || "Loading..." }}
+            {{ current_user?.last_name || "Loading..." }}</div
+          >
           <div style="font-weight: bold; font-size: large">Email:</div>
-          <div>{{ user?.email || "Loading..." }}</div>
+          <div>{{ current_user?.email || "Loading..." }}</div>
           <div style="font-weight: bold; font-size: large">Contact:</div>
-          <div>{{ user?.contact || "Loading..." }}</div>
+          <div>{{ current_user?.id || "Loading..." }}</div>
           <div style="font-weight: bold; font-size: large">Address:</div>
-          <div>{{ user?.address || "Loading..." }}</div>
+          <div>{{ current_user?.username || "Loading..." }}</div>
         </div>
       </div>
       <div
@@ -136,12 +141,13 @@
         class="bank-info"
         style="
           background-color: white;
-          min-height: 200px;
+          min-height: 30vh;
           height: auto;
           width: auto;
           border-radius: 10px;
           margin: 10pt;
           display: flex;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
         "
       >
       </div>
@@ -155,38 +161,27 @@ import { api } from "../../boot/axios";
 
 const prompt = ref(false);
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  contact: string;
-  address: string;
-}
-
 interface CurrentUser {
   id: number;
   username: string;
   email: string;
+  first_name: string;
+  last_name: string;
 }
 
 const current_user = ref<CurrentUser | null>(null);
-
-const user = ref<User | null>(null);
-const originalUser = ref<User | null>(null);
+const originalUser = ref<CurrentUser | null>(null);
 
 const loading = ref(true);
 const saving = ref(false);
 const errorMessage = ref("");
 const successMessage = ref("");
 
-const initial = computed(
-  () => user.value?.name?.charAt(0).toUpperCase() || "?"
-);
-
-const new_name = computed(() => user.value?.name);
-const new_email = computed(() => user.value?.email);
-const new_contact = computed(() => user.value?.contact);
-const new_address = computed(() => user?.value?.address);
+//to be edited
+const new_name = computed(() => current_user.value?.id);
+const new_email = computed(() => current_user.value?.id);
+const new_contact = computed(() => current_user.value?.id);
+const new_address = computed(() => current_user.value?.id);
 
 // Fetch a specific user from Django
 
@@ -201,10 +196,10 @@ async function fetchUser() {
 
     console.log("Logged-in user ID:", current_user.value.id);
 
-    const { data } = await api.get<User>(`api/users/${current_user.value.id}/`);
+    //const { data } = await api.get<User>(`api/users/${current_user.value.id}/`);
 
-    user.value = { ...data };
-    originalUser.value = { ...data };
+    //user.value = { ...data };
+    //originalUser.value = { ...data };
   } catch (error: any) {
     console.error("Error fetching user:", error.response?.data ?? error);
 
@@ -215,7 +210,7 @@ async function fetchUser() {
   }
 }
 
-// Update the existing user record
+/* Update the existing user record
 async function updateUser() {
   if (!user.value || saving.value) return;
 
@@ -264,6 +259,6 @@ function resetForm() {
     successMessage.value = "";
   }
 }
-
+*/
 onMounted(fetchUser);
 </script>
