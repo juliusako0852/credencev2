@@ -43,7 +43,7 @@
                 <div
                   class="healthscore-text-value"
                   style="font-size: 45pt; margin-top: 2pt; width: 50%"
-                  >98
+                  >{{ current_user_hs?.uh_score }}
                 </div>
                 <div
                   style="
@@ -255,4 +255,52 @@
 
 <script setup lang="ts">
 //
+import { onMounted, ref } from "vue";
+import { api } from "../../boot/axios";
+
+const loading = ref(true);
+const saving = ref(false);
+const errorMessage = ref("");
+const successMessage = ref("");
+
+interface CurrentUser {
+  id: number;
+}
+
+interface UserHealthScore {
+  user_account: number;
+  uh_score: number;
+}
+
+const current_user = ref<CurrentUser | null>(null);
+const current_user_hs = ref<UserHealthScore>();
+
+async function fetchUser() {
+  loading.value = true;
+  errorMessage.value = "";
+
+  try {
+    const response = await api.get<CurrentUser>("users/me/");
+
+    current_user.value = response.data;
+
+    console.log("Logged-in user ID:", current_user.value.id);
+
+    const response2 = await api.get<UserHealthScore>(
+      `api/uhs/update/${current_user.value.id}/`
+    );
+    console.log("API UHS Response:", response2.data);
+    current_user_hs.value = response2.data;
+    console.log("Assigned UHS Records:", current_user_hs.value);
+  } catch (error: any) {
+    console.error("Error fetching user:", error.response?.data ?? error);
+    console.error("Error fetching user:", error.response2?.data ?? error);
+    errorMessage.value =
+      error.response?.data?.detail || "Could not load profile.";
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(fetchUser);
 </script>

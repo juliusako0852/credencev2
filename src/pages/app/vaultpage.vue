@@ -51,7 +51,7 @@
               <div
                 class="healthscore-text-value"
                 style="font-size: 25pt; margin-top: 3pt; width: 100%"
-                >Php. 199.000.00
+                >PHP {{ current_user_vault?.vault_balance }}
               </div>
             </div>
           </q-card-section>
@@ -164,7 +164,53 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { api } from "../../boot/axios";
+
+const loading = ref(true);
+const saving = ref(false);
+const errorMessage = ref("");
+const successMessage = ref("");
+
+interface CurrentUser {
+  id: number;
+}
+
+interface UserVault {
+  user_account: number;
+  vault_type: string;
+  vault_balance: number;
+}
+
+const current_user = ref<CurrentUser | null>(null);
+const current_user_vault = ref<UserVault>();
+
+async function fetchUser() {
+  loading.value = true;
+  errorMessage.value = "";
+
+  try {
+    const response = await api.get<CurrentUser>("users/me/");
+
+    current_user.value = response.data;
+
+    console.log("Logged-in user ID:", current_user.value.id);
+
+    const response2 = await api.get<UserVault>(
+      `api/vault/update/${current_user.value.id}/`
+    );
+    console.log("API Loan Response:", response2.data);
+    current_user_vault.value = response2.data;
+    console.log("Assigned Loan Records:", current_user_vault.value);
+  } catch (error: any) {
+    console.error("Error fetching user:", error.response?.data ?? error);
+    console.error("Error fetching user:", error.response2?.data ?? error);
+    errorMessage.value =
+      error.response?.data?.detail || "Could not load profile.";
+  } finally {
+    loading.value = false;
+  }
+}
 
 const alert = ref(false);
 const confirm = ref(false);
@@ -173,4 +219,6 @@ const prompt = ref(false);
 const emergency_file_upload = ref(null);
 const emergency_amount = ref("");
 const emergency_purpose = ref("");
+
+onMounted(fetchUser);
 </script>
