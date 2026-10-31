@@ -14,8 +14,8 @@
           box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
           display: flex;
         "
-        v-for="entry in investments"
-        key="entry.investments_id"
+        v-for="entry in current_user_investment"
+        key="entry.id"
       >
         <div
           style="width: 100%; color: teal; font-size: medium; font-weight: bold"
@@ -24,33 +24,41 @@
             <summary>
               <div>Name of Investment:</div>
               <div style="font-weight: normal; color: black">{{
-                entry.investment_name
+                entry?.investment_provider_name
               }}</div>
               <div>Type:</div>
               <div style="font-weight: normal; color: black">{{
-                entry.type
+                entry?.investment_type
               }}</div>
               <div>Minimum Capital:</div>
               <div style="font-weight: normal; color: black">{{
-                entry.minimum_capital
+                entry?.minimum_capital
               }}</div>
               <div>Return:</div>
               <div style="font-weight: normal; color: black">{{
-                entry.return
+                entry?.return1
               }}</div></summary
             >
             <div>Month to Date (MTD) Performance:</div>
-            <div style="font-weight: normal; color: black">{{ entry.mtd }}</div>
+            <div style="font-weight: normal; color: black">{{
+              entry?.mtd
+            }}</div>
             <div>Year to Date (YTD) Performance:</div>
-            <div style="font-weight: normal; color: black">{{ entry.ytd }}</div>
+            <div style="font-weight: normal; color: black">{{
+              entry?.ytd
+            }}</div>
             <div>Net Asset Value (NAV):</div>
-            <div style="font-weight: normal; color: black">{{ entry.nav }}</div>
+            <div style="font-weight: normal; color: black">{{
+              entry?.nav
+            }}</div>
             <div>Net Asset Value per Share (NAVPS):</div>
             <div style="font-weight: normal; color: black">{{
-              entry.navps
+              entry?.navps
             }}</div>
             <div>Return since inception:</div>
-            <div style="font-weight: normal; color: black">{{ entry.rsi }}</div>
+            <div style="font-weight: normal; color: black">{{
+              entry?.rsi
+            }}</div>
           </details>
         </div>
       </div>
@@ -60,44 +68,63 @@
 
 <script setup lang="ts">
 //
-import { ref } from "vue";
-import { invalidateTypeCache } from "vue/compiler-sfc";
-const investments = ref([
-  {
-    investment_id: 1,
-    investment_name: "Shann Scam Inc.",
-    type: "Trust Fund",
-    minimum_capital: 10000,
-    return: 1234,
-    mtd: 23323,
-    ytd: 23232,
-    nav: 1231,
-    navps: 2323,
-    rsi: 322332
-  },
-  {
-    investment_id: 2,
-    investment_name: "Shann Scam Inc.",
-    type: "Trust Fund",
-    minimum_capital: 10000,
-    return: 1234,
-    mtd: 23323,
-    ytd: 23232,
-    nav: 1231,
-    navps: 2323,
-    rsi: 322332
-  },
-  {
-    investment_id: 3,
-    investment_name: "Shann Scam Inc.",
-    type: "Trust Fund",
-    minimum_capital: 10000,
-    return: 1234,
-    mtd: 23323,
-    ytd: 23232,
-    nav: 1231,
-    navps: 2323,
-    rsi: 322332
+import { onMounted, ref } from "vue";
+import { api } from "../../boot/axios";
+
+const loading = ref(true);
+const saving = ref(false);
+const errorMessage = ref("");
+const successMessage = ref("");
+
+interface CurrentUser {
+  id: number;
+}
+
+interface InvestmentRecord {
+  investment_provider_name: string;
+  investment_type: string;
+  date_availed: Date;
+  minimum_capital: number;
+  return1: number;
+  mtd: number;
+  ytd: number;
+  nav: number;
+  navps: number;
+  rsi: number;
+}
+
+const current_user = ref<CurrentUser | null>(null);
+const current_user_investment = ref<InvestmentRecord[]>([]);
+
+async function fetchUser() {
+  loading.value = true;
+  errorMessage.value = "";
+
+  try {
+    const response = await api.get<CurrentUser>("users/me/");
+
+    current_user.value = response.data;
+
+    console.log("Logged-in user ID:", current_user.value.id);
+
+    const response2 = await api.get<InvestmentRecord[]>(
+      `api/investmentinfo/list/${current_user.value.id}/`
+    );
+    console.log("API Loan Response:", response2.data);
+    current_user_investment.value = response2.data;
+    console.log("Assigned Loan Records:", current_user_investment.value);
+    //current_user_loan.value = response2.data;
+    //user.value = { ...data };
+    //originalUser.value = { ...data };
+  } catch (error: any) {
+    console.error("Error fetching user:", error.response?.data ?? error);
+    console.error("Error fetching user:", error.response2?.data ?? error);
+    errorMessage.value =
+      error.response?.data?.detail || "Could not load profile.";
+  } finally {
+    loading.value = false;
   }
-]);
+}
+
+onMounted(fetchUser);
 </script>

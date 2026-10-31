@@ -113,52 +113,5 @@ async function fetchUser() {
   }
 }
 
-const credit_histories = ref([
-  {
-    loan_id: 1,
-    lender: "BPI",
-    disbursement_date: "2026-10-25",
-    loan_amount: 500000,
-    daily_amount: 125,
-    loan_term: 12,
-    daily_payment_amount: 1234,
-    total_repayment: 12356,
-    total_interest_rate: 0.57
-  },
-  {
-    loan_id: 2,
-    lender: "BPI",
-    disbursement_date: "2026-10-25",
-    loan_amount: 500000,
-    daily_amount: 125,
-    loan_term: 12,
-    daily_payment_amount: 1234,
-    total_repayment: 12356,
-    total_interest_rate: 0.57
-  },
-  {
-    loan_id: 3,
-    lender: "BPI",
-    disbursement_date: "2026-10-25",
-    loan_amount: 500000,
-    daily_amount: 125,
-    loan_term: 12,
-    daily_payment_amount: 1234,
-    total_repayment: 12356,
-    total_interest_rate: 0.57
-  },
-  {
-    loan_id: 4,
-    lender: "BPI",
-    disbursement_date: "2026-10-25",
-    loan_amount: 500000,
-    daily_amount: 125,
-    loan_term: 12,
-    daily_payment_amount: 1234,
-    total_repayment: 12356,
-    total_interest_rate: 0.57
-  }
-]);
-
 onMounted(fetchUser);
 </script>
