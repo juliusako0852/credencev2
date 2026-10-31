@@ -15,7 +15,7 @@
           display: flex;
         "
         v-for="entry in current_user_loan"
-        key="entry.id"
+        :key="entry.id"
       >
         <div
           style="
@@ -37,7 +37,7 @@
           <div>End Date:</div>
         </div>
         <div style="width: 40%; min-height: 130px; font-size: medium">
-          <div>{{ entry?.lender_name }} haha</div>
+          <div>{{ entry?.lender_name }}</div>
           <div>{{ entry?.disbursement_date }}</div>
           <div>{{ entry?.loan_amount }}</div>
           <div>{{ entry?.loan_type }}</div>
@@ -81,7 +81,7 @@ interface LoanRecord {
 }
 
 const current_user = ref<CurrentUser | null>(null);
-const current_user_loan = ref<LoanRecord[] | null>([]);
+const current_user_loan = ref<LoanRecord[]>([]);
 
 async function fetchUser() {
   loading.value = true;
@@ -95,10 +95,11 @@ async function fetchUser() {
     console.log("Logged-in user ID:", current_user.value.id);
 
     const response2 = await api.get<LoanRecord[]>(
-      `api/loaninfo/update/${current_user.value.id}/`
+      `api/loaninfo/list/${current_user.value.id}/`
     );
-
+    console.log("API Loan Response:", response2.data);
     current_user_loan.value = response2.data;
+    console.log("Assigned Loan Records:", current_user_loan.value);
     //current_user_loan.value = response2.data;
     //user.value = { ...data };
     //originalUser.value = { ...data };
