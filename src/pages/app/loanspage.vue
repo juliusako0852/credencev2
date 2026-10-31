@@ -14,8 +14,8 @@
           box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
           display: flex;
         "
-        v-for="entry in credit_histories"
-        key="entry.loan_id"
+        v-for="entry in current_user_loan"
+        key="entry.id"
       >
         <div
           style="
@@ -29,21 +29,23 @@
           <div>Lender:</div>
           <div>Disbursement Date:</div>
           <div>Loan Amount:</div>
-          <div>Daily Amount:</div>
+          <div>Loan Type:</div>
           <div>Loan Term:</div>
-          <div>Daily Payment Amount:</div>
           <div>Total Repayment:</div>
-          <div>Total Interest Rate:</div>
+          <div>Interest Rate:</div>
+          <div>Start Date:</div>
+          <div>End Date:</div>
         </div>
         <div style="width: 40%; min-height: 130px; font-size: medium">
-          <div>{{ entry.lender }}</div>
-          <div>{{ entry.disbursement_date }}</div>
-          <div>{{ entry.loan_amount }}</div>
-          <div>{{ entry.daily_amount }}</div>
-          <div>{{ entry.loan_term }}</div>
-          <div>{{ entry.daily_payment_amount }}</div>
-          <div>{{ entry.total_repayment }}</div>
-          <div>{{ entry.total_interest_rate }}</div>
+          <div>{{ entry?.lender_name }} haha</div>
+          <div>{{ entry?.disbursement_date }}</div>
+          <div>{{ entry?.loan_amount }}</div>
+          <div>{{ entry?.loan_type }}</div>
+          <div>{{ entry?.no_of_terms }}</div>
+          <div>{{ entry?.payment_amount }}</div>
+          <div>{{ entry?.interest_rate * 100 }}%</div>
+          <div>{{ entry?.start_date }}</div>
+          <div>{{ entry?.end_date }}</div>
         </div>
       </div>
     </div>
@@ -51,7 +53,65 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { api } from "../../boot/axios";
+
+const loading = ref(true);
+const saving = ref(false);
+const errorMessage = ref("");
+const successMessage = ref("");
+
+interface CurrentUser {
+  id: number;
+}
+
+interface LoanRecord {
+  id: number;
+  lender: string;
+  lender_name: string;
+  loan_type: string;
+  loan_amount: number;
+  no_of_terms: number;
+  interest_rate: number;
+  payment_amount: number;
+  disbursement_date: Date;
+  start_date: Date;
+  end_date: Date;
+  user_account: number;
+}
+
+const current_user = ref<CurrentUser | null>(null);
+const current_user_loan = ref<LoanRecord[] | null>([]);
+
+async function fetchUser() {
+  loading.value = true;
+  errorMessage.value = "";
+
+  try {
+    const response = await api.get<CurrentUser>("users/me/");
+
+    current_user.value = response.data;
+
+    console.log("Logged-in user ID:", current_user.value.id);
+
+    const response2 = await api.get<LoanRecord[]>(
+      `api/loaninfo/update/${current_user.value.id}/`
+    );
+
+    current_user_loan.value = response2.data;
+    //current_user_loan.value = response2.data;
+    //user.value = { ...data };
+    //originalUser.value = { ...data };
+  } catch (error: any) {
+    console.error("Error fetching user:", error.response?.data ?? error);
+    console.error("Error fetching user:", error.response2?.data ?? error);
+    errorMessage.value =
+      error.response?.data?.detail || "Could not load profile.";
+  } finally {
+    loading.value = false;
+  }
+}
+
 const credit_histories = ref([
   {
     loan_id: 1,
@@ -98,4 +158,6 @@ const credit_histories = ref([
     total_interest_rate: 0.57
   }
 ]);
+
+onMounted(fetchUser);
 </script>
