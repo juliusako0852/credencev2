@@ -33,10 +33,17 @@
             >
           </q-card-section>
           <q-card-section>
-            <div class="text-h6">Name:</div>
+            <div class="text-h6">First Name:</div>
             <q-input
               dense
-              v-model="new_name"
+              v-model="new_fname"
+              autofocus
+              @keyup.enter="prompt = false"
+            />
+            <div class="text-h6">Last Name:</div>
+            <q-input
+              dense
+              v-model="new_lname"
               autofocus
               @keyup.enter="prompt = false"
             />
@@ -104,6 +111,20 @@
               use-input
               input-debounce="0"
               clearable
+            />
+            <div class="text-h6">Barangay:</div>
+            <q-input
+              dense
+              v-model="new_barangay"
+              autofocus
+              @keyup.enter="prompt = false"
+            />
+            <div class="text-h6">Street:</div>
+            <q-input
+              dense
+              v-model="new_street"
+              autofocus
+              @keyup.enter="prompt = false"
             />
           </q-card-section>
 
@@ -215,10 +236,12 @@ const errorMessage = ref("");
 const successMessage = ref("");
 
 //to be edited
-const new_name = computed(() => current_user.value?.id);
-const new_email = computed(() => current_user.value?.id);
+const new_fname = computed(() => current_user.value?.first_name);
+const new_lname = computed(() => current_user.value?.last_name);
+const new_email = computed(() => current_user.value?.email);
 const new_contact = computed(() => current_user.value?.id);
-const new_address = computed(() => current_user.value?.id);
+const new_barangay = computed(() => current_user.value?.id);
+const new_street = computed(() => current_user.value?.id);
 
 // Fetch a specific user from Django
 
@@ -247,21 +270,27 @@ async function fetchUser() {
   }
 }
 
-/* Update the existing user record
+interface UAccount {
+  id: number;
+  contact_number: number;
+}
+const current_user_acct_deets = ref<UAccount | null>(null);
+
+//Update the existing user record
 async function updateUser() {
-  if (!user.value || saving.value) return;
+  if (!current_user.value || saving.value) return;
 
   saving.value = true;
   errorMessage.value = "";
   successMessage.value = "";
 
   try {
-    const { data } = await api.patch<User>(`/api/users/${user.value.id}/`, {
-      name: user.value.name,
-      email: user.value.email,
-      contact: user.value.contact,
-      address: user.value.address
-    });
+    const { data } = await api.patch<UAccount>(
+      `/api/users/${current_user.value.id}/`,
+      {
+        contact_number: current_user_acct_deets.value?.contact_number
+      }
+    );
 
     user.value = { ...data };
     originalUser.value = { ...data };
@@ -296,7 +325,7 @@ function resetForm() {
     successMessage.value = "";
   }
 }
-*/
+
 interface Region {
   id: number;
   name: string;
