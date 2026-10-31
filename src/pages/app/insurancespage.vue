@@ -14,8 +14,8 @@
           box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
           display: flex;
         "
-        v-for="entry in insurance_list"
-        key="entry.insurance_id"
+        v-for="entry in current_user_insurance"
+        key="entry.id"
       >
         <div
           style="
@@ -36,14 +36,14 @@
           <div>Policy Limit:</div>
         </div>
         <div style="width: 55%; min-height: 130px; font-size: medium">
-          <div>{{ entry.provider }}</div>
-          <div>{{ entry.type }}</div>
-          <div>{{ entry.date_availed }}</div>
-          <div>{{ entry.premium }}</div>
-          <div>{{ entry.deductible }}</div>
-          <div>{{ entry.co_payment }}</div>
-          <div>{{ entry.co_insurance }}</div>
-          <div>{{ entry.policy_limit }}</div>
+          <div>{{ entry?.insurance_provider_name }}</div>
+          <div>{{ entry?.insurance_type }}</div>
+          <div>{{ entry?.date_availed }}</div>
+          <div>{{ entry?.premium }}</div>
+          <div>{{ entry?.deductible }}</div>
+          <div>{{ entry?.co_payment }}</div>
+          <div>{{ entry?.con_insurance }}</div>
+          <div>{{ entry?.policy_limit }}</div>
         </div>
       </div>
     </div>
@@ -51,51 +51,59 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-const insurance_list = ref([
-  {
-    insurance_id: 1,
-    provider: "Shann Scam Inc.",
-    type: "hell yeah",
-    date_availed: "09-11-2001",
-    premium: 1212,
-    deductible: 12,
-    co_payment: 23,
-    co_insurance: 23,
-    policy_limit: 233223
-  },
-  {
-    insurance_id: 2,
-    provider: "Shann Scam Inc.",
-    type: "hell yeah",
-    date_availed: "09-11-2001",
-    premium: 1212,
-    deductible: 12,
-    co_payment: 23,
-    co_insurance: 23,
-    policy_limit: 233223
-  },
-  {
-    insurance_id: 3,
-    provider: "Shann Scam Inc.",
-    type: "hell yeah",
-    date_availed: "09-11-2001",
-    premium: 1212,
-    deductible: 12,
-    co_payment: 23,
-    co_insurance: 23,
-    policy_limit: 233223
-  },
-  {
-    insurance_id: 4,
-    provider: "Shann Scam Inc.",
-    type: "hell yeah",
-    date_availed: "09-11-2001",
-    premium: 1212,
-    deductible: 12,
-    co_payment: 23,
-    co_insurance: 23,
-    policy_limit: 233223
+import { onMounted, ref } from "vue";
+import { api } from "../../boot/axios";
+
+const loading = ref(true);
+const saving = ref(false);
+const errorMessage = ref("");
+const successMessage = ref("");
+
+interface CurrentUser {
+  id: number;
+}
+
+interface InsuranceRecord {
+  id: number;
+  insurance_provider_name: string;
+  insurance_type: string;
+  date_availed: Date;
+  premium: number;
+  deductible: number;
+  co_payment: number;
+  con_insurance: number;
+  policy_limit: number;
+}
+
+const current_user = ref<CurrentUser | null>(null);
+const current_user_insurance = ref<InsuranceRecord[]>([]);
+
+async function fetchUser() {
+  loading.value = true;
+  errorMessage.value = "";
+
+  try {
+    const response = await api.get<CurrentUser>("users/me/");
+
+    current_user.value = response.data;
+
+    console.log("Logged-in user ID:", current_user.value.id);
+
+    const response2 = await api.get<InsuranceRecord[]>(
+      `api/insuranceinfo/list/${current_user.value.id}/`
+    );
+    console.log("API Loan Response:", response2.data);
+    current_user_insurance.value = response2.data;
+    console.log("Assigned Loan Records:", current_user_insurance.value);
+  } catch (error: any) {
+    console.error("Error fetching user:", error.response?.data ?? error);
+    console.error("Error fetching user:", error.response2?.data ?? error);
+    errorMessage.value =
+      error.response?.data?.detail || "Could not load profile.";
+  } finally {
+    loading.value = false;
   }
-]);
+}
+
+onMounted(fetchUser);
 </script>

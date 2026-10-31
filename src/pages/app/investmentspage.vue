@@ -113,9 +113,6 @@ async function fetchUser() {
     console.log("API Loan Response:", response2.data);
     current_user_investment.value = response2.data;
     console.log("Assigned Loan Records:", current_user_investment.value);
-    //current_user_loan.value = response2.data;
-    //user.value = { ...data };
-    //originalUser.value = { ...data };
   } catch (error: any) {
     console.error("Error fetching user:", error.response?.data ?? error);
     console.error("Error fetching user:", error.response2?.data ?? error);
