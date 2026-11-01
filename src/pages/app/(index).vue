@@ -339,11 +339,24 @@ onMounted(fetchUser);
 // DISTRIBUTION ALGORITHM
 // ========================================
 
-// Sample data
-const arr: number[] = [1000, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0];
+// Original income data
+const arr: number[] = [
+  583.72, 914.35, 467.89, 728.16, 852.43, 641.28, 976.51, 512.67, 793.84,
+  438.29, 867.92, 695.41, 554.73, 932.18, 761.56, 489.32, 821.67, 607.94,
+  958.23, 713.85, 446.71, 884.59, 672.38, 536.92, 905.14, 748.63, 421.85,
+  839.47, 619.26, 781.93
+];
 
-// Preserve original values for comparison
+const exp_arr: number[] = [
+  418.32, 572.14, 349.67, 498.21, 387.45, 531.76, 308.92, 463.51, 579.83,
+  421.68, 354.27, 516.39, 475.82, 321.54, 549.63, 402.17, 567.28, 341.95,
+  489.36, 372.81, 542.19, 448.63, 314.72, 523.47, 481.26, 361.58, 503.92,
+  432.15, 584.67, 395.24
+];
+
+// Preserve original values
 const arr2: number[] = [...arr];
+const exp_arr2: number[] = [...exp_arr];
 
 // Distribution percentages and offsets
 const distributions: [number, number][] = [
@@ -357,66 +370,187 @@ const distributions: [number, number][] = [
 
 // Initialize distributed array
 const distributed: number[] = [...arr];
+const distributed_exp: number[] = [...exp_arr];
 
 // Sequential distribution
 for (let i = 0; i < distributed.length; i++) {
-  // Create a snapshot of the current array
   const current = [...distributed];
+  const current_exp = [...distributed_exp];
 
   const currentValue = current[i];
+  const currentValue2 = current_exp[i];
 
   if (currentValue === undefined) continue;
 
   for (const [offset, percentage] of distributions) {
     const targetIndex = i + offset;
 
-    // Ensure the target index is within array bounds
     if (targetIndex >= 0 && targetIndex < current.length) {
       const sourceValue = current[i];
       const targetValue = current[targetIndex];
+      const sourceValue2 = current_exp[i];
+      const targetValue2 = current_exp[targetIndex];
 
-      if (sourceValue === undefined || targetValue === undefined) {
+      if (
+        sourceValue === undefined ||
+        sourceValue2 === undefined ||
+        targetValue === undefined ||
+        targetValue2 === undefined
+      ) {
         continue;
       }
 
       const amount = sourceValue * percentage;
+      const amount2 = sourceValue2 * percentage;
 
-      // Update source and target values
       current[targetIndex] = targetValue + amount;
       current[i] = sourceValue - amount;
+
+      current_exp[targetIndex] = targetValue2 + amount2;
+      current_exp[i] = sourceValue2 - amount2;
     }
   }
 
-  // Update the entire distributed array
   distributed.splice(0, distributed.length, ...current);
+  distributed_exp.splice(0, distributed_exp.length, ...current_exp);
+}
+
+// ========================================
+// SMA: WINDOW SIZE = 30
+// FORECAST = 3 DAYS
+// ========================================
+
+const windowSize = 30;
+const forecastDays = 3;
+
+// ----------------------------------------
+// 1. HISTORICAL SMA
+// ----------------------------------------
+
+const historicalSMA: (number | null)[] = distributed.map((_, index) => {
+  const startIndex = Math.max(0, index - windowSize + 1);
+
+  const window = distributed.slice(startIndex, index + 1);
+
+  const sum = window.reduce((total, income) => total + income, 0);
+
+  return sum / window.length;
+});
+
+const historicalSMA_exp: (number | null)[] = distributed_exp.map((_, index) => {
+  const startIndex = Math.max(0, index - windowSize + 1);
+
+  const window = distributed.slice(startIndex, index + 1);
+
+  const sum_exp = window.reduce((total, expense) => total + expense, 0);
+
+  return sum_exp / window.length;
+});
+
+// ----------------------------------------
+// 2. NEXT 3-DAY SMA FORECAST
+// ----------------------------------------
+
+const sma_var: number[] = [];
+const sma_var_exp: number[] = [];
+
+// Copy the historical income values
+const rollingWindow = [...distributed];
+const rollingWindow_exp = [...distributed_exp];
+
+for (let m = 0; m < forecastDays; m++) {
+  // Get the latest 30 values
+  const recentWindow = rollingWindow.slice(-windowSize);
+  const recentWindow2 = rollingWindow_exp.slice(-windowSize);
+
+  // Calculate SMA
+  const sma_sum = recentWindow.reduce((sum, income) => sum + income, 0);
+  const sma_sum_exp = recentWindow2.reduce(
+    (sum_exp, expense) => sum_exp + expense,
+    0
+  );
+
+  const sma_average = sma_sum / windowSize;
+  const sma_average_exp = sma_sum_exp / windowSize;
+
+  // Store prediction
+  sma_var.push(sma_average);
+  sma_var_exp.push(sma_average_exp);
+
+  // Remove oldest income
+  rollingWindow.shift();
+  rollingWindow_exp.shift();
+
+  // Append predicted income
+  rollingWindow.push(sma_average);
+  rollingWindow_exp.push(sma_average_exp);
 }
 
 // ========================================
 // CHART DATA
 // ========================================
 
-const chartData = computed(() => ({
-  labels: distributed.map((_, index) => `Index ${index}`),
+const chartData = computed(() => {
+  const labels = [
+    ...distributed.map((_, index) => `Day ${index + 1}`),
+    "Day 31",
+    "Day 32",
+    "Day 33"
+  ];
 
-  datasets: [
-    {
-      label: "Original Values",
-      data: arr2,
-      borderColor: "#2196F3",
-      borderWidth: 2,
-      pointRadius: 2,
-      tension: 0.3
-    },
-    {
-      label: "Distributed Values",
-      data: distributed,
-      borderColor: "#1A898B",
-      borderWidth: 2,
-      pointRadius: 2,
-      tension: 0.3
-    }
-  ]
-}));
+  const lastDistributed = distributed[distributed.length - 1] ?? null;
+  const lastDistributed_exp =
+    distributed_exp[distributed_exp.length - 1] ?? null;
+
+  return {
+    labels,
+
+    datasets: [
+      {
+        label: "Distributed Income",
+        data: [...distributed, null, null, null],
+        borderColor: "#1A898B",
+        backgroundColor: "#1A898B",
+        borderWidth: 2,
+        pointRadius: 1.5,
+        tension: 0.3
+      },
+      {
+        label: "Distributed Expense",
+        data: [...distributed_exp, null, null, null],
+        borderColor: "red",
+        backgroundColor: "red",
+        borderWidth: 2,
+        pointRadius: 1.5,
+        tension: 0.3
+      },
+      {
+        label: "SMA Forecast for Income",
+        data: [...Array(29).fill(null), lastDistributed, ...sma_var],
+        borderColor: "#1A898B",
+        backgroundColor: "#1A898B",
+        borderWidth: 2,
+        borderDash: [3, 5],
+        pointRadius: 1.5,
+        pointHoverRadius: 5,
+        tension: 0.3,
+        spanGaps: false
+      },
+      {
+        label: "SMA Forecast for Expense",
+        data: [...Array(29).fill(null), lastDistributed_exp, ...sma_var_exp],
+        borderColor: "red",
+        backgroundColor: "red",
+        borderWidth: 2,
+        borderDash: [3, 5],
+        pointRadius: 1.5,
+        pointHoverRadius: 5,
+        tension: 0.3,
+        spanGaps: false
+      }
+    ]
+  };
+});
 
 // ========================================
 // CHART OPTIONS
@@ -438,6 +572,23 @@ const chartOptions = {
           size: 9
         }
       }
+    },
+
+    tooltip: {
+      callbacks: {
+        label: (context: any) => {
+          const value = context.parsed.y;
+
+          return `${context.dataset.label}: ₱${
+            value !== null
+              ? value.toLocaleString("en-PH", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })
+              : "N/A"
+          }`;
+        }
+      }
     }
   },
 
@@ -456,6 +607,10 @@ const chartOptions = {
       ticks: {
         font: {
           size: 8
+        },
+
+        callback: (value: any) => {
+          return "₱" + Number(value).toLocaleString("en-PH");
         }
       }
     }
