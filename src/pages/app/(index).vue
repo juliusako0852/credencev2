@@ -197,10 +197,12 @@
           margin-right: 5%;
           margin-top: 5pt;
           margin-bottom: 10pt;
+          padding: 10px;
           border-radius: 10px;
           box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
         "
       >
+        <Line :data="chartData" :options="chartOptions" />
       </div>
 
       <div
@@ -254,9 +256,35 @@
 </template>
 
 <script setup lang="ts">
-//
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { api } from "../../boot/axios";
+import { Line } from "vue-chartjs";
+
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale
+} from "chart.js";
+
+// Register Chart.js components
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale
+);
+
+// ========================================
+// USER HEALTH SCORE API
+// ========================================
 
 const loading = ref(true);
 const saving = ref(false);
@@ -289,12 +317,15 @@ async function fetchUser() {
     const response2 = await api.get<UserHealthScore>(
       `api/uhs/update/${current_user.value.id}/`
     );
+
     console.log("API UHS Response:", response2.data);
+
     current_user_hs.value = response2.data;
+
     console.log("Assigned UHS Records:", current_user_hs.value);
   } catch (error: any) {
     console.error("Error fetching user:", error.response?.data ?? error);
-    console.error("Error fetching user:", error.response2?.data ?? error);
+
     errorMessage.value =
       error.response?.data?.detail || "Could not load profile.";
   } finally {
@@ -303,4 +334,131 @@ async function fetchUser() {
 }
 
 onMounted(fetchUser);
+
+// ========================================
+// DISTRIBUTION ALGORITHM
+// ========================================
+
+// Sample data
+const arr: number[] = [1000, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0];
+
+// Preserve original values for comparison
+const arr2: number[] = [...arr];
+
+// Distribution percentages and offsets
+const distributions: [number, number][] = [
+  [-3, 0.03],
+  [-2, 0.05],
+  [-1, 0.07],
+  [3, 0.03],
+  [2, 0.05],
+  [1, 0.07]
+];
+
+// Initialize distributed array
+const distributed: number[] = [...arr];
+
+// Sequential distribution
+for (let i = 0; i < distributed.length; i++) {
+  // Create a snapshot of the current array
+  const current = [...distributed];
+
+  const currentValue = current[i];
+
+  if (currentValue === undefined) continue;
+
+  for (const [offset, percentage] of distributions) {
+    const targetIndex = i + offset;
+
+    // Ensure the target index is within array bounds
+    if (targetIndex >= 0 && targetIndex < current.length) {
+      const sourceValue = current[i];
+      const targetValue = current[targetIndex];
+
+      if (sourceValue === undefined || targetValue === undefined) {
+        continue;
+      }
+
+      const amount = sourceValue * percentage;
+
+      // Update source and target values
+      current[targetIndex] = targetValue + amount;
+      current[i] = sourceValue - amount;
+    }
+  }
+
+  // Update the entire distributed array
+  distributed.splice(0, distributed.length, ...current);
+}
+
+// ========================================
+// CHART DATA
+// ========================================
+
+const chartData = computed(() => ({
+  labels: distributed.map((_, index) => `Index ${index}`),
+
+  datasets: [
+    {
+      label: "Original Values",
+      data: arr2,
+      borderColor: "#2196F3",
+      borderWidth: 2,
+      pointRadius: 2,
+      tension: 0.3
+    },
+    {
+      label: "Distributed Values",
+      data: distributed,
+      borderColor: "#1A898B",
+      borderWidth: 2,
+      pointRadius: 2,
+      tension: 0.3
+    }
+  ]
+}));
+
+// ========================================
+// CHART OPTIONS
+// ========================================
+
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+
+  plugins: {
+    legend: {
+      display: true,
+      position: "top" as const,
+
+      labels: {
+        boxWidth: 10,
+
+        font: {
+          size: 9
+        }
+      }
+    }
+  },
+
+  scales: {
+    x: {
+      ticks: {
+        font: {
+          size: 8
+        }
+      }
+    },
+
+    y: {
+      beginAtZero: true,
+
+      ticks: {
+        font: {
+          size: 8
+        }
+      }
+    }
+  }
+};
 </script>
