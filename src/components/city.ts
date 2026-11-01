@@ -5,7 +5,6 @@ interface Region {
   name: string;
   provinces: string[];
 }
-
 const new_region: Region[] = [
   {
     id: 1,

@@ -3,7 +3,7 @@
     <div class="vault-page" style="width: 100%; height: 100%; width: 100%">
       <div
         style="
-          min-height: 320px;
+          min-height: 40vh;
           width: auto;
           margin: 10pt;
           border-radius: 10px;
@@ -158,6 +158,33 @@
             label="Stash Surplus"
           />
         </div>
+      </div>
+      <div
+        style="
+          min-height: 30vh;
+          width: auto;
+          margin: 10pt;
+          border-radius: 10px;
+          background-color: white;
+          color: white;
+          text-align: center;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <div
+          style="
+            color: #0e494a;
+            font-size: x-large;
+            font-weight: bold;
+            height: 40px;
+            text-align: center;
+            align-items: center;
+            align-content: center;
+          "
+        >
+          Connected Finance Apps</div
+        >
       </div>
     </div>
   </q-page>

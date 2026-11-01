@@ -192,11 +192,11 @@
           align-items: center;
         "
       >
-        Bank Accounts
+        Platforms
       </div>
 
       <div
-        class="bank-info"
+        class="platforms-info"
         style="
           background-color: white;
           min-height: 30vh;
