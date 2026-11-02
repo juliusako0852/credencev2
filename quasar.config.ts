@@ -37,6 +37,18 @@ export default defineConfig((/* ctx */) => {
         // node: 'node22'
       },
 
+      csp: {
+        directives: {
+          "default-src": ["'self'"],
+          "connect-src": [
+            "'self'",
+            "ws://localhost:*",
+            "http://192.168.246.95:8000",
+            "https://generativelanguage.googleapis.com"
+          ]
+        }
+      },
+
       env: {
         API_URL: process.env.API_URL || "http://192.168.246.95:8000/"
       },

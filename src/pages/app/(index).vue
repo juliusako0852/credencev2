@@ -241,15 +241,68 @@
         style="
           background-color: white;
           width: auto;
-          height: 200px;
+          min-height: 200px;
           margin-left: 5%;
           margin-right: 5%;
           margin-top: 5pt;
           margin-bottom: 10pt;
           border-radius: 10px;
+          padding: 10pt;
           box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
         "
       >
+        <div v-if="loading"> Loading financial data... </div>
+
+        <div v-else>
+          <div v-if="aiLoading">
+            <q-spinner color="primary" size="30px" />
+            <p>Credence AI is analyzing your financial data...</p>
+          </div>
+
+          <div v-else-if="aiError">
+            <p>{{ aiError }}</p>
+            <q-btn
+              label="Retry AI Analysis"
+              color="primary"
+              @click="generateAIInsights"
+            />
+          </div>
+
+          <div v-else-if="aiInsights">
+            <h5>Credence AI Financial Insights</h5>
+
+            <p>{{ aiInsights.summary }}</p>
+
+            <h6>Income Analysis</h6>
+            <p>{{ aiInsights.income_analysis }}</p>
+
+            <h6>Expense Analysis</h6>
+            <p>{{ aiInsights.expense_analysis }}</p>
+
+            <h6>Forecast Analysis</h6>
+            <p>{{ aiInsights.forecast_analysis }}</p>
+
+            <h6>Financial Risks</h6>
+            <ul>
+              <li
+                v-for="(risk, index) in aiInsights.financial_risks"
+                :key="index"
+              >
+                {{ risk }}
+              </li>
+            </ul>
+
+            <h6>Recommendations</h6>
+            <ul>
+              <li
+                v-for="(recommendation, index) in aiInsights.recommendations"
+                :key="index"
+              >
+                {{ recommendation }}
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </q-page>
@@ -259,6 +312,10 @@
 import { onMounted, ref, computed } from "vue";
 import { api } from "../../boot/axios";
 import { Line } from "vue-chartjs";
+import {
+  analyzeFinances,
+  type FinancialInsights
+} from "../../services/aiService";
 
 import {
   Chart as ChartJS,
@@ -559,10 +616,11 @@ async function fetchUser() {
 
     // Calculate distribution and SMA
     calculateAnalytics();
+    await generateAIInsights();
 
     console.log("API UHS Response:", current_user_hs.value);
     console.log("API Income Records:", incomeRecords.value);
-    console.log("API Expense Records:", expenseRecords.value);
+    console.log("API Expense Records:", expenses.value);
   } catch (error: any) {
     console.error("Error fetching user:", error.response?.data ?? error);
 
@@ -776,4 +834,43 @@ const chartOptions = {
     }
   }
 };
+
+// ========================================
+// AI FINANCIAL ADVISOR
+// ========================================
+
+const aiLoading = ref(false);
+const aiError = ref("");
+const aiInsights = ref<FinancialInsights | null>(null);
+
+async function generateAIInsights() {
+  aiLoading.value = true;
+  aiError.value = "";
+  aiInsights.value = null;
+
+  try {
+    const financialData = {
+      income: incomes.value,
+      expenses: expenses.value,
+
+      distributed_income: distributed_income.value,
+      distributed_expenses: distributed_expenses.value,
+
+      income_forecast: sma_var.value,
+      expense_forecast: sma_var_exp.value,
+
+      financial_health_score: Number(current_user_hs.value?.uh_score ?? 0)
+    };
+
+    aiInsights.value = await analyzeFinances(financialData);
+
+    console.log("AI Financial Insights:", aiInsights.value);
+  } catch (error: any) {
+    console.error("AI Analysis Error:", error);
+
+    aiError.value = error.message || "Unable to generate financial insights.";
+  } finally {
+    aiLoading.value = false;
+  }
+}
 </script>
