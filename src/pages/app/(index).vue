@@ -312,23 +312,25 @@ interface Income {
   income_2_bankacct: number;
 }
 
+interface Expense {
+  id: number;
+  expense_amount: number;
+  e_date: string;
+  user_account: number;
+  expense_2_bankacct: number;
+}
+
 const current_user = ref<CurrentUser | null>(null);
 const current_user_hs = ref<UserHealthScore>();
 
 const incomes = ref<number[]>([]);
+const expenses = ref<number[]>([]);
 const distributed_income = ref<number[]>([]);
-const distributed_exp = ref<number[]>([]);
+const distributed_expenses = ref<number[]>([]);
 
 // ========================================
 // ORIGINAL EXPENSE DATA
 // ========================================
-
-const exp_arr: number[] = [
-  418.32, 572.14, 349.67, 498.21, 387.45, 531.76, 308.92, 463.51, 579.83,
-  421.68, 354.27, 516.39, 475.82, 321.54, 549.63, 402.17, 567.28, 341.95,
-  489.36, 372.81, 542.19, 448.63, 314.72, 523.47, 481.26, 361.58, 503.92,
-  432.15, 584.67, 395.24
-];
 
 // ========================================
 // DISTRIBUTION SETTINGS
@@ -454,23 +456,23 @@ function calculateAnalytics() {
   // 1. Distribute income and expense
   distributed_income.value = distributeValues(incomes.value);
 
-  distributed_exp.value = distributeValues(exp_arr);
+  distributed_expenses.value = distributeValues(expenses.value);
 
   // 2. Calculate historical SMA (Days 1-30)
   historicalSMA.value = calculateHistoricalSMA(distributed_income.value);
 
-  historicalSMA_exp.value = calculateHistoricalSMA(distributed_exp.value);
+  historicalSMA_exp.value = calculateHistoricalSMA(distributed_expenses.value);
 
   // 3. Calculate next 3-day SMA forecast (Days 31-33)
   sma_var.value = calculateSMAForecast(distributed_income.value);
 
-  sma_var_exp.value = calculateSMAForecast(distributed_exp.value);
+  sma_var_exp.value = calculateSMAForecast(distributed_expenses.value);
 
   // 4. Debugging
   console.log("Original Income:", incomes.value);
   console.log("Distributed Income:", distributed_income.value);
 
-  console.log("Distributed Expense:", distributed_exp.value);
+  console.log("Distributed Expense:", distributed_expenses.value);
 
   console.log("Historical Income SMA:", historicalSMA.value);
   console.log("Historical Expense SMA:", historicalSMA_exp.value);
@@ -514,14 +516,22 @@ async function fetchUser() {
     const response3 = await api.get<Income[]>(
       `api/income/list/${current_user.value.id}/`
     );
+    const response4 = await api.get<Expense[]>(
+      `api/expense/list/${current_user.value.id}/`
+    );
 
     const incomeData = response3.data;
+    const expenseData = response4.data;
 
     // Convert API income values into numbers
     incomes.value = incomeData.map(item => Number(item.income_amount));
+    expenses.value = expenseData.map(item => Number(item.expense_amount));
 
     // Validate API values
     if (incomes.value.some(value => !Number.isFinite(value))) {
+      throw new Error("Invalid income values received from API.");
+    }
+    if (expenses.value.some(value => !Number.isFinite(value))) {
       throw new Error("Invalid income values received from API.");
     }
 
@@ -550,7 +560,7 @@ onMounted(fetchUser);
 
 const chartData = computed(() => {
   const incomeLength = distributed_income.value.length;
-  const expenseLength = distributed_exp.value.length;
+  const expenseLength = distributed_expenses.value.length;
 
   const historyLength = Math.max(incomeLength, expenseLength);
 
@@ -580,7 +590,7 @@ const chartData = computed(() => {
   ];
 
   const expenseData = [
-    ...distributed_exp.value,
+    ...distributed_expenses.value,
     ...Array(Math.max(0, totalLength - expenseLength)).fill(null)
   ];
 
