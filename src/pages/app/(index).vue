@@ -271,7 +271,10 @@ import {
   LinearScale
 } from "chart.js";
 
-// Register Chart.js components
+// ========================================
+// CHART.JS REGISTRATION
+// ========================================
+
 ChartJS.register(
   Title,
   Tooltip,
@@ -283,7 +286,7 @@ ChartJS.register(
 );
 
 // ========================================
-// USER HEALTH SCORE API
+// API AND INTERFACES
 // ========================================
 
 const loading = ref(true);
@@ -300,52 +303,25 @@ interface UserHealthScore {
   uh_score: number;
 }
 
+interface Income {
+  id: number;
+  income_amount: number;
+  i_date: string;
+  user_account: number;
+  job_info: number;
+  income_2_bankacct: number;
+}
+
 const current_user = ref<CurrentUser | null>(null);
 const current_user_hs = ref<UserHealthScore>();
 
-async function fetchUser() {
-  loading.value = true;
-  errorMessage.value = "";
-
-  try {
-    const response = await api.get<CurrentUser>("users/me/");
-
-    current_user.value = response.data;
-
-    console.log("Logged-in user ID:", current_user.value.id);
-
-    const response2 = await api.get<UserHealthScore>(
-      `api/uhs/update/${current_user.value.id}/`
-    );
-
-    console.log("API UHS Response:", response2.data);
-
-    current_user_hs.value = response2.data;
-
-    console.log("Assigned UHS Records:", current_user_hs.value);
-  } catch (error: any) {
-    console.error("Error fetching user:", error.response?.data ?? error);
-
-    errorMessage.value =
-      error.response?.data?.detail || "Could not load profile.";
-  } finally {
-    loading.value = false;
-  }
-}
-
-onMounted(fetchUser);
+const incomes = ref<number[]>([]);
+const distributed_income = ref<number[]>([]);
+const distributed_exp = ref<number[]>([]);
 
 // ========================================
-// DISTRIBUTION ALGORITHM
+// ORIGINAL EXPENSE DATA
 // ========================================
-
-// Original income data
-const arr: number[] = [
-  583.72, 914.35, 467.89, 728.16, 852.43, 641.28, 976.51, 512.67, 793.84,
-  438.29, 867.92, 695.41, 554.73, 932.18, 761.56, 489.32, 821.67, 607.94,
-  958.23, 713.85, 446.71, 884.59, 672.38, 536.92, 905.14, 748.63, 421.85,
-  839.47, 619.26, 781.93
-];
 
 const exp_arr: number[] = [
   418.32, 572.14, 349.67, 498.21, 387.45, 531.76, 308.92, 463.51, 579.83,
@@ -354,11 +330,10 @@ const exp_arr: number[] = [
   432.15, 584.67, 395.24
 ];
 
-// Preserve original values
-const arr2: number[] = [...arr];
-const exp_arr2: number[] = [...exp_arr];
+// ========================================
+// DISTRIBUTION SETTINGS
+// ========================================
 
-// Distribution percentages and offsets
 const distributions: [number, number][] = [
   [-3, 0.03],
   [-2, 0.05],
@@ -368,182 +343,308 @@ const distributions: [number, number][] = [
   [1, 0.07]
 ];
 
-// Initialize distributed array
-const distributed: number[] = [...arr];
-const distributed_exp: number[] = [...exp_arr];
-
-// Sequential distribution
-for (let i = 0; i < distributed.length; i++) {
-  const current = [...distributed];
-  const current_exp = [...distributed_exp];
-
-  const currentValue = current[i];
-  const currentValue2 = current_exp[i];
-
-  if (currentValue === undefined) continue;
-
-  for (const [offset, percentage] of distributions) {
-    const targetIndex = i + offset;
-
-    if (targetIndex >= 0 && targetIndex < current.length) {
-      const sourceValue = current[i];
-      const targetValue = current[targetIndex];
-      const sourceValue2 = current_exp[i];
-      const targetValue2 = current_exp[targetIndex];
-
-      if (
-        sourceValue === undefined ||
-        sourceValue2 === undefined ||
-        targetValue === undefined ||
-        targetValue2 === undefined
-      ) {
-        continue;
-      }
-
-      const amount = sourceValue * percentage;
-      const amount2 = sourceValue2 * percentage;
-
-      current[targetIndex] = targetValue + amount;
-      current[i] = sourceValue - amount;
-
-      current_exp[targetIndex] = targetValue2 + amount2;
-      current_exp[i] = sourceValue2 - amount2;
-    }
-  }
-
-  distributed.splice(0, distributed.length, ...current);
-  distributed_exp.splice(0, distributed_exp.length, ...current_exp);
-}
-
 // ========================================
-// SMA: WINDOW SIZE = 30
-// FORECAST = 3 DAYS
+// SMA SETTINGS
 // ========================================
 
 const windowSize = 30;
 const forecastDays = 3;
 
-// ----------------------------------------
-// 1. HISTORICAL SMA
-// ----------------------------------------
+// ========================================
+// SMA RESULTS
+// ========================================
 
-const historicalSMA: (number | null)[] = distributed.map((_, index) => {
-  const startIndex = Math.max(0, index - windowSize + 1);
+const historicalSMA = ref<(number | null)[]>([]);
+const historicalSMA_exp = ref<(number | null)[]>([]);
 
-  const window = distributed.slice(startIndex, index + 1);
+const sma_var = ref<number[]>([]);
+const sma_var_exp = ref<number[]>([]);
 
-  const sum = window.reduce((total, income) => total + income, 0);
+// ========================================
+// DISTRIBUTION ALGORITHM
+// ========================================
 
-  return sum / window.length;
-});
+function distributeValues(values: number[]): number[] {
+  const result = [...values];
 
-const historicalSMA_exp: (number | null)[] = distributed_exp.map((_, index) => {
-  const startIndex = Math.max(0, index - windowSize + 1);
+  for (let i = 0; i < result.length; i++) {
+    for (const [offset, percentage] of distributions) {
+      const targetIndex = i + offset;
 
-  const window = distributed.slice(startIndex, index + 1);
+      if (targetIndex < 0 || targetIndex >= result.length) {
+        continue;
+      }
 
-  const sum_exp = window.reduce((total, expense) => total + expense, 0);
+      const sourceValue = result[i];
+      const targetValue = result[targetIndex];
 
-  return sum_exp / window.length;
-});
+      if (
+        sourceValue === undefined ||
+        targetValue === undefined ||
+        !Number.isFinite(sourceValue) ||
+        !Number.isFinite(targetValue)
+      ) {
+        continue;
+      }
 
-// ----------------------------------------
-// 2. NEXT 3-DAY SMA FORECAST
-// ----------------------------------------
+      const amount = sourceValue * percentage;
 
-const sma_var: number[] = [];
-const sma_var_exp: number[] = [];
+      result[targetIndex] = targetValue + amount;
+      result[i] = sourceValue - amount;
+    }
+  }
 
-// Copy the historical income values
-const rollingWindow = [...distributed];
-const rollingWindow_exp = [...distributed_exp];
-
-for (let m = 0; m < forecastDays; m++) {
-  // Get the latest 30 values
-  const recentWindow = rollingWindow.slice(-windowSize);
-  const recentWindow2 = rollingWindow_exp.slice(-windowSize);
-
-  // Calculate SMA
-  const sma_sum = recentWindow.reduce((sum, income) => sum + income, 0);
-  const sma_sum_exp = recentWindow2.reduce(
-    (sum_exp, expense) => sum_exp + expense,
-    0
-  );
-
-  const sma_average = sma_sum / windowSize;
-  const sma_average_exp = sma_sum_exp / windowSize;
-
-  // Store prediction
-  sma_var.push(sma_average);
-  sma_var_exp.push(sma_average_exp);
-
-  // Remove oldest income
-  rollingWindow.shift();
-  rollingWindow_exp.shift();
-
-  // Append predicted income
-  rollingWindow.push(sma_average);
-  rollingWindow_exp.push(sma_average_exp);
+  return result;
 }
+
+// ========================================
+// HISTORICAL SMA (DAYS 1-30)
+// ========================================
+
+function calculateHistoricalSMA(values: number[]): (number | null)[] {
+  return values.map((_, index) => {
+    const startIndex = Math.max(0, index - windowSize + 1);
+
+    const window = values.slice(startIndex, index + 1);
+
+    if (window.length === 0) {
+      return null;
+    }
+
+    const sum = window.reduce((total, value) => total + value, 0);
+
+    return sum / window.length;
+  });
+}
+
+// ========================================
+// SMA FORECAST (DAYS 31-33)
+// ========================================
+
+function calculateSMAForecast(values: number[]): number[] {
+  const predictions: number[] = [];
+  const rollingWindow = [...values];
+
+  if (rollingWindow.length === 0) {
+    return predictions;
+  }
+
+  for (let m = 0; m < forecastDays; m++) {
+    const recentWindow = rollingWindow.slice(-windowSize);
+
+    const sum = recentWindow.reduce((total, value) => total + value, 0);
+
+    const average = sum / recentWindow.length;
+
+    predictions.push(average);
+
+    // Update rolling window for the next prediction
+    rollingWindow.shift();
+    rollingWindow.push(average);
+  }
+
+  return predictions;
+}
+
+// ========================================
+// PROCESS INCOME AND EXPENSE DATA
+// ========================================
+
+function calculateAnalytics() {
+  // 1. Distribute income and expense
+  distributed_income.value = distributeValues(incomes.value);
+
+  distributed_exp.value = distributeValues(exp_arr);
+
+  // 2. Calculate historical SMA (Days 1-30)
+  historicalSMA.value = calculateHistoricalSMA(distributed_income.value);
+
+  historicalSMA_exp.value = calculateHistoricalSMA(distributed_exp.value);
+
+  // 3. Calculate next 3-day SMA forecast (Days 31-33)
+  sma_var.value = calculateSMAForecast(distributed_income.value);
+
+  sma_var_exp.value = calculateSMAForecast(distributed_exp.value);
+
+  // 4. Debugging
+  console.log("Original Income:", incomes.value);
+  console.log("Distributed Income:", distributed_income.value);
+
+  console.log("Distributed Expense:", distributed_exp.value);
+
+  console.log("Historical Income SMA:", historicalSMA.value);
+  console.log("Historical Expense SMA:", historicalSMA_exp.value);
+
+  console.log("3-Day Income Forecast:", sma_var.value);
+  console.log("3-Day Expense Forecast:", sma_var_exp.value);
+
+  console.log("Complete Income SMA (33 Days):", [
+    ...historicalSMA.value,
+    ...sma_var.value
+  ]);
+
+  console.log("Complete Expense SMA (33 Days):", [
+    ...historicalSMA_exp.value,
+    ...sma_var_exp.value
+  ]);
+}
+
+// ========================================
+// FETCH USER AND INCOME DATA
+// ========================================
+
+async function fetchUser() {
+  loading.value = true;
+  errorMessage.value = "";
+
+  try {
+    // Get authenticated user
+    const response = await api.get<CurrentUser>("users/me/");
+
+    current_user.value = response.data;
+
+    // Get user health score
+    const response2 = await api.get<UserHealthScore>(
+      `api/uhs/update/${current_user.value.id}/`
+    );
+
+    current_user_hs.value = response2.data;
+
+    // Get user income records
+    const response3 = await api.get<Income[]>(
+      `api/income/list/${current_user.value.id}/`
+    );
+
+    const incomeData = response3.data;
+
+    // Convert API income values into numbers
+    incomes.value = incomeData.map(item => Number(item.income_amount));
+
+    // Validate API values
+    if (incomes.value.some(value => !Number.isFinite(value))) {
+      throw new Error("Invalid income values received from API.");
+    }
+
+    // Calculate distribution and SMA
+    calculateAnalytics();
+
+    console.log("API UHS Response:", current_user_hs.value);
+    console.log("API Income Records:", incomeData);
+  } catch (error: any) {
+    console.error("Error fetching user:", error.response?.data ?? error);
+
+    errorMessage.value =
+      error.response?.data?.detail ||
+      error.message ||
+      "Could not load profile.";
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(fetchUser);
 
 // ========================================
 // CHART DATA
 // ========================================
 
 const chartData = computed(() => {
-  const labels = [
-    ...distributed.map((_, index) => `Day ${index + 1}`),
-    "Day 31",
-    "Day 32",
-    "Day 33"
+  const incomeLength = distributed_income.value.length;
+  const expenseLength = distributed_exp.value.length;
+
+  const historyLength = Math.max(incomeLength, expenseLength);
+
+  const totalLength = historyLength + forecastDays;
+
+  // Generate 33-day labels
+  const labels = Array.from(
+    { length: totalLength },
+    (_, index) => `Day ${index + 1}`
+  );
+
+  // ========================================
+  // COMPLETE SMA DATA (HISTORICAL + FORECAST)
+  // ========================================
+
+  const incomeSMAData = [...historicalSMA.value, ...sma_var.value];
+
+  const expenseSMAData = [...historicalSMA_exp.value, ...sma_var_exp.value];
+
+  // ========================================
+  // DISTRIBUTED INCOME AND EXPENSE
+  // ========================================
+
+  const incomeData = [
+    ...distributed_income.value,
+    ...Array(Math.max(0, totalLength - incomeLength)).fill(null)
   ];
 
-  const lastDistributed = distributed[distributed.length - 1] ?? null;
-  const lastDistributed_exp =
-    distributed_exp[distributed_exp.length - 1] ?? null;
+  const expenseData = [
+    ...distributed_exp.value,
+    ...Array(Math.max(0, totalLength - expenseLength)).fill(null)
+  ];
 
   return {
     labels,
 
     datasets: [
+      // ========================================
+      // DISTRIBUTED INCOME
+      // ========================================
+
       {
         label: "Distributed Income",
-        data: [...distributed, null, null, null],
+        data: incomeData,
         borderColor: "#1A898B",
         backgroundColor: "#1A898B",
-        borderWidth: 2,
-        pointRadius: 1.5,
+        borderWidth: 1,
+        pointRadius: 1.2,
         tension: 0.3
       },
+
+      // ========================================
+      // DISTRIBUTED EXPENSE
+      // ========================================
+
       {
         label: "Distributed Expense",
-        data: [...distributed_exp, null, null, null],
+        data: expenseData,
         borderColor: "red",
         backgroundColor: "red",
-        borderWidth: 2,
-        pointRadius: 1.5,
+        borderWidth: 1,
+        pointRadius: 1.2,
         tension: 0.3
       },
+
+      // ========================================
+      // INCOME SMA (ALL 33 DAYS)
+      // ========================================
+
       {
-        label: "SMA Forecast for Income",
-        data: [...Array(29).fill(null), lastDistributed, ...sma_var],
+        label: "Income SMA (33 Days)",
+        data: incomeSMAData,
         borderColor: "#1A898B",
         backgroundColor: "#1A898B",
-        borderWidth: 2,
-        borderDash: [3, 5],
-        pointRadius: 1.5,
+        borderWidth: 1,
+        borderDash: [5, 5],
+        pointRadius: 1,
         pointHoverRadius: 5,
         tension: 0.3,
         spanGaps: false
       },
+
+      // ========================================
+      // EXPENSE SMA (ALL 33 DAYS)
+      // ========================================
+
       {
-        label: "SMA Forecast for Expense",
-        data: [...Array(29).fill(null), lastDistributed_exp, ...sma_var_exp],
+        label: "Expense SMA (33 Days)",
+        data: expenseSMAData,
         borderColor: "red",
         backgroundColor: "red",
-        borderWidth: 2,
-        borderDash: [3, 5],
-        pointRadius: 1.5,
+        borderWidth: 1,
+        borderDash: [5, 5],
+        pointRadius: 1,
         pointHoverRadius: 5,
         tension: 0.3,
         spanGaps: false
@@ -580,7 +681,7 @@ const chartOptions = {
           const value = context.parsed.y;
 
           return `${context.dataset.label}: ₱${
-            value !== null
+            value !== null && value !== undefined
               ? value.toLocaleString("en-PH", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2

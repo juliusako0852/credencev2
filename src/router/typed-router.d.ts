@@ -56,6 +56,7 @@ declare module 'vue-router/auto-routes' {
       | '/app/insurancespage'
       | '/app/investmentspage'
       | '/app/loanspage'
+      | '/app/newnew'
       | '/app/profilepage'
       | '/app/qrcodepage'
       | '/app/second'
@@ -99,6 +100,13 @@ declare module 'vue-router/auto-routes' {
     '/app/loanspage': RouteRecordInfo<
       '/app/loanspage',
       '/app/loanspage',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/app/newnew': RouteRecordInfo<
+      '/app/newnew',
+      '/app/newnew',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -176,6 +184,7 @@ declare module 'vue-router/auto-routes' {
         | '/app/insurancespage'
         | '/app/investmentspage'
         | '/app/loanspage'
+        | '/app/newnew'
         | '/app/profilepage'
         | '/app/qrcodepage'
         | '/app/second'
@@ -228,6 +237,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/app/loanspage.vue': {
       routes:
         | '/app/loanspage'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/app/newnew.vue': {
+      routes:
+        | '/app/newnew'
       views:
         | never
       pathParamNames:
