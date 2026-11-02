@@ -323,14 +323,17 @@ interface Expense {
 const current_user = ref<CurrentUser | null>(null);
 const current_user_hs = ref<UserHealthScore>();
 
+// Original API records
+const incomeRecords = ref<Income[]>([]);
+const expenseRecords = ref<Expense[]>([]);
+
+// Original numeric values
 const incomes = ref<number[]>([]);
 const expenses = ref<number[]>([]);
+
+// Distributed values
 const distributed_income = ref<number[]>([]);
 const distributed_expenses = ref<number[]>([]);
-
-// ========================================
-// ORIGINAL EXPENSE DATA
-// ========================================
 
 // ========================================
 // DISTRIBUTION SETTINGS
@@ -400,7 +403,7 @@ function distributeValues(values: number[]): number[] {
 }
 
 // ========================================
-// HISTORICAL SMA (DAYS 1-30)
+// HISTORICAL SMA
 // ========================================
 
 function calculateHistoricalSMA(values: number[]): (number | null)[] {
@@ -420,7 +423,7 @@ function calculateHistoricalSMA(values: number[]): (number | null)[] {
 }
 
 // ========================================
-// SMA FORECAST (DAYS 31-33)
+// SMA FORECAST (NEXT 3 DAYS)
 // ========================================
 
 function calculateSMAForecast(values: number[]): number[] {
@@ -440,7 +443,7 @@ function calculateSMAForecast(values: number[]): number[] {
 
     predictions.push(average);
 
-    // Update rolling window for the next prediction
+    // Update rolling window
     rollingWindow.shift();
     rollingWindow.push(average);
   }
@@ -458,21 +461,22 @@ function calculateAnalytics() {
 
   distributed_expenses.value = distributeValues(expenses.value);
 
-  // 2. Calculate historical SMA (Days 1-30)
+  // 2. Calculate historical SMA
   historicalSMA.value = calculateHistoricalSMA(distributed_income.value);
 
   historicalSMA_exp.value = calculateHistoricalSMA(distributed_expenses.value);
 
-  // 3. Calculate next 3-day SMA forecast (Days 31-33)
+  // 3. Calculate next 3-day forecast
   sma_var.value = calculateSMAForecast(distributed_income.value);
 
   sma_var_exp.value = calculateSMAForecast(distributed_expenses.value);
 
   // 4. Debugging
   console.log("Original Income:", incomes.value);
-  console.log("Distributed Income:", distributed_income.value);
+  console.log("Original Expenses:", expenses.value);
 
-  console.log("Distributed Expense:", distributed_expenses.value);
+  console.log("Distributed Income:", distributed_income.value);
+  console.log("Distributed Expenses:", distributed_expenses.value);
 
   console.log("Historical Income SMA:", historicalSMA.value);
   console.log("Historical Expense SMA:", historicalSMA_exp.value);
@@ -512,34 +516,53 @@ async function fetchUser() {
 
     current_user_hs.value = response2.data;
 
-    // Get user income records
+    // Get income records
     const response3 = await api.get<Income[]>(
       `api/income/list/${current_user.value.id}/`
     );
+
+    // Get expense records
     const response4 = await api.get<Expense[]>(
       `api/expense/list/${current_user.value.id}/`
     );
 
-    const incomeData = response3.data;
-    const expenseData = response4.data;
+    // ========================================
+    // SORT RECORDS CHRONOLOGICALLY
+    // ========================================
 
-    // Convert API income values into numbers
-    incomes.value = incomeData.map(item => Number(item.income_amount));
-    expenses.value = expenseData.map(item => Number(item.expense_amount));
+    incomeRecords.value = [...response3.data].sort((a, b) =>
+      a.i_date.localeCompare(b.i_date)
+    );
+
+    expenseRecords.value = [...response4.data].sort((a, b) =>
+      a.e_date.localeCompare(b.e_date)
+    );
+
+    // ========================================
+    // CONVERT API VALUES INTO NUMBERS
+    // ========================================
+
+    incomes.value = incomeRecords.value.map(item => Number(item.income_amount));
+
+    expenses.value = expenseRecords.value.map(item =>
+      Number(item.expense_amount)
+    );
 
     // Validate API values
     if (incomes.value.some(value => !Number.isFinite(value))) {
       throw new Error("Invalid income values received from API.");
     }
+
     if (expenses.value.some(value => !Number.isFinite(value))) {
-      throw new Error("Invalid income values received from API.");
+      throw new Error("Invalid expense values received from API.");
     }
 
     // Calculate distribution and SMA
     calculateAnalytics();
 
     console.log("API UHS Response:", current_user_hs.value);
-    console.log("API Income Records:", incomeData);
+    console.log("API Income Records:", incomeRecords.value);
+    console.log("API Expense Records:", expenseRecords.value);
   } catch (error: any) {
     console.error("Error fetching user:", error.response?.data ?? error);
 
@@ -555,6 +578,19 @@ async function fetchUser() {
 onMounted(fetchUser);
 
 // ========================================
+// FORMAT DATE LABELS
+// ========================================
+
+function formatDate(dateString: string): string {
+  const date = new Date(`${dateString}T00:00:00`);
+
+  return date.toLocaleDateString("en-PH", {
+    day: "2-digit",
+    month: "short"
+  });
+}
+
+// ========================================
 // CHART DATA
 // ========================================
 
@@ -566,14 +602,27 @@ const chartData = computed(() => {
 
   const totalLength = historyLength + forecastDays;
 
-  // Generate 33-day labels
-  const labels = Array.from(
-    { length: totalLength },
-    (_, index) => `Day ${index + 1}`
-  );
+  // ========================================
+  // HORIZONTAL LABELS
+  // INCOME DATES + 3 FORECAST DAYS
+  // ========================================
+
+  const incomeDates = incomeRecords.value.map(item => formatDate(item.i_date));
+
+  const labels = [
+    ...incomeDates,
+    ...Array.from(
+      { length: Math.max(0, historyLength - incomeDates.length) },
+      (_, index) => `Day ${incomeDates.length + index + 1}`
+    ),
+    "Day 31",
+    "Day 32",
+    "Day 33"
+  ];
 
   // ========================================
-  // COMPLETE SMA DATA (HISTORICAL + FORECAST)
+  // COMPLETE SMA DATA
+  // HISTORICAL + FORECAST
   // ========================================
 
   const incomeSMAData = [...historicalSMA.value, ...sma_var.value];
@@ -627,7 +676,7 @@ const chartData = computed(() => {
       },
 
       // ========================================
-      // INCOME SMA (ALL 33 DAYS)
+      // INCOME SMA (HISTORICAL + FORECAST)
       // ========================================
 
       {
@@ -644,7 +693,7 @@ const chartData = computed(() => {
       },
 
       // ========================================
-      // EXPENSE SMA (ALL 33 DAYS)
+      // EXPENSE SMA (HISTORICAL + FORECAST)
       // ========================================
 
       {
