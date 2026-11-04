@@ -103,16 +103,10 @@
             color: #1a898b;
           "
         >
-          <q-btn
-            stack
-            flat
-            dense
-            aria-label="send"
-            size="8pt"
-            to="../signuppage"
+          <q-btn stack flat dense aria-label="digital_diary" size="8pt" to="/">
+            <q-icon name="payments" size="5vh" />Digital Diary</q-btn
           >
-            <q-icon name="swap_horiz" size="5vh" />Transfer</q-btn
-          >
+
           <q-btn stack flat dense aria-label="bills" size="8pt" to="/">
             <q-icon name="payments" size="5vh" />Bills</q-btn
           >
@@ -137,9 +131,7 @@
           >
             <q-icon name="book" size="5vh" />Credit Passport</q-btn
           >
-          <q-btn stack flat dense aria-label="connect" size="8pt" to="/">
-            <q-icon name="smartphone" size="5vh" />Load</q-btn
-          >
+
           <q-btn
             stack
             flat
@@ -249,6 +241,7 @@
           border-radius: 10px;
           padding: 10pt;
           box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+          text-align: justify;
         "
       >
         <div v-if="loading"> Loading financial data... </div>
