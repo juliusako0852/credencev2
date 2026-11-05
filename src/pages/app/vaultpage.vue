@@ -155,17 +155,10 @@
             >
               <q-card-section style="font-size: large; text-align: justify">
                 Would you authorize us to automatically
-                <b
-                  >allocate 30% (PHP
-                  {{
-                    Number(
-                      (
-                        (currentDailyIncome - currentDailyExpenses) *
-                        0.3
-                      ).toFixed(2)
-                    )
-                  }}) of your calculated surplus</b
-                >
+                <b>
+                  allocate 30% (PHP {{ calculateStashAmount().toFixed(2) }}) of
+                  your calculated surplus
+                </b>
                 funds to your savings vault? This will help you consistently
                 build your savings while ensuring that the remaining 70% remains
                 available for your other financial needs and expenses.
@@ -200,7 +193,7 @@
                   >
                     <q-radio
                       v-model="bank_vault_choice"
-                      :val="entry?.id"
+                      :val="entry.id"
                       color="white"
                     />
                   </div>
@@ -225,11 +218,25 @@
               </q-card-section>
               <q-card-section>
                 Do you consent to this automatic savings allocation?
+                <div v-if="errorMessage" class="text-negative q-pa-sm">
+                  {{ errorMessage }}
+                </div>
+
+                <div v-if="successMessage" class="text-positive q-pa-sm">
+                  {{ successMessage }}
+                </div>
               </q-card-section>
 
               <q-card-actions align="center" class="text-primary">
-                <q-btn flat label="Cancel" v-close-popup />
-                <q-btn flat label="Stash Surplus " v-close-popup />
+                <q-btn flat label="Cancel" v-close-popup :disable="saving" />
+
+                <q-btn
+                  flat
+                  label="Stash Surplus"
+                  :loading="saving"
+                  :disable="saving || !bank_vault_choice"
+                  @click="stashSurplus"
+                />
               </q-card-actions>
             </q-card>
           </q-dialog>
@@ -397,7 +404,76 @@ import { api } from "../../boot/axios";
 import FinancialChart from "./(index).vue";
 
 //choices for banking vault
-const bank_vault_choice = ref();
+const bank_vault_choice = ref<number | null>(null);
+
+function calculateStashAmount(): number {
+  const surplus = currentDailyIncome.value - currentDailyExpenses.value;
+
+  if (surplus <= 0) {
+    return 0;
+  }
+
+  return Number((surplus * 0.3).toFixed(2));
+}
+async function stashSurplus() {
+  if (!bank_vault_choice.value) {
+    errorMessage.value = "Please select a bank account.";
+    return;
+  }
+
+  const amount = calculateStashAmount();
+
+  if (amount <= 0) {
+    errorMessage.value = "You do not have a positive surplus to stash.";
+    return;
+  }
+
+  const selectedBank = current_user_connected_bank_list.value.find(
+    bank => bank.id === bank_vault_choice.value
+  );
+
+  if (!selectedBank) {
+    errorMessage.value = "Selected bank account was not found.";
+    return;
+  }
+
+  if (selectedBank.bank_balance < amount) {
+    errorMessage.value = "Insufficient bank balance.";
+    return;
+  }
+
+  saving.value = true;
+  errorMessage.value = "";
+  successMessage.value = "";
+
+  try {
+    const response = await api.post("api/vault/stash/", {
+      bank_id: bank_vault_choice.value,
+      amount: amount.toFixed(2)
+    });
+
+    successMessage.value = response.data.message;
+
+    console.log("Transfer successful:", response.data);
+
+    // Refresh bank and vault balances
+    await fetchUser();
+
+    // Close dialog
+    prompt2.value = false;
+
+    // Reset selection
+    bank_vault_choice.value = null;
+  } catch (error: any) {
+    console.error("Error transferring surplus:", error.response?.data ?? error);
+
+    errorMessage.value =
+      error.response?.data?.error ||
+      "Unable to transfer surplus to your vault.";
+  } finally {
+    saving.value = false;
+  }
+}
 
 // ========================================
 // INTERFACES
