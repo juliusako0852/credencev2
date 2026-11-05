@@ -170,6 +170,55 @@
                 build your savings while ensuring that the remaining 70% remains
                 available for your other financial needs and expenses.
               </q-card-section>
+
+              <q-card-section>
+                Select a Bank:
+                <div
+                  class="basic-info"
+                  style="
+                    background-color: teal;
+                    min-height: 50px;
+                    width: auto;
+                    border-radius: 10px;
+                    margin: 5pt;
+                    padding: 5pt;
+                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    align-items: flex-start;
+                    font-size: x-small;
+                  "
+                  v-for="entry in current_user_connected_bank_list"
+                  :key="entry.id"
+                >
+                  <div
+                    style="
+                      width: 10%;
+                      color: white;
+                      font-size: small;
+                      font-weight: bold;
+                    "
+                  >
+                    <q-radio v-model="bank_options" val="line" />
+                  </div>
+                  <div
+                    style="
+                      width: 30%;
+                      color: white;
+                      font-size: small;
+                      font-weight: bold;
+                    "
+                  >
+                    <div style="text-align: left">Bank Name:</div>
+                    <div style="text-align: left">Balance:</div>
+                  </div>
+                  <div style="width: 60%; font-size: small; color: white">
+                    <div style="text-align: left">{{ entry?.bank_name }}</div>
+                    <div style="text-align: left"
+                      >PHP {{ entry?.bank_balance }}</div
+                    >
+                  </div>
+                </div>
+              </q-card-section>
               <q-card-section>
                 Do you consent to this automatic savings allocation?
               </q-card-section>
@@ -342,6 +391,9 @@
 import { onMounted, ref, nextTick } from "vue";
 import { api } from "../../boot/axios";
 import FinancialChart from "./(index).vue";
+
+//choices for banking vault
+const bank_vault_choice = ref();
 
 // ========================================
 // INTERFACES
