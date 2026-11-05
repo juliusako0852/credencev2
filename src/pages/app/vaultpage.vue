@@ -6,7 +6,7 @@
     <div class="vault-page" style="width: 100%; height: 100%; width: 100%">
       <div
         style="
-          min-height: 40vh;
+          min-height: 32vh;
           width: auto;
           margin: 10pt;
           border-radius: 10px;
@@ -141,27 +141,59 @@
             </q-card>
           </q-dialog>
         </div>
-        <div style="width: 100%">
-          <q-btn
-            style="
-              background-color: #0e494a;
-              color: white;
-              font-weight: bold;
-              height: 50%;
-              width: 60%;
-              margin: 5pt;
-              border-radius: 10px;
-              font-size: small;
-              text-align: center;
-              justify-content: center;
-              align-items: center;
-            "
-            elevated
-            to="/second"
-            label="Stash Surplus"
-          />
+      </div>
+
+      <div
+        v-if="isHigh == true"
+        style="
+          min-height: 20vh;
+          width: auto;
+          margin: 10pt;
+          border-radius: 10px;
+          background-color: white;
+          color: teal;
+          text-align: center;
+          align-items: center;
+          display: flex;
+          padding: 15pt;
+          font-size: 13pt;
+        "
+        class="stash_background_positive"
+      >
+        <div style="width: 60%; text-align: left"
+          >We observe that your current income is higher than your current
+          average weekly expense.
         </div>
       </div>
+
+      <div v-if="isHigh == false">
+        <div
+          style="
+            min-height: 20vh;
+            width: auto;
+            margin: 10pt;
+            border-radius: 10px;
+            background-color: white;
+            color: teal;
+            text-align: center;
+            align-items: center;
+            display: flex;
+            padding: 15pt;
+            font-size: 13pt;
+          "
+          class="stash_background_negative"
+        >
+          <div style="width: 100%"
+            ><div style="width: 60%; text-align: left; font-weight: bold"
+              >We observe that your current income is lower than your current
+              average weekly expense.
+            </div>
+          </div>
+
+          <div style="width: 100%; background-color: pink">hahdsdsa</div>
+        </div>
+      </div>
+
       <div
         style="
           min-height: 30vh;
