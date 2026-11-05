@@ -60,7 +60,20 @@
                 })
               }}
             </div>
-            <div style="display: flex; width: 100%"> Confidence: {{}} </div>
+            <div style="display: flex; width: 100%">
+              Confidence:
+              {{
+                (
+                  ((historicalSMA_expenses[historicalSMA_expenses.length - 1] ??
+                    0) /
+                    ((latestGasSMA30 ?? 0) +
+                      (historicalSMA_expenses[
+                        historicalSMA_expenses.length - 1
+                      ] ?? 0))) *
+                  100
+                ).toFixed(2)
+              }}%
+            </div>
           </q-card-section>
         </q-card>
       </div>
@@ -771,7 +784,7 @@ async function fetchUser() {
     );
 
     const response5 = await api.get<DistanceTravelled[]>(
-      `api/distance/list/${current_user.value.id}/`
+      `api/distance_travelled/list/${current_user.value.id}/`
     );
 
     incomeRecords.value = response3.data;
