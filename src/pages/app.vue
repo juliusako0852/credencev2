@@ -50,10 +50,10 @@
       style="
         background-color: #156c6d;
         height: 75px;
-        width: auto;
+        width: 90vw;
         padding-top: 3%;
-        margin-left: 3%;
-        margin-right: 3%;
+        margin-left: 5vw;
+        margin-right: 5vw;
         margin-bottom: 3%;
         border-radius: 27px;
         background-image: linear-gradient(to bottom, #156c6d, #1a898b);
