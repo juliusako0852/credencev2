@@ -1,6 +1,6 @@
 const API_KEY = "AQ.Ab8RN6INiZm8JrKuC13pEwv0dH1sqbvOQJUIxknLUew2XTq1hw";
 
-const MODEL = "gemini-3.6-flash";
+const MODEL = "gemini-3.8-flash";
 
 export interface FinancialInsights {
   summary: string;
@@ -18,7 +18,6 @@ export interface FinancialData {
   distributed_expenses: number[];
   income_forecast: number[];
   expense_forecast: number[];
-  financial_health_score: number;
 }
 
 export async function analyzeFinances(
@@ -30,9 +29,6 @@ You are Credence AI, a personal financial analysis assistant.
 Analyze the following financial information.
 
 All monetary values are in Philippine pesos (PHP).
-
-FINANCIAL HEALTH SCORE:
-${data.financial_health_score}
 
 ORIGINAL INCOME:
 ${JSON.stringify(data.income)}

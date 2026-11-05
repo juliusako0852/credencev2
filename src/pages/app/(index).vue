@@ -2,93 +2,65 @@
   <q-page>
     <div class="home-page" style="height: 100%; width: 100%">
       <div
-        class="q-pt-none"
-        style="height: 170px; width: 100%; margin-top: -22px"
+        class="top-bar2"
+        style="
+          height: 100%;
+          background-color: white;
+          min-height: 25vh;
+          margin-top: -22px;
+          color: white;
+          display: flex;
+          text-align: center;
+          justify-content: center;
+          align-items: center;
+          border-bottom-left-radius: 7%;
+          border-bottom-right-radius: 7%;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+          padding: 2%;
+        "
       >
-        <div
-          class="top-bar2"
+        <q-card
           style="
             height: 100%;
-            background-color: white;
-            color: white;
-            display: flex;
-            text-align: center;
-            justify-content: center;
-            align-items: center;
-            border-bottom-left-radius: 7%;
-            border-bottom-right-radius: 7%;
+            width: 95%;
+            border-radius: 15px;
+            background-image: linear-gradient(
+              to right,
+              black,
+              #156c6d,
+              #1a898b
+            );
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            text-align: left;
+            min-height: 150px;
           "
         >
-          <q-card
-            style="
-              height: 85%;
-              width: 95%;
-              border-radius: 15px;
-              background-image: linear-gradient(
-                to right,
-                black,
-                #156c6d,
-                #1a898b
-              );
-              box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-              text-align: left;
-            "
-          >
-            <q-card-section style="margin-left: 5%; margin-top: 1%">
-              <div class="healthscore-text" style="font-size: 12pt; width: 100%"
-                >Health Score</div
-              >
-              <div style="display: flex; width: 100%">
-                <div
-                  class="healthscore-text-value"
-                  style="font-size: 45pt; margin-top: 2pt; width: 50%"
-                  >{{ current_user_hs?.uh_score }}
-                </div>
-                <div
-                  style="
-                    margin-top: px;
-                    height: auto;
-                    width: 50%;
-                    display: flex;
-                    color: white;
-                    text-align: center;
-                    justify-content: center;
-                    align-items: center;
-                  "
-                >
-                  <q-btn
-                    style="
-                      background-color: #0e494a;
-                      color: white;
-                      font-weight: bold;
-                      height: 50%;
-                      width: 100%;
-                      border-radius: 10px;
-                      font-size: small;
-                      text-align: center;
-                      justify-content: center;
-                      align-items: center;
-                    "
-                    elevated
-                    to="/loginpage"
-                    label="Generate Report"
-                  />
-                </div>
+          <q-card-section style="margin-left: 5%; margin-top: 1%">
+            <div
+              class="healthscore-text"
+              style="font-size: x-large; width: 100%; font-weight: bold"
+              >Hello, Shann!</div
+            >
+            <div style="display: flex; width: 100%">
+              <div
+                v-if="aiInsights"
+                class="healthscore-text-value"
+                style="font-size: 5pt; margin-top: 2pt; width: 50%"
+                >{{ aiInsights?.summary }}
               </div>
-            </q-card-section>
-          </q-card>
-        </div>
+
+              <div v-if="loading"> Loading financial dahehe </div>
+              <div v-if="errorMessage">
+                Error in Summarizing the Financial Data
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
       </div>
 
       <div
         class="menu-buttons"
-        style="
-          width: 100%;
-          height: 25vh;
-
-          align-items: center;
-        "
+        style="width: 100%; height: 10vh; align-items: center"
       >
         <div
           class="main-menu-button-panel"
@@ -103,13 +75,6 @@
             color: #1a898b;
           "
         >
-          <q-btn stack flat dense aria-label="digital_diary" size="8pt" to="/">
-            <q-icon name="payments" size="5vh" />Digital Diary</q-btn
-          >
-
-          <q-btn stack flat dense aria-label="bills" size="8pt" to="/">
-            <q-icon name="payments" size="5vh" />Bills</q-btn
-          >
           <q-btn
             stack
             flat
@@ -121,15 +86,8 @@
             <q-icon name="savings" size="5vh" />Vault</q-btn
           >
 
-          <q-btn
-            stack
-            flat
-            dense
-            aria-label="credit-passport"
-            size="8pt"
-            to="/"
-          >
-            <q-icon name="book" size="5vh" />Credit Passport</q-btn
+          <q-btn stack flat dense aria-label="digital_diary" size="8pt" to="/">
+            <q-icon name="book" size="5vh" />Digital Diary</q-btn
           >
 
           <q-btn
@@ -141,26 +99,6 @@
             to="/app/loanspage"
           >
             <q-icon name="wallet" size="5vh" />Loans</q-btn
-          >
-          <q-btn
-            stack
-            flat
-            dense
-            aria-label="investment"
-            size="8pt"
-            to="/app/investmentspage"
-          >
-            <q-icon name="percent" size="5vh" />Investments</q-btn
-          >
-          <q-btn
-            stack
-            flat
-            dense
-            aria-label="insurance"
-            size="8pt"
-            to="/app/insurancespage"
-          >
-            <q-icon name="shield" size="5vh" />Insurances</q-btn
           >
         </div>
       </div>
@@ -305,6 +243,7 @@
 import { onMounted, ref, computed } from "vue";
 import { api } from "../../boot/axios";
 import { Line } from "vue-chartjs";
+
 import {
   analyzeFinances,
   type FinancialInsights
@@ -336,27 +275,18 @@ ChartJS.register(
 );
 
 // ========================================
-// API AND INTERFACES
+// INTERFACES
 // ========================================
-
-const loading = ref(true);
-const saving = ref(false);
-const errorMessage = ref("");
-const successMessage = ref("");
 
 interface CurrentUser {
   id: number;
-}
-
-interface UserHealthScore {
-  user_account: number;
-  uh_score: number;
 }
 
 interface Income {
   id: number;
   income_amount: number;
   i_date: string;
+  i_time: string | null;
   user_account: number;
   job_info: number;
   income_2_bankacct: number;
@@ -366,22 +296,56 @@ interface Expense {
   id: number;
   expense_amount: number;
   e_date: string;
+  e_time: string | null;
   user_account: number;
   expense_2_bankacct: number;
 }
 
-const current_user = ref<CurrentUser | null>(null);
-const current_user_hs = ref<UserHealthScore>();
+interface DailyFinancial {
+  date: string;
+  total_income: number;
+  total_expense: number;
+}
 
-// Original API records
+interface SMAValues {
+  historicalSMA_income: (number | null)[];
+  historicalSMA7_income: (number | null)[];
+  historicalSMA_expenses: (number | null)[];
+  historicalSMA7_expenses: (number | null)[];
+
+  sma_var_income: number[];
+  sma_var7_income: number[];
+  sma_var_expenses: number[];
+  sma_var7_expenses: number[];
+}
+
+// ========================================
+// LOADING AND STATUS
+// ========================================
+
+const loading = ref(true);
+const saving = ref(false);
+const errorMessage = ref("");
+const successMessage = ref("");
+
+// ========================================
+// API DATA
+// ========================================
+
+const current_user = ref<CurrentUser | null>(null);
+
 const incomeRecords = ref<Income[]>([]);
 const expenseRecords = ref<Expense[]>([]);
 
-// Original numeric values
+const dailyFinancialRecords = ref<DailyFinancial[]>([]);
+
 const incomes = ref<number[]>([]);
 const expenses = ref<number[]>([]);
 
-// Distributed values
+// ========================================
+// DISTRIBUTED VALUES
+// ========================================
+
 const distributed_income = ref<number[]>([]);
 const distributed_expenses = ref<number[]>([]);
 
@@ -403,17 +367,122 @@ const distributions: [number, number][] = [
 // ========================================
 
 const windowSize = 30;
+const windowSize7 = 7;
 const forecastDays = 3;
 
 // ========================================
-// SMA RESULTS
+// HISTORICAL SMA
 // ========================================
 
-const historicalSMA = ref<(number | null)[]>([]);
-const historicalSMA_exp = ref<(number | null)[]>([]);
+const historicalSMA_income = ref<(number | null)[]>([]);
+const historicalSMA7_income = ref<(number | null)[]>([]);
 
-const sma_var = ref<number[]>([]);
-const sma_var_exp = ref<number[]>([]);
+const historicalSMA_expenses = ref<(number | null)[]>([]);
+const historicalSMA7_expenses = ref<(number | null)[]>([]);
+
+// ========================================
+// SMA FORECASTS
+// ========================================
+
+const sma_var_income = ref<number[]>([]);
+const sma_var7_income = ref<number[]>([]);
+
+const sma_var_expenses = ref<number[]>([]);
+const sma_var7_expenses = ref<number[]>([]);
+
+// ========================================
+// DATE UTILITIES
+// ========================================
+
+function parseLocalDate(dateString: string): Date {
+  const [year, month, day] = dateString.split("-").map(Number);
+
+  return new Date(year!, month! - 1, day!);
+}
+
+function toDateString(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+function addDays(dateString: string, days: number): string {
+  const date = parseLocalDate(dateString);
+
+  date.setDate(date.getDate() + days);
+
+  return toDateString(date);
+}
+
+function formatDate(dateString: string): string {
+  const date = parseLocalDate(dateString);
+
+  return date.toLocaleDateString("en-PH", {
+    day: "2-digit",
+    month: "short"
+  });
+}
+
+// ========================================
+// AGGREGATE FINANCIAL RECORDS
+// ========================================
+
+function calculateDailyFinancials(
+  incomeData: Income[],
+  expenseData: Expense[]
+): DailyFinancial[] {
+  const incomeTotals = new Map<string, number>();
+  const expenseTotals = new Map<string, number>();
+
+  incomeData.forEach(item => {
+    const amount = Number(item.income_amount);
+
+    if (!item.i_date || !Number.isFinite(amount)) return;
+
+    incomeTotals.set(
+      item.i_date,
+      (incomeTotals.get(item.i_date) ?? 0) + amount
+    );
+  });
+
+  expenseData.forEach(item => {
+    const amount = Number(item.expense_amount);
+
+    if (!item.e_date || !Number.isFinite(amount)) return;
+
+    expenseTotals.set(
+      item.e_date,
+      (expenseTotals.get(item.e_date) ?? 0) + amount
+    );
+  });
+
+  const allDates = [...incomeTotals.keys(), ...expenseTotals.keys()].sort(
+    (a, b) => a.localeCompare(b)
+  );
+
+  if (allDates.length === 0) return [];
+
+  const firstDate = allDates[0]!;
+  const lastDate = allDates[allDates.length - 1]!;
+
+  const records: DailyFinancial[] = [];
+
+  let currentDate = firstDate;
+
+  while (currentDate <= lastDate) {
+    records.push({
+      date: currentDate,
+      total_income: incomeTotals.get(currentDate) ?? 0,
+      total_expense: expenseTotals.get(currentDate) ?? 0
+    });
+
+    currentDate = addDays(currentDate, 1);
+  }
+
+  return records;
+}
 
 // ========================================
 // DISTRIBUTION ALGORITHM
@@ -456,15 +525,16 @@ function distributeValues(values: number[]): number[] {
 // HISTORICAL SMA
 // ========================================
 
-function calculateHistoricalSMA(values: number[]): (number | null)[] {
+function calculateHistoricalSMA(
+  values: number[],
+  period: number
+): (number | null)[] {
   return values.map((_, index) => {
-    const startIndex = Math.max(0, index - windowSize + 1);
+    const startIndex = Math.max(0, index - period + 1);
 
     const window = values.slice(startIndex, index + 1);
 
-    if (window.length === 0) {
-      return null;
-    }
+    if (window.length === 0) return null;
 
     const sum = window.reduce((total, value) => total + value, 0);
 
@@ -473,19 +543,17 @@ function calculateHistoricalSMA(values: number[]): (number | null)[] {
 }
 
 // ========================================
-// SMA FORECAST (NEXT 3 DAYS)
+// SMA FORECAST
 // ========================================
 
-function calculateSMAForecast(values: number[]): number[] {
+function calculateSMAForecast(values: number[], period: number): number[] {
   const predictions: number[] = [];
   const rollingWindow = [...values];
 
-  if (rollingWindow.length === 0) {
-    return predictions;
-  }
+  if (rollingWindow.length === 0) return predictions;
 
   for (let m = 0; m < forecastDays; m++) {
-    const recentWindow = rollingWindow.slice(-windowSize);
+    const recentWindow = rollingWindow.slice(-period);
 
     const sum = recentWindow.reduce((total, value) => total + value, 0);
 
@@ -493,7 +561,6 @@ function calculateSMAForecast(values: number[]): number[] {
 
     predictions.push(average);
 
-    // Update rolling window
     rollingWindow.shift();
     rollingWindow.push(average);
   }
@@ -502,51 +569,101 @@ function calculateSMAForecast(values: number[]): number[] {
 }
 
 // ========================================
-// PROCESS INCOME AND EXPENSE DATA
+// CALCULATE ALL ANALYTICS
 // ========================================
 
 function calculateAnalytics() {
-  // 1. Distribute income and expense
   distributed_income.value = distributeValues(incomes.value);
 
   distributed_expenses.value = distributeValues(expenses.value);
 
-  // 2. Calculate historical SMA
-  historicalSMA.value = calculateHistoricalSMA(distributed_income.value);
+  // Historical SMA-30
+  historicalSMA_income.value = calculateHistoricalSMA(
+    distributed_income.value,
+    windowSize
+  );
 
-  historicalSMA_exp.value = calculateHistoricalSMA(distributed_expenses.value);
+  historicalSMA_expenses.value = calculateHistoricalSMA(
+    distributed_expenses.value,
+    windowSize
+  );
 
-  // 3. Calculate next 3-day forecast
-  sma_var.value = calculateSMAForecast(distributed_income.value);
+  // Historical SMA-7
+  historicalSMA7_income.value = calculateHistoricalSMA(
+    distributed_income.value,
+    windowSize7
+  );
 
-  sma_var_exp.value = calculateSMAForecast(distributed_expenses.value);
+  historicalSMA7_expenses.value = calculateHistoricalSMA(
+    distributed_expenses.value,
+    windowSize7
+  );
 
-  // 4. Debugging
-  console.log("Original Income:", incomes.value);
-  console.log("Original Expenses:", expenses.value);
+  // Forecast SMA-30
+  sma_var_income.value = calculateSMAForecast(
+    distributed_income.value,
+    windowSize
+  );
 
-  console.log("Distributed Income:", distributed_income.value);
-  console.log("Distributed Expenses:", distributed_expenses.value);
+  sma_var_expenses.value = calculateSMAForecast(
+    distributed_expenses.value,
+    windowSize
+  );
 
-  console.log("Historical Income SMA:", historicalSMA.value);
-  console.log("Historical Expense SMA:", historicalSMA_exp.value);
+  // Forecast SMA-7
+  sma_var7_income.value = calculateSMAForecast(
+    distributed_income.value,
+    windowSize7
+  );
 
-  console.log("3-Day Income Forecast:", sma_var.value);
-  console.log("3-Day Expense Forecast:", sma_var_exp.value);
-
-  console.log("Complete Income SMA (33 Days):", [
-    ...historicalSMA.value,
-    ...sma_var.value
-  ]);
-
-  console.log("Complete Expense SMA (33 Days):", [
-    ...historicalSMA_exp.value,
-    ...sma_var_exp.value
-  ]);
+  sma_var7_expenses.value = calculateSMAForecast(
+    distributed_expenses.value,
+    windowSize7
+  );
 }
 
 // ========================================
-// FETCH USER AND INCOME DATA
+// AI FINANCIAL ADVISOR
+// ========================================
+
+const aiLoading = ref(false);
+const aiError = ref("");
+const aiInsights = ref<FinancialInsights | null>(null);
+
+async function generateAIInsights() {
+  aiLoading.value = true;
+  aiError.value = "";
+  aiInsights.value = null;
+
+  try {
+    const financialData = {
+      income: incomes.value,
+      expenses: expenses.value,
+
+      distributed_income: distributed_income.value,
+      distributed_expenses: distributed_expenses.value,
+
+      income_forecast: sma_var_income.value,
+      income_forecast7: sma_var7_income.value,
+
+      expense_forecast: sma_var_expenses.value,
+      expense_forecast7: sma_var7_expenses.value
+    };
+
+    aiInsights.value = await analyzeFinances(financialData);
+
+    console.log("AI Financial Insights:", aiInsights.value);
+  } catch (error: any) {
+    console.error("AI Analysis Error:", error);
+
+    aiError.value = error.message || "Unable to generate financial insights.";
+  } finally {
+    aiLoading.value = false;
+  }
+}
+
+// ========================================
+// FETCH USER AND FINANCIAL DATA
 // ========================================
 
 async function fetchUser() {
@@ -554,208 +671,171 @@ async function fetchUser() {
   errorMessage.value = "";
 
   try {
-    // Get authenticated user
     const response = await api.get<CurrentUser>("users/me/");
 
     current_user.value = response.data;
 
-    // Get user health score
-    const response2 = await api.get<UserHealthScore>(
-      `api/uhs/update/${current_user.value.id}/`
-    );
-
-    current_user_hs.value = response2.data;
-
-    // Get income records
     const response3 = await api.get<Income[]>(
       `api/income/list/${current_user.value.id}/`
     );
 
-    // Get expense records
     const response4 = await api.get<Expense[]>(
       `api/expense/list/${current_user.value.id}/`
     );
 
-    // ========================================
-    // SORT RECORDS CHRONOLOGICALLY
-    // ========================================
+    incomeRecords.value = response3.data;
+    expenseRecords.value = response4.data;
 
-    incomeRecords.value = [...response3.data].sort((a, b) =>
-      a.i_date.localeCompare(b.i_date)
+    dailyFinancialRecords.value = calculateDailyFinancials(
+      incomeRecords.value,
+      expenseRecords.value
     );
 
-    expenseRecords.value = [...response4.data].sort((a, b) =>
-      a.e_date.localeCompare(b.e_date)
+    incomes.value = dailyFinancialRecords.value.map(item => item.total_income);
+
+    expenses.value = dailyFinancialRecords.value.map(
+      item => item.total_expense
     );
 
-    // ========================================
-    // CONVERT API VALUES INTO NUMBERS
-    // ========================================
-
-    incomes.value = incomeRecords.value.map(item => Number(item.income_amount));
-
-    expenses.value = expenseRecords.value.map(item =>
-      Number(item.expense_amount)
-    );
-
-    // Validate API values
-    if (incomes.value.some(value => !Number.isFinite(value))) {
-      throw new Error("Invalid income values received from API.");
+    if (
+      incomes.value.some(value => !Number.isFinite(value)) ||
+      expenses.value.some(value => !Number.isFinite(value))
+    ) {
+      throw new Error("Invalid financial values received from API.");
     }
 
-    if (expenses.value.some(value => !Number.isFinite(value))) {
-      throw new Error("Invalid expense values received from API.");
-    }
-
-    // Calculate distribution and SMA
     calculateAnalytics();
+
     await generateAIInsights();
 
-    console.log("API UHS Response:", current_user_hs.value);
-    console.log("API Income Records:", incomeRecords.value);
-    console.log("API Expense Records:", expenses.value);
+    console.log("Daily Financial Records:", dailyFinancialRecords.value);
   } catch (error: any) {
     console.error("Error fetching user:", error.response?.data ?? error);
 
     errorMessage.value =
       error.response?.data?.detail ||
       error.message ||
-      "Could not load profile.";
+      "Could not load financial data.";
   } finally {
     loading.value = false;
   }
-}
-
-onMounted(fetchUser);
-
-// ========================================
-// FORMAT DATE LABELS
-// ========================================
-
-function formatDate(dateString: string): string {
-  const date = new Date(`${dateString}T00:00:00`);
-
-  return date.toLocaleDateString("en-PH", {
-    day: "2-digit",
-    month: "short"
-  });
 }
 
 // ========================================
 // CHART DATA
 // ========================================
 
+const incomeData = computed(() => [
+  ...distributed_income.value,
+  ...Array(forecastDays).fill(null)
+]);
+
+const expenseData = computed(() => [
+  ...distributed_expenses.value,
+  ...Array(forecastDays).fill(null)
+]);
+
 const chartData = computed(() => {
-  const incomeLength = distributed_income.value.length;
-  const expenseLength = distributed_expenses.value.length;
+  const historicalLabels = dailyFinancialRecords.value.map(item =>
+    formatDate(item.date)
+  );
 
-  const historyLength = Math.max(incomeLength, expenseLength);
+  const lastRecord =
+    dailyFinancialRecords.value[dailyFinancialRecords.value.length - 1];
 
-  const totalLength = historyLength + forecastDays;
+  const forecastLabels: string[] = [];
 
-  // ========================================
-  // HORIZONTAL LABELS
-  // INCOME DATES + 3 FORECAST DAYS
-  // ========================================
+  if (lastRecord) {
+    for (let i = 1; i <= forecastDays; i++) {
+      forecastLabels.push(formatDate(addDays(lastRecord.date, i)));
+    }
+  }
 
-  const incomeDates = incomeRecords.value.map(item => formatDate(item.i_date));
+  const labels = [...historicalLabels, ...forecastLabels];
 
-  const labels = [
-    ...incomeDates,
-    ...Array.from(
-      { length: Math.max(0, historyLength - incomeDates.length) },
-      (_, index) => `Day ${incomeDates.length + index + 1}`
-    ),
-    "Day 31",
-    "Day 32",
-    "Day 33"
+  const incomeSMAData = [
+    ...historicalSMA_income.value,
+    ...sma_var_income.value
   ];
 
-  // ========================================
-  // COMPLETE SMA DATA
-  // HISTORICAL + FORECAST
-  // ========================================
-
-  const incomeSMAData = [...historicalSMA.value, ...sma_var.value];
-
-  const expenseSMAData = [...historicalSMA_exp.value, ...sma_var_exp.value];
-
-  // ========================================
-  // DISTRIBUTED INCOME AND EXPENSE
-  // ========================================
-
-  const incomeData = [
-    ...distributed_income.value,
-    ...Array(Math.max(0, totalLength - incomeLength)).fill(null)
+  const incomeSMAData7 = [
+    ...historicalSMA7_income.value,
+    ...sma_var7_income.value
   ];
 
-  const expenseData = [
-    ...distributed_expenses.value,
-    ...Array(Math.max(0, totalLength - expenseLength)).fill(null)
+  const expenseSMAData = [
+    ...historicalSMA_expenses.value,
+    ...sma_var_expenses.value
+  ];
+
+  const expenseSMAData7 = [
+    ...historicalSMA7_expenses.value,
+    ...sma_var7_expenses.value
   ];
 
   return {
     labels,
 
     datasets: [
-      // ========================================
-      // DISTRIBUTED INCOME
-      // ========================================
-
       {
-        label: "Distributed Income",
-        data: incomeData,
+        label: "Distributed Daily Income",
+        data: incomeData.value,
         borderColor: "#1A898B",
         backgroundColor: "#1A898B",
         borderWidth: 1,
         pointRadius: 1.2,
         tension: 0.3
       },
-
-      // ========================================
-      // DISTRIBUTED EXPENSE
-      // ========================================
-
       {
-        label: "Distributed Expense",
-        data: expenseData,
+        label: "Distributed Daily Expense",
+        data: expenseData.value,
         borderColor: "red",
         backgroundColor: "red",
         borderWidth: 1,
         pointRadius: 1.2,
         tension: 0.3
       },
-
-      // ========================================
-      // INCOME SMA (HISTORICAL + FORECAST)
-      // ========================================
-
       {
-        label: "Income SMA (33 Days)",
+        label: "Income SMA (30 Days)",
         data: incomeSMAData,
         borderColor: "#1A898B",
         backgroundColor: "#1A898B",
         borderWidth: 1,
         borderDash: [5, 5],
         pointRadius: 1,
-        pointHoverRadius: 5,
         tension: 0.3,
         spanGaps: false
       },
-
-      // ========================================
-      // EXPENSE SMA (HISTORICAL + FORECAST)
-      // ========================================
-
       {
-        label: "Expense SMA (33 Days)",
-        data: expenseSMAData,
-        borderColor: "red",
-        backgroundColor: "red",
+        label: "Income SMA (7 Days)",
+        data: incomeSMAData7,
+        borderColor: "green",
+        backgroundColor: "green",
         borderWidth: 1,
         borderDash: [5, 5],
         pointRadius: 1,
-        pointHoverRadius: 5,
+        tension: 0.3,
+        spanGaps: false
+      },
+      {
+        label: "Expense SMA (30 Days)",
+        data: expenseSMAData,
+        borderColor: "black",
+        backgroundColor: "black",
+        borderWidth: 1,
+        borderDash: [5, 5],
+        pointRadius: 1,
+        tension: 0.3,
+        spanGaps: false
+      },
+      {
+        label: "Expense SMA (7 Days)",
+        data: expenseSMAData7,
+        borderColor: "orange",
+        backgroundColor: "orange",
+        borderWidth: 1,
+        borderDash: [5, 5],
+        pointRadius: 1,
         tension: 0.3,
         spanGaps: false
       }
@@ -829,41 +909,65 @@ const chartOptions = {
 };
 
 // ========================================
-// AI FINANCIAL ADVISOR
+// EXPOSE SMA VALUES TO PARENT
 // ========================================
 
-const aiLoading = ref(false);
-const aiError = ref("");
-const aiInsights = ref<FinancialInsights | null>(null);
+let fetchPromise: Promise<void> = Promise.resolve();
 
-async function generateAIInsights() {
-  aiLoading.value = true;
-  aiError.value = "";
-  aiInsights.value = null;
+async function getSMAValues(): Promise<SMAValues> {
+  await fetchPromise;
 
-  try {
-    const financialData = {
-      income: incomes.value,
-      expenses: expenses.value,
-
-      distributed_income: distributed_income.value,
-      distributed_expenses: distributed_expenses.value,
-
-      income_forecast: sma_var.value,
-      expense_forecast: sma_var_exp.value,
-
-      financial_health_score: Number(current_user_hs.value?.uh_score ?? 0)
-    };
-
-    aiInsights.value = await analyzeFinances(financialData);
-
-    console.log("AI Financial Insights:", aiInsights.value);
-  } catch (error: any) {
-    console.error("AI Analysis Error:", error);
-
-    aiError.value = error.message || "Unable to generate financial insights.";
-  } finally {
-    aiLoading.value = false;
+  if (errorMessage.value) {
+    throw new Error(errorMessage.value);
   }
+
+  return {
+    historicalSMA_income: [...historicalSMA_income.value],
+    historicalSMA7_income: [...historicalSMA7_income.value],
+
+    historicalSMA_expenses: [...historicalSMA_expenses.value],
+    historicalSMA7_expenses: [...historicalSMA7_expenses.value],
+
+    sma_var_income: [...sma_var_income.value],
+    sma_var7_income: [...sma_var7_income.value],
+
+    sma_var_expenses: [...sma_var_expenses.value],
+    sma_var7_expenses: [...sma_var7_expenses.value]
+  };
 }
+
+async function refreshFinancialData() {
+  fetchPromise = fetchUser();
+  await fetchPromise;
+}
+
+defineExpose({
+  getSMAValues,
+  refreshFinancialData,
+
+  incomeData,
+  expenseData,
+  chartData,
+
+  incomes,
+  expenses,
+
+  distributed_income,
+  distributed_expenses,
+
+  loading,
+  errorMessage,
+
+  aiInsights,
+  aiLoading,
+  aiError
+});
+
+// ========================================
+// INITIALIZE
+// ========================================
+
+onMounted(() => {
+  fetchPromise = fetchUser();
+});
 </script>
