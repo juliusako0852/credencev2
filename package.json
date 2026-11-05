@@ -27,6 +27,8 @@
     "axios": "^1.20.0",
     "chart.js": "^4.5.1",
     "pinia": "^4.0.2",
+    "qrcode": "^1.5.4",
+    "qrious": "^4.0.2",
     "quasar": "^2.35.0",
     "vue": "^3.5.22",
     "vue-chartjs": "^5.3.4",
@@ -35,6 +37,7 @@
   "devDependencies": {
     "@quasar/app-vite": "^3.10.2",
     "@types/node": "^22.19.11",
+    "@types/qrcode": "^1.5.6",
     "autoprefixer": "^10.4.27",
     "oxfmt": "^0.x",
     "oxlint": "^1.x",
@@ -46,5 +49,9 @@
   "engines": {
     "node": ">= 26 || ^24 || ^22.12"
   },
-  "productName": "Credence1"
+  "productName": "Credence1",
+  "allowScripts": {
+    "qrious@4.0.2": true,
+    "@parcel/watcher@2.6.0": true
+  }
 }

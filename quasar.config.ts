@@ -40,6 +40,9 @@ export default defineConfig((/* ctx */) => {
       csp: {
         directives: {
           "default-src": ["'self'"],
+
+          "img-src": ["'self'", "data:", "blob:"],
+
           "connect-src": [
             "'self'",
             "ws://localhost:*",

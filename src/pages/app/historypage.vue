@@ -39,9 +39,6 @@
               <div style="width: 15%" v-if="entry.entity === 'Buffer Vault'"
                 ><q-icon name="savings" size="40px" style="color: #0e494a"
               /></div>
-              <div style="width: 15%" v-if="entry.entity !== 'Buffer Vault'"
-                ><q-icon name="swap_horiz" size="40px" style="color: #0e494a"
-              /></div>
               <div style="width: 50%">
                 <div
                   style="
@@ -93,7 +90,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
+import { api } from "../../boot/axios";
+interface CurrentUser {
+  id: string;
+}
+
+const current_user = ref<CurrentUser | null>(null);
+
 const history_entries = ref([
   {
     transaction_id: 1,
