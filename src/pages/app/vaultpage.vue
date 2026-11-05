@@ -150,14 +150,25 @@
                 min-height: 40vh;
                 border-radius: 10px;
                 color: #0e494a;
+                padding: 10pt;
               "
             >
-              <q-card-section>
-                Would you authorize us to automatically allocate 30% of your
-                calculated surplus funds to your savings vault? This will help
-                you consistently build your savings while ensuring that the
-                remaining 70% remains available for your other financial needs
-                and expenses.
+              <q-card-section style="font-size: large; text-align: justify">
+                Would you authorize us to automatically
+                <b
+                  >allocate 30% (PHP
+                  {{
+                    Number(
+                      (
+                        (currentDailyIncome - currentDailyExpenses) *
+                        0.3
+                      ).toFixed(2)
+                    )
+                  }}) of your calculated surplus</b
+                >
+                funds to your savings vault? This will help you consistently
+                build your savings while ensuring that the remaining 70% remains
+                available for your other financial needs and expenses.
               </q-card-section>
               <q-card-section>
                 Do you consent to this automatic savings allocation?
