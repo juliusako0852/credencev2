@@ -262,8 +262,8 @@
       >
         <div style="width: 60%"
           ><div style="width: 100%; text-align: left; font-weight: bold"
-            >We observe that your current income is higher than your current
-            average weekly expense.
+            >CONGRATULATIONS! We observe that your current income is higher than
+            your current average weekly expense.
           </div>
           <div style="width: 100%"
             ><q-btn

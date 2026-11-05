@@ -42,7 +42,7 @@
               >Hello, Shann!</div
             >
             <div style="display: flex; width: 100%; margin-top: 5pt">
-              Balance:
+              Average Net Income:
             </div>
             <div
               style="
@@ -52,11 +52,15 @@
                 font-weight: bold;
               "
             >
-              PHP PLACEHOLDER
+              PHP
+              {{
+                netIncome.toLocaleString("en-PH", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })
+              }}
             </div>
-            <div style="display: flex; width: 100%">
-              Confidence: Placeholder Percentage
-            </div>
+            <div style="display: flex; width: 100%"> Confidence: {{}} </div>
           </q-card-section>
         </q-card>
       </div>
@@ -322,6 +326,14 @@ interface SMAValues {
   sma_var7_expenses: number[];
 }
 
+function getLatestValue2(values: (number | null)[]): number | null {
+  if (values.length === 0) {
+    return null;
+  }
+
+  return values[values.length - 1] ?? null;
+}
+
 // ========================================
 // LOADING AND STATUS
 // ========================================
@@ -574,6 +586,17 @@ function calculateSMAForecast(values: number[], period: number): number[] {
 // ========================================
 // CALCULATE ALL ANALYTICS
 // ========================================
+
+const netIncome = computed(() => {
+  const latestIncome = historicalSMA_income.value.at(-1);
+  const latestExpenses = historicalSMA_expenses.value.at(-1);
+
+  if (latestIncome == null || latestExpenses == null) {
+    return 0;
+  }
+
+  return latestIncome - latestExpenses;
+});
 
 function calculateAnalytics() {
   distributed_income.value = distributeValues(incomes.value);

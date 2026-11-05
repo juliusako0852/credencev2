@@ -50,11 +50,6 @@ export default defineRouter((/* { store, ssrContext } */) => {
       return { path: "/" };
     }
 
-    // Redirect logged-in users away from the login page
-    if (to.path === "/" && token) {
-      return { path: "/app" };
-    }
-
     return true;
   });
 
