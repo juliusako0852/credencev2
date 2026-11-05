@@ -41,19 +41,8 @@
               style="font-size: x-large; width: 100%; font-weight: bold"
               >Hello, Shann!</div
             >
-            <div style="display: flex; width: 100%">
-              <div
-                v-if="aiInsights"
-                class="healthscore-text-value"
-                style="font-size: 5pt; margin-top: 2pt; width: 50%"
-                >{{ aiInsights?.summary }}
-              </div>
-
-              <div v-if="loading"> Loading financial dahehe </div>
-              <div v-if="errorMessage">
-                Error in Summarizing the Financial Data
-              </div>
-            </div>
+            <div style="display: flex; width: 100%"> Balance: </div>
+            <div style="display: flex; width: 100%"> PHP. PLACEHOLDER </div>
           </q-card-section>
         </q-card>
       </div>
