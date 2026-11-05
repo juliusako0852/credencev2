@@ -299,6 +299,19 @@ interface Income {
   income_2_bankacct: number;
 }
 
+interface DistanceTravelled {
+  id: number;
+  user_account: number;
+  t_date: string;
+  t_time: string;
+  start_latitude: number;
+  start_longitude: number;
+  end_latitude: number;
+  end_longitude: number;
+  km: number;
+  vehicle_type: string;
+}
+
 interface Expense {
   id: number;
   expense_amount: number;
@@ -351,6 +364,10 @@ const current_user = ref<CurrentUser | null>(null);
 
 const incomeRecords = ref<Income[]>([]);
 const expenseRecords = ref<Expense[]>([]);
+const distanceRecords = ref<DistanceTravelled[]>([]);
+
+// One value per day, same order/length as dailyFinancialRecords
+const gasolineExpenses = ref<number[]>([]);
 
 const dailyFinancialRecords = ref<DailyFinancial[]>([]);
 
@@ -378,6 +395,12 @@ const distributions: [number, number][] = [
 ];
 
 // ========================================
+// GASOLINE SETTINGS
+// ========================================
+
+const GAS_PRICE_PER_KM_FACTOR = 89 * 0.025; // = 2.225 pesos per km
+
+// ========================================
 // SMA SETTINGS
 // ========================================
 
@@ -394,6 +417,7 @@ const historicalSMA7_income = ref<(number | null)[]>([]);
 
 const historicalSMA_expenses = ref<(number | null)[]>([]);
 const historicalSMA7_expenses = ref<(number | null)[]>([]);
+const historicalSMA_gas_expenses = ref<(number | null)[]>([]);
 
 // ========================================
 // SMA FORECASTS
@@ -497,6 +521,32 @@ function calculateDailyFinancials(
   }
 
   return records;
+}
+
+// ========================================
+// DAILY GASOLINE EXPENSES
+// ========================================
+
+function calculateDailyGasoline(
+  distanceData: DistanceTravelled[],
+  dailyRecords: DailyFinancial[]
+): number[] {
+  const kmTotals = new Map<string, number>();
+
+  distanceData.forEach(item => {
+    const km = Number(item.km);
+
+    if (!item.t_date || !Number.isFinite(km)) return;
+
+    kmTotals.set(item.t_date, (kmTotals.get(item.t_date) ?? 0) + km);
+  });
+
+  // km * 89 pesos * 0.025, one value per day in the income/expense range
+  return dailyRecords.map(record => {
+    const totalKm = kmTotals.get(record.date) ?? 0;
+
+    return totalKm * 89 * 0.025;
+  });
 }
 
 // ========================================
@@ -614,6 +664,8 @@ function calculateAnalytics() {
     windowSize
   );
 
+  historicalSMA_gas_expenses.value = calculateHistoricalSMA(windowSize);
+
   // Historical SMA-7
   historicalSMA7_income.value = calculateHistoricalSMA(
     distributed_income.value,
@@ -709,12 +761,22 @@ async function fetchUser() {
       `api/expense/list/${current_user.value.id}/`
     );
 
+    const response5 = await api.get<DistanceTravelled[]>(
+      `api/distance/list/${current_user.value.id}/`
+    );
+
     incomeRecords.value = response3.data;
     expenseRecords.value = response4.data;
+    distanceRecords.value = response5.data;
 
     dailyFinancialRecords.value = calculateDailyFinancials(
       incomeRecords.value,
       expenseRecords.value
+    );
+
+    gasolineExpenses.value = calculateDailyGasoline(
+      distanceRecords.value,
+      dailyFinancialRecords.value
     );
 
     incomes.value = dailyFinancialRecords.value.map(item => item.total_income);
@@ -725,7 +787,8 @@ async function fetchUser() {
 
     if (
       incomes.value.some(value => !Number.isFinite(value)) ||
-      expenses.value.some(value => !Number.isFinite(value))
+      expenses.value.some(value => !Number.isFinite(value)) ||
+      gasolineExpenses.value.some(value => !Number.isFinite(value))
     ) {
       throw new Error("Invalid financial values received from API.");
     }
@@ -970,6 +1033,9 @@ async function refreshFinancialData() {
 defineExpose({
   getSMAValues,
   refreshFinancialData,
+
+  gasolineExpenses,
+  distanceRecords,
 
   incomeData,
   expenseData,
