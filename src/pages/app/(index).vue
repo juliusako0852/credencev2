@@ -39,16 +39,16 @@
             <div
               class="healthscore-text"
               style="font-size: x-large; width: 100%; font-weight: bold"
-              >Hello, Shann!</div
+              >Hello, {{ current_user?.first_name }}!</div
             >
             <div style="display: flex; width: 100%; margin-top: 5pt">
-              Average Net Income:
+              Your Average Net Income is:
             </div>
             <div
               style="
                 display: flex;
                 width: 100%;
-                font-size: x-large;
+                font-size: xx-large;
                 font-weight: bold;
               "
             >
@@ -60,7 +60,7 @@
                 })
               }}
             </div>
-            <div style="display: flex; width: 100%">
+            <div style="display: flex; width: 100%; font-size: large">
               Confidence:
               {{
                 (
@@ -171,19 +171,6 @@
         "
       >
         <div>Insights</div>
-        <div style="width: 30%"
-          ><q-btn
-            stack
-            flat
-            dense
-            aria-label="insights"
-            size="8pt"
-            to="/analyticspage"
-            style="background-color: #0e494a; width: 100%; border-radius: 10px"
-          >
-            View Details</q-btn
-          ></div
-        >
       </div>
 
       <div
@@ -300,6 +287,7 @@ ChartJS.register(
 
 interface CurrentUser {
   id: number;
+  first_name: string;
 }
 
 interface Income {

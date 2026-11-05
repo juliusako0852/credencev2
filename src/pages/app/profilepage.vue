@@ -145,6 +145,7 @@
           margin-right: 10pt;
           display: flex;
           box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+          padding: 5pt;
         "
       >
         <div
@@ -172,42 +173,77 @@
           <div style="font-weight: bold; font-size: large">Email:</div>
           <div>{{ current_user?.email || "Loading..." }}</div>
           <div style="font-weight: bold; font-size: large">Contact:</div>
-          <div>{{ current_user?.id || "Loading..." }}</div>
+          <div>{{ current_user_profile?.contact_number || "Loading..." }}</div>
           <div style="font-weight: bold; font-size: large">Address:</div>
-          <div>{{ current_user?.username || "Loading..." }}</div>
+          <div
+            >{{ current_user_profile?.street_address || "Loading..." }},
+            {{ current_user_profile?.barangay }},
+            {{ current_user_profile?.municipality_city }},
+            {{ current_user_profile?.province }},
+            {{ current_user_profile?.region }}</div
+          >
         </div>
       </div>
       <div
-        class="user-profile"
         style="
-          height: 30px;
+          min-height: 20vh;
           width: auto;
-          border-radius: 10px;
           margin: 10pt;
-          font-size: 20pt;
-          font-weight: bold;
+          border-radius: 10px;
+          background-color: white;
+          padding: 5pt;
           color: white;
-          display: flex;
           text-align: center;
+          justify-content: center;
           align-items: center;
         "
       >
-        Platforms
-      </div>
-
-      <div
-        class="platforms-info"
-        style="
-          background-color: white;
-          min-height: 30vh;
-          height: auto;
-          width: auto;
-          border-radius: 10px;
-          margin: 10pt;
-          display: flex;
-          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-        "
-      >
+        <div
+          style="
+            color: #0e494a;
+            font-size: x-large;
+            font-weight: bold;
+            height: 40px;
+            text-align: center;
+            align-items: center;
+            align-content: center;
+          "
+        >
+          Connected Gig Platforms</div
+        ><div
+          class="basic-info"
+          style="
+            background-color: teal;
+            min-height: 50px;
+            width: auto;
+            border-radius: 10px;
+            margin: 10pt;
+            padding: 10pt;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: flex-start;
+          "
+          v-for="entry in current_user_profile"
+          key="entry.id"
+        >
+          <div
+            style="
+              width: 40%;
+              color: white;
+              font-size: medium;
+              font-weight: bold;
+            "
+          >
+            <div style="text-align: left">Bank Name:</div>
+            <div style="text-align: left">Account Type:</div>
+            <div style="text-align: left">Balance:</div>
+          </div>
+          <div style="width: 60%; font-size: medium">
+            <div style="text-align: left">{{ entry?.bank_name }}</div>
+            <div style="text-align: left">{{ entry?.account_type }}</div>
+            <div style="text-align: left">PHP {{ entry?.bank_balance }}</div>
+          </div>
+        </div>
       </div>
     </div>
   </q-page>
@@ -227,7 +263,28 @@ interface CurrentUser {
   last_name: string;
 }
 
+interface ProfileDetails {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  contact_number: number;
+  region: string;
+  province: string;
+  municipality_city: string;
+  barangay: string;
+  street_address: string;
+}
+
+interface ConnectedPlatforms {
+  id: number;
+  current_user: number;
+  platform_name: string;
+  platform_type: string;
+}
+
 const current_user = ref<CurrentUser | null>(null);
+const current_user_profile = ref<ProfileDetails | null>(null);
 const originalUser = ref<CurrentUser | null>(null);
 
 const loading = ref(true);
@@ -253,8 +310,12 @@ async function fetchUser() {
     const response = await api.get<CurrentUser>("users/me/");
 
     current_user.value = response.data;
+    const response2 = await api.get<ProfileDetails>(
+      `/api/user_profile/${current_user.value.id}/`
+    );
 
     console.log("Logged-in user ID:", current_user.value.id);
+    current_user_profile.value = response2.data;
 
     //const { data } = await api.get<User>(`api/users/${current_user.value.id}/`);
 
