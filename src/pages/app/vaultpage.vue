@@ -258,6 +258,11 @@ interface CurrentUser {
   id: number;
 }
 
+interface ConnectedBank {
+  bank: number;
+  user_account: number;
+}
+
 interface UserVault {
   user_account: number;
   vault_type: string;
@@ -563,27 +568,6 @@ onMounted(async () => {
   // Evaluate savings eligibility
   if (smaValues.value) {
     isHigh.value = checkSavingsCondition();
-
-    console.log("================================");
-    console.log("CURRENT FINANCIAL STATUS");
-    console.log("================================");
-
-    console.log("Current SMA-30 Income:", currentSMA_income.value);
-    console.log("Current SMA-7 Income:", currentSMA7_income.value);
-
-    console.log("Current SMA-30 Expenses:", currentSMA_expenses.value);
-    console.log("Current SMA-7 Expenses:", currentSMA7_expenses.value);
-
-    console.log("Current Daily Income:", currentDailyIncome.value);
-    console.log("Current Daily Expenses:", currentDailyExpenses.value);
-
-    console.log("Current Daily Surplus:", currentDailySurplus.value);
-
-    console.log("================================");
-    console.log("SAVINGS ELIGIBILITY");
-    console.log("================================");
-
-    console.log("Savings condition satisfied:", isHigh.value);
   }
 });
 </script>
