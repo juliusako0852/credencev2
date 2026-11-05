@@ -160,9 +160,31 @@
         "
         class="stash_background_positive"
       >
-        <div style="width: 60%; text-align: left"
-          >We observe that your current income is higher than your current
-          average weekly expense.
+        <div style="width: 60%"
+          ><div style="width: 100%; text-align: left; font-weight: bold"
+            >We observe that your current income is higher than your current
+            average weekly expense.
+          </div>
+          <div style="width: 100%"
+            ><q-btn
+              style="
+                background-color: #0e494a;
+                color: white;
+                font-weight: bold;
+                height: 50%;
+                width: 100%;
+                margin-top: 10pt;
+                border-radius: 10px;
+
+                font-size: small;
+                text-align: center;
+                justify-content: center;
+                align-items: center;
+              "
+              elevated
+              @click="prompt = true"
+              label="Stash Surplus"
+          /></div>
         </div>
       </div>
 
@@ -183,14 +205,12 @@
           "
           class="stash_background_negative"
         >
-          <div style="width: 100%"
-            ><div style="width: 60%; text-align: left; font-weight: bold"
+          <div style="width: 60%"
+            ><div style="width: 100%; text-align: left; font-weight: bold"
               >We observe that your current income is lower than your current
               average weekly expense.
             </div>
           </div>
-
-          <div style="width: 100%; background-color: pink">hahdsdsa</div>
         </div>
       </div>
 
