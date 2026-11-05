@@ -332,6 +332,8 @@ interface SMAValues {
   historicalSMA7_income: (number | null)[];
   historicalSMA_expenses: (number | null)[];
   historicalSMA7_expenses: (number | null)[];
+  historicalSMA_gas_expenses: (number | null)[];
+  latest_gas_sma30: number | null;
 
   sma_var_income: number[];
   sma_var7_income: number[];
@@ -545,7 +547,7 @@ function calculateDailyGasoline(
   return dailyRecords.map(record => {
     const totalKm = kmTotals.get(record.date) ?? 0;
 
-    return totalKm * 89 * 0.025;
+    return totalKm * GAS_PRICE_PER_KM_FACTOR; // km * 89 * 0.025
   });
 }
 
@@ -648,6 +650,10 @@ const netIncome = computed(() => {
   return latestIncome - latestExpenses;
 });
 
+const latestGasSMA30 = computed(() =>
+  getLatestValue2(historicalSMA_gas_expenses.value)
+);
+
 function calculateAnalytics() {
   distributed_income.value = distributeValues(incomes.value);
 
@@ -664,7 +670,10 @@ function calculateAnalytics() {
     windowSize
   );
 
-  historicalSMA_gas_expenses.value = calculateHistoricalSMA(windowSize);
+  historicalSMA_gas_expenses.value = calculateHistoricalSMA(
+    gasolineExpenses.value,
+    windowSize
+  );
 
   // Historical SMA-7
   historicalSMA7_income.value = calculateHistoricalSMA(
@@ -1021,7 +1030,10 @@ async function getSMAValues(): Promise<SMAValues> {
     sma_var7_income: [...sma_var7_income.value],
 
     sma_var_expenses: [...sma_var_expenses.value],
-    sma_var7_expenses: [...sma_var7_expenses.value]
+    sma_var7_expenses: [...sma_var7_expenses.value],
+
+    historicalSMA_gas_expenses: [...historicalSMA_gas_expenses.value],
+    latest_gas_sma30: latestGasSMA30.value
   };
 }
 
