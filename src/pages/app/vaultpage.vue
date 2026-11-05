@@ -423,6 +423,12 @@ async function stashSurplus() {
 
   const amount = calculateStashAmount();
 
+  console.log("Daily Income:", currentDailyIncome.value);
+  console.log("Daily Expenses:", currentDailyExpenses.value);
+  console.log("Calculated Surplus:", currentDailySurplus.value);
+  console.log("Stash Amount:", amount);
+  console.log("Selected Bank:", bank_vault_choice.value);
+
   if (amount <= 0) {
     errorMessage.value = "You do not have a positive surplus to stash.";
     return;
