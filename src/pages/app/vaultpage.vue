@@ -140,6 +140,35 @@
               </q-card-actions>
             </q-card>
           </q-dialog>
+
+          <!-- Stash Income Dialog -->
+
+          <q-dialog v-model="prompt2" persistent>
+            <q-card
+              style="
+                min-width: 70vw;
+                min-height: 40vh;
+                border-radius: 10px;
+                color: #0e494a;
+              "
+            >
+              <q-card-section>
+                Would you authorize us to automatically allocate 30% of your
+                calculated surplus funds to your savings vault? This will help
+                you consistently build your savings while ensuring that the
+                remaining 70% remains available for your other financial needs
+                and expenses.
+              </q-card-section>
+              <q-card-section>
+                Do you consent to this automatic savings allocation?
+              </q-card-section>
+
+              <q-card-actions align="center" class="text-primary">
+                <q-btn flat label="Cancel" v-close-popup />
+                <q-btn flat label="Stash Surplus " v-close-popup />
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
         </div>
       </div>
 
@@ -182,7 +211,7 @@
                 align-items: center;
               "
               elevated
-              @click="prompt = true"
+              @click="prompt2 = true"
               label="Stash Surplus"
           /></div>
         </div>
@@ -210,17 +239,37 @@
               >We observe that your current income is lower than your current
               average weekly expense.
             </div>
+            <q-btn
+              style="
+                background-color: #0e494a;
+                color: white;
+                font-weight: bold;
+                height: 50%;
+                width: 100%;
+                margin-top: 10pt;
+                border-radius: 10px;
+
+                font-size: small;
+                text-align: center;
+                justify-content: center;
+                align-items: center;
+              "
+              elevated
+              @click="prompt2 = true"
+              label="Stash Surplus"
+            />
           </div>
         </div>
       </div>
 
       <div
         style="
-          min-height: 30vh;
+          min-height: 20vh;
           width: auto;
           margin: 10pt;
           border-radius: 10px;
           background-color: white;
+          padding: 5pt;
           color: white;
           text-align: center;
           justify-content: center;
@@ -239,7 +288,40 @@
           "
         >
           Connected Finance Apps</div
+        ><div
+          class="basic-info"
+          style="
+            background-color: teal;
+            min-height: 50px;
+            width: auto;
+            border-radius: 10px;
+            margin: 10pt;
+            padding: 10pt;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: flex-start;
+          "
+          v-for="entry in current_user_connected_bank_list"
+          :key="entry.id"
         >
+          <div
+            style="
+              width: 40%;
+              color: white;
+              font-size: medium;
+              font-weight: bold;
+            "
+          >
+            <div style="text-align: left">Bank Name:</div>
+            <div style="text-align: left">Account Type:</div>
+            <div style="text-align: left">Balance:</div>
+          </div>
+          <div style="width: 60%; font-size: medium">
+            <div style="text-align: left">{{ entry?.bank_name }}</div>
+            <div style="text-align: left">{{ entry?.account_type }}</div>
+            <div style="text-align: left">PHP {{ entry?.bank_balance }}</div>
+          </div>
+        </div>
       </div>
     </div>
   </q-page>
@@ -259,8 +341,12 @@ interface CurrentUser {
 }
 
 interface ConnectedBank {
+  id: number;
   bank: number;
   user_account: number;
+  bank_name: string;
+  account_type: string;
+  bank_balance: number;
 }
 
 interface UserVault {
@@ -300,6 +386,12 @@ const isHigh = ref(false);
 
 const current_user = ref<CurrentUser | null>(null);
 const current_user_vault = ref<UserVault | null>(null);
+
+// ========================================
+// CONNECTED BANKS DAATA
+// ========================================
+
+const current_user_connected_bank_list = ref<ConnectedBank[]>([]);
 
 // ========================================
 // HISTORICAL SMA DATA
@@ -342,6 +434,7 @@ const currentDailySurplus = ref<number>(0);
 const alert = ref(false);
 const confirm = ref(false);
 const prompt = ref(false);
+const prompt2 = ref(false);
 
 const emergency_file_upload = ref<File | null>(null);
 const emergency_amount = ref("");
@@ -368,7 +461,13 @@ async function fetchUser() {
       `api/vault/update/${current_user.value.id}/`
     );
 
+    // Retrieve connected bank list
+    const connectedBankResponseList = await api.get<ConnectedBank[]>(
+      `api/connected_bank2/list/${current_user.value.id}/`
+    );
+
     current_user_vault.value = vaultResponse.data;
+    current_user_connected_bank_list.value = connectedBankResponseList.data;
 
     console.log("Vault information:", current_user_vault.value);
   } catch (error: any) {

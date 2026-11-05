@@ -3,10 +3,9 @@
     <div class="loans-page" style="width: 100%; height: 100%; width: 100%">
       <div class="page-title-text"> Loans </div>
       <div
-        class="basic-info"
         style="
           background-color: white;
-          min-height: 200px;
+          min-height: 100px;
           width: auto;
           border-radius: 10px;
           margin: 10pt;
