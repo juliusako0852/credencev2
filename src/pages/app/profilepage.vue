@@ -223,7 +223,7 @@
             display: flex;
             align-items: flex-start;
           "
-          v-for="entry in current_user_profile"
+          v-for="entry in current_user_job_info"
           key="entry.id"
         >
           <div
@@ -234,14 +234,18 @@
               font-weight: bold;
             "
           >
-            <div style="text-align: left">Bank Name:</div>
-            <div style="text-align: left">Account Type:</div>
-            <div style="text-align: left">Balance:</div>
+            <div style="text-align: left">Platform Name: </div>
+            <div style="text-align: left">Platform Type: </div>
+            <div style="text-align: left">Job Name: </div>
+            <div style="text-align: left">Job Type: </div>
+            <div style="text-align: left">Description: </div>
           </div>
           <div style="width: 60%; font-size: medium">
-            <div style="text-align: left">{{ entry?.bank_name }}</div>
-            <div style="text-align: left">{{ entry?.account_type }}</div>
-            <div style="text-align: left">PHP {{ entry?.bank_balance }}</div>
+            <div style="text-align: left">{{ entry?.platform_name }}</div>
+            <div style="text-align: left">{{ entry?.platform_type }}</div>
+            <div style="text-align: left">{{ entry?.job_name }}</div>
+            <div style="text-align: left">{{ entry?.job_type }}</div>
+            <div style="text-align: left">{{ entry?.job_description }}</div>
           </div>
         </div>
       </div>
@@ -276,15 +280,22 @@ interface ProfileDetails {
   street_address: string;
 }
 
-interface ConnectedPlatforms {
+interface JobInfo {
   id: number;
-  current_user: number;
+  user_account: number;
+  connected_bank_account: number | null;
+  bank_name: string | null;
+  platform: number;
   platform_name: string;
   platform_type: string;
+  job_name: string;
+  job_type: string;
+  job_description: string;
 }
 
 const current_user = ref<CurrentUser | null>(null);
 const current_user_profile = ref<ProfileDetails | null>(null);
+const current_user_job_info = ref<JobInfo[]>([]);
 const originalUser = ref<CurrentUser | null>(null);
 
 const loading = ref(true);
@@ -313,9 +324,13 @@ async function fetchUser() {
     const response2 = await api.get<ProfileDetails>(
       `/api/user_profile/${current_user.value.id}/`
     );
+    const response3 = await api.get<JobInfo[]>(
+      `jobinfo/user/${current_user.value.id}/`
+    );
 
     console.log("Logged-in user ID:", current_user.value.id);
     current_user_profile.value = response2.data;
+    current_user_job_info.value = response3.data;
 
     //const { data } = await api.get<User>(`api/users/${current_user.value.id}/`);
 
