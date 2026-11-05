@@ -1,6 +1,6 @@
 const API_KEY = "AQ.Ab8RN6INiZm8JrKuC13pEwv0dH1sqbvOQJUIxknLUew2XTq1hw";
 
-const MODEL = "gemini-3.8-flash";
+const MODEL = "gemini-3.6-flash";
 
 export interface FinancialInsights {
   summary: string;

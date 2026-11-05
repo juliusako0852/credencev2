@@ -41,8 +41,22 @@
               style="font-size: x-large; width: 100%; font-weight: bold"
               >Hello, Shann!</div
             >
-            <div style="display: flex; width: 100%"> Balance: </div>
-            <div style="display: flex; width: 100%"> PHP. PLACEHOLDER </div>
+            <div style="display: flex; width: 100%; margin-top: 5pt">
+              Balance:
+            </div>
+            <div
+              style="
+                display: flex;
+                width: 100%;
+                font-size: x-large;
+                font-weight: bold;
+              "
+            >
+              PHP PLACEHOLDER
+            </div>
+            <div style="display: flex; width: 100%">
+              Confidence: Placeholder Percentage
+            </div>
           </q-card-section>
         </q-card>
       </div>
