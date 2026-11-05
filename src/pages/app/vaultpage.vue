@@ -192,13 +192,17 @@
                 >
                   <div
                     style="
-                      width: 10%;
+                      width: 15%;
                       color: white;
                       font-size: small;
                       font-weight: bold;
                     "
                   >
-                    <q-radio v-model="bank_options" val="line" />
+                    <q-radio
+                      v-model="bank_vault_choice"
+                      :val="entry?.id"
+                      color="white"
+                    />
                   </div>
                   <div
                     style="
@@ -211,7 +215,7 @@
                     <div style="text-align: left">Bank Name:</div>
                     <div style="text-align: left">Balance:</div>
                   </div>
-                  <div style="width: 60%; font-size: small; color: white">
+                  <div style="width: 55%; font-size: small; color: white">
                     <div style="text-align: left">{{ entry?.bank_name }}</div>
                     <div style="text-align: left"
                       >PHP {{ entry?.bank_balance }}</div
