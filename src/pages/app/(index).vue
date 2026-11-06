@@ -106,10 +106,6 @@
             <q-icon name="savings" size="5vh" />Vault</q-btn
           >
 
-          <q-btn stack flat dense aria-label="digital_diary" size="8pt" to="/">
-            <q-icon name="book" size="5vh" />Digital Diary</q-btn
-          >
-
           <q-btn
             stack
             flat
@@ -119,6 +115,13 @@
             to="/app/loanspage"
           >
             <q-icon name="wallet" size="5vh" />Loans</q-btn
+          >
+
+          <q-btn stack flat dense aria-label="cs1" size="8pt" to="/app">
+            <q-icon name="book" size="5vh" />Coming Soon...</q-btn
+          >
+          <q-btn stack flat dense aria-label="cs2" size="8pt" to="/app">
+            <q-icon name="swap_horiz" size="5vh" />Coming Soon...</q-btn
           >
         </div>
       </div>
