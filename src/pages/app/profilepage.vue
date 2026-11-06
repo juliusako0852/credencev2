@@ -368,9 +368,6 @@ async function updateUser() {
       }
     );
 
-    user.value = { ...data };
-    originalUser.value = { ...data };
-
     successMessage.value = "Profile updated successfully!";
   } catch (error: any) {
     console.error("Error updating user:", error);
@@ -396,7 +393,6 @@ async function updateUser() {
 // Restore the last fetched or successfully saved values
 function resetForm() {
   if (originalUser.value) {
-    user.value = { ...originalUser.value };
     errorMessage.value = "";
     successMessage.value = "";
   }

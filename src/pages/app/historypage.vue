@@ -36,7 +36,12 @@
             style="width: 100%; height: auto"
           >
             <div style="width: 100%; display: flex">
-              <div style="width: 15%" v-if="entry.entity === 'Buffer Vault'"
+              <div
+                style="width: 15%"
+                v-if="
+                  entry.transaction_name === 'Buffer Vault - Withdrawal' ||
+                  entry.transaction_name === 'Buffer Vault - Deposit'
+                "
                 ><q-icon name="savings" size="40px" style="color: #0e494a"
               /></div>
               <div style="width: 50%">
@@ -47,10 +52,11 @@
                     font-size: large;
                     color: #0e494a;
                   "
-                  >{{ entry.entity }}</div
+                  >{{ entry.transaction_name }}</div
                 >
                 <div style="width: 100%; font-size: medium"
-                  >{{ entry.time }} - {{ entry.date }}</div
+                  >{{ entry.transaction_time }} -
+                  {{ entry.transaction_date }}</div
                 >
               </div>
               <div style="width: 35%; justify-items: flex-end">
@@ -62,8 +68,8 @@
                     font-weight: bold;
                     font-size: large;
                   "
-                  v-if="entry.amount > 0"
-                  >{{ entry.amount }}</div
+                  v-if="entry.transaction_name === 'Buffer Vault - Deposit'"
+                  >PHP {{ entry.transaction_amount }}</div
                 >
                 <div
                   style="
@@ -73,12 +79,8 @@
                     font-weight: bold;
                     font-size: large;
                   "
-                  v-if="entry.amount <= 0"
-                  >{{ entry.amount }}</div
-                >
-                <div
-                  style="width: 100%; text-align: right; font-size: medium"
-                  >{{ entry.purpose }}</div
+                  v-if="entry.transaction_name === 'Buffer Vault - Withdrawal'"
+                  >PHP {{ entry.transaction_amount }}</div
                 >
               </div>
             </div>
@@ -96,89 +98,54 @@ interface CurrentUser {
   id: string;
 }
 
-const current_user = ref<CurrentUser | null>(null);
+interface TransactionHistory {
+  user_account: number;
+  transaction_name: string;
+  transaction_date: string;
+  transaction_time: string;
+  transaction_amount: number;
+}
 
-const history_entries = ref([
-  {
-    transaction_id: 1,
-    id: 1,
-    entity: "Buffer Vault",
-    purpose: "Withdrawal",
-    date: "9/11/2026",
-    time: "9:00 AM",
-    amount: -100.0
-  },
-  {
-    transaction_id: 2,
-    id: 1,
-    entity: "Buffer Vault",
-    purpose: "Withdrawal",
-    date: "9/11/2026",
-    time: "9:00 AM",
-    amount: -100.0
-  },
-  {
-    transaction_id: 3,
-    id: 1,
-    entity: "Buffer Vault",
-    purpose: "Withdrawal",
-    date: "9/11/2026",
-    time: "9:00 AM",
-    amount: -100.0
-  },
-  {
-    transaction_id: 1,
-    id: 1,
-    entity: "Buffer Vault",
-    purpose: "Withdrawal",
-    date: "9/11/2026",
-    time: "9:00 AM",
-    amount: -100.0
-  },
-  {
-    transaction_id: 2,
-    id: 1,
-    entity: "Buffer Vault",
-    purpose: "Withdrawal",
-    date: "9/11/2026",
-    time: "9:00 AM",
-    amount: -100.0
-  },
-  {
-    transaction_id: 3,
-    id: 1,
-    entity: "Buffer Vault",
-    purpose: "Withdrawal",
-    date: "9/11/2026",
-    time: "9:00 AM",
-    amount: -100.0
-  },
-  {
-    transaction_id: 4,
-    id: 1,
-    entity: "Buffer Vault",
-    purpose: "Withdrawal",
-    date: "9/11/2026",
-    time: "9:00 AM",
-    amount: -100.0
-  },
-  {
-    transaction_id: 5,
-    id: 1,
-    entity: "Buffer Vault",
-    purpose: "Withdrawal",
-    date: "9/11/2026",
-    time: "9:00 AM",
-    amount: -100.0
-  },
-  {
-    transaction_id: 6,
-    id: 1,
-    entity: "Buffer Vault",
-    purpose: "Withdrawal",
-    date: "9/11/2026",
-    time: "9:00 AM",
-    amount: -100.0
+const current_user = ref<CurrentUser | null>(null);
+const history_entries = ref<TransactionHistory[]>([]);
+
+const loading = ref(true);
+const saving = ref(false);
+const errorMessage = ref("");
+const successMessage = ref("");
+
+async function fetchUser() {
+  loading.value = true;
+  errorMessage.value = "";
+
+  try {
+    const response = await api.get<CurrentUser>("users/me/");
+
+    current_user.value = response.data;
+    const response2 = await api.get<TransactionHistory[]>(
+      `transactions/list/${current_user.value.id}/`
+    );
+
+    console.log("Logged-in user ID:", current_user.value.id);
+    history_entries.value = response2.data;
+    console.log(history_entries.value);
+
+    //const { data } = await api.get<User>(`api/users/${current_user.value.id}/`);
+
+    //user.value = { ...data };
+    //originalUser.value = { ...data };
+  } catch (error: any) {
+    console.error("Error fetching user:", error.response?.data ?? error);
+
+    errorMessage.value =
+      error.response?.data?.detail || "Could not load profile.";
+  } finally {
+    loading.value = false;
   }
-]);
+}
+
+let fetchPromise: Promise<void> = Promise.resolve();
+onMounted(() => {
+  fetchPromise = fetchUser();
+});
 </script>
